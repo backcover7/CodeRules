@@ -149,11 +149,6 @@ public class TableUtils {
     }
 
     public static void InitDB() throws Exception {
-        File db = new File(DbUtils.dbname);
-        if (db.exists()) {
-            db.delete();
-        }
-
         ArrayList<String> CsvPathList = FilesUtils.getExtensionFiles(
                 Paths.get(FilesUtils.method_csv).toAbsolutePath().toString(), StringsUtils.CsvExtension, true);
 

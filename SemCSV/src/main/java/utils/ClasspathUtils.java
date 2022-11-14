@@ -15,9 +15,8 @@ public class ClasspathUtils {
     public final static String JDK = Paths.get(SRC_MAIN_LIB, "JDK").toString();
     public final static String Dependencies = Paths.get(SRC_MAIN_LIB, "Dependencies").toString();
 
-    private final static HashSet<String> classpath = new HashSet<>();
-
     public static HashSet<String> getSootClassPath(List<String> targets) {
+        HashSet<String> classpath = new HashSet<>();
         classpath.add(Paths.get(JDK, "rt.jar").toString());
         classpath.add(Paths.get(JDK, "jce.jar").toString());
         classpath.add(Paths.get(JDK, "nashorn.jar").toString());
