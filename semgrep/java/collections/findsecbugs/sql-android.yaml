@@ -1,0 +1,54 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).compileStatement(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .compileStatement(...)
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .compileStatement(...)
+      - pattern-either:
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).query(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .query(...)
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .query(...)
+      - pattern-either:
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .queryWithFactory(...)
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).queryWithFactory(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .queryWithFactory(...)
+      - pattern-either:
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).rawQuery(...)
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .rawQuery(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .rawQuery(...)
+      - pattern-either:
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .rawQueryWithFactory(...)
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).rawQueryWithFactory(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .rawQueryWithFactory(...)
+      - pattern-either:
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).delete(...)
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .delete(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .delete(...)
+      - pattern-either:
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .update(...)
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).update(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .update(...)
+      - pattern: (android.database.sqlite.SQLiteDatabase $A).updateWithOnConflict(...)
+      - pattern-either:
+        - pattern: (android.database.sqlite.SQLiteDatabase $A).execSQL(...)
+        - pattern: (android.content.ContextWrapper $A).openOrCreateDatabase(...). ... .execSQL(...)
+        - pattern: android.database.sqlite.SQLiteDatabase.openDatabase(...). ... .execSQL(...)
+      - pattern: android.database.DatabaseUtils.longForQuery(...)
+      - pattern: android.database.DatabaseUtils.stringForQuery(...)
+      - pattern: (android.database.DatabaseUtils $A).blobFileDescriptorForQuery(...)
+      - pattern: android.database.DatabaseUtils.createDbFromSqlStatements(...)
+      - pattern: (android.database.sqlite.SQLiteQueryBuilder $A).appendWhere(...)
+      - pattern: android.database.sqlite.SQLiteQueryBuilder.buildQueryString(...)
+      - pattern: (android.database.sqlite.SQLiteQueryBuilder $A).query(...)
+      - pattern: (android.database.sqlite.SQLiteQueryBuilder $A).buildQuery(...)
+      - pattern: (android.database.sqlite.SQLiteQueryBuilder $A).buildUnionSubQuery(...)
+      - pattern: (android.database.sqlite.SQLiteQueryBuilder $A).buildUnionQuery(...)
+      - pattern: (android.content.ContentProvider $A).query(...)
+      - pattern: (android.content.ContentProvider $A).delete(...)
+      - pattern: (android.content.ContentProvider $A).update(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

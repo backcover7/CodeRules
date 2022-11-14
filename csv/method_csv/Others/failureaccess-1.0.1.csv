@@ -1,0 +1,4 @@
+com.google.common.util.concurrent.internal:InternalFutureFailureAccess:public,abstract:java.lang.Object::<init>:protected:0::void::3PP
+com.google.common.util.concurrent.internal:InternalFutureFailureAccess:public,abstract:java.lang.Object::tryInternalFastPathGetFailure:protected,abstract:0::java.lang.Throwable::3PP
+com.google.common.util.concurrent.internal:InternalFutures:public,final:java.lang.Object::tryInternalFastPathGetFailure:public,static:1:com.google.common.util.concurrent.internal.InternalFutureFailureAccess:java.lang.Throwable::3PP
+com.google.common.util.concurrent.internal:InternalFutures:public,final:java.lang.Object::<init>:private:0::void::3PP

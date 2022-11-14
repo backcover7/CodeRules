@@ -1,0 +1,6 @@
+org.apache.logging.slf4j:org.apache.logging.slf4j.SLF4JLoggerContext:3PP
+org.apache.logging.slf4j:org.apache.logging.slf4j.SLF4JLogger$1:3PP
+org.apache.logging.slf4j:org.apache.logging.slf4j.SLF4JProvider:3PP
+org.apache.logging.slf4j:org.apache.logging.slf4j.SLF4JLoggerContextFactory:3PP
+org.apache.logging.slf4j:org.apache.logging.slf4j.MDCContextMap:3PP
+org.apache.logging.slf4j:org.apache.logging.slf4j.SLF4JLogger:3PP

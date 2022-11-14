@@ -1,0 +1,21 @@
+rules:
+  - id: crlf
+    options:
+      symbolic_propagation: true
+    patterns:
+      - pattern-either:
+        - pattern: (javax.servlet.http.HttpServletResponse $RESP).sendRedirect($URL)
+        - pattern: (jakarta.servlet.http.HttpServletResponse $RESP).sendRedirect($URL)
+        - pattern: javax.ws.rs.core.Response.seeOther($URL)
+        - pattern: javax.ws.rs.core.Response.temporaryRedirect($URL)
+        - pattern: jakarta.ws.rs.core.Response.seeOther($URL)
+        - pattern: jakarta.ws.rs.core.Response.temporaryRedirect($URL)
+      - metavariable-pattern:
+          metavariable: $URL
+          patterns:
+            - pattern-not: |
+                "..."
+    message: Semgrep found a match related to CRLF injection
+    severity: WARNING
+    languages:
+      - java

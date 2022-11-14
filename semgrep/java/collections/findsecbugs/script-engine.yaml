@@ -1,0 +1,45 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (javax.script.ScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl2.scripting.JexlScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl3.scripting.JexlScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (org.springframework.web.servlet.view.script.ScriptTemplateConfigurer $A).getEngine(...). ... .eval(...)
+        - pattern: (org.codehaus.groovy.jsr223.GroovyScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (org.mvel2.jsr223.MvelCompiledScript $A).getEngine(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl2.scripting.JexlScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (javax.script.Compilable $A).compile(...). ... .eval(...)
+        - pattern: (org.codehaus.groovy.jsr223.GroovyCompiledScript $A).getEngine(...). ... .eval(...)
+        - pattern: (javax.script.CompiledScript $A).getEngine(...). ... .eval(...)
+        - pattern: (org.springframework.web.reactive.result.view.script.ScriptTemplateConfigurer $A).getEngine(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl2.scripting.JexlScriptEngine.JexlCompiledScript $A).getEngine(...). ... .eval(...)
+        - pattern: (org.mvel2.jsr223.MvelScriptEngine $A).compile(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl2.scripting.JexlScriptEngine $A).compile(...). ... .eval(...)
+        - pattern: org.springframework.scripting.support.StandardScriptUtils.retrieveEngineByName(...). ... .eval(...)
+        - pattern: (apple.applescript.AppleScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (apple.applescript.AppleScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (jdk.nashorn.api.scripting.NashornScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (javax.script.ScriptEngine $A).eval(...)
+        - pattern: (org.codehaus.groovy.jsr223.GroovyScriptEngineImpl $A).compile(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl3.scripting.JexlScriptEngine $A).compile(...). ... .eval(...)
+        - pattern: (org.mvel2.jsr223.MvelScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (javax.script.ScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (javax.script.ScriptEngineManager $A).getEngineByExtension(...). ... .eval(...)
+        - pattern: (javax.script.ScriptEngineManager $A).getEngineByMimeType(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl3.scripting.JexlScriptEngine.JexlCompiledScript $A).getEngine(...). ... .eval(...)
+        - pattern: (jdk.nashorn.api.scripting.NashornScriptEngine.3 $A).getEngine(...). ... .eval(...)
+        - pattern: (jdk.nashorn.api.scripting.NashornScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (org.codehaus.groovy.jsr223.GroovyScriptEngineImpl $A).getFactory(...). ... .eval(...)
+        - pattern: (org.springframework.web.servlet.view.script.ScriptTemplateConfig $A).getEngine(...). ... .eval(...)
+        - pattern: (javax.script.ScriptEngineManager $A).getEngineByName(...). ... .eval(...)
+        - pattern: (org.springframework.web.reactive.result.view.script.ScriptTemplateConfig $A).getEngine(...). ... .eval(...)
+        - pattern: (org.mvel2.jsr223.MvelScriptEngine $A).getFactory(...). ... .eval(...)
+        - pattern: (org.apache.commons.jexl3.scripting.JexlScriptEngineFactory $A).getScriptEngine(...). ... .eval(...)
+        - pattern: (jdk.nashorn.api.scripting.NashornScriptEngine $A).compile(...). ... .eval(...)
+        - pattern: org.codehaus.groovy.vmplugin.v6.PluginStaticGroovyMethods.$static_propertyMissing(...). ... .eval(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

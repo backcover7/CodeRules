@@ -1,0 +1,19 @@
+rules:
+  - id: setter_and_constructor
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - patterns:
+          - pattern: |
+              $TYPE $METHOD(...) {...}
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: ^set[A-Z].*$
+      - patterns:
+          - pattern-inside: class $METHOD {...}
+          - pattern: |
+              $METHOD(...) {...}
+    message: Semgrep found a match
+    languages:
+      - java
+    severity: WARNING

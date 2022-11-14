@@ -1,0 +1,11 @@
+com.workingdogs.village:com.workingdogs.village.Column:3PP
+com.workingdogs.village:com.workingdogs.village.DataSet:3PP
+com.workingdogs.village:com.workingdogs.village.DataSetException:3PP
+com.workingdogs.village:com.workingdogs.village.Enums:3PP
+com.workingdogs.village:com.workingdogs.village.KeyDef:3PP
+com.workingdogs.village:com.workingdogs.village.QueryDataSet:3PP
+com.workingdogs.village:com.workingdogs.village.Record:3PP
+com.workingdogs.village:com.workingdogs.village.Schema:3PP
+com.workingdogs.village:com.workingdogs.village.SelectStmt:3PP
+com.workingdogs.village:com.workingdogs.village.TableDataSet:3PP
+com.workingdogs.village:com.workingdogs.village.Value:3PP

@@ -1,0 +1,5 @@
+com.fasterxml.jackson.module.paramnames:com.fasterxml.jackson.module.paramnames.PackageVersion:3PP
+com.fasterxml.jackson.module.paramnames:com.fasterxml.jackson.module.paramnames.ParameterExtractor:3PP
+com.fasterxml.jackson.module.paramnames:com.fasterxml.jackson.module.paramnames.ParameterNamesAnnotationIntrospector:3PP
+com.fasterxml.jackson.module.paramnames:com.fasterxml.jackson.module.paramnames.ParameterNamesModule:3PP
+META-INF.versions.9:META-INF.versions.9.module-info:3PP

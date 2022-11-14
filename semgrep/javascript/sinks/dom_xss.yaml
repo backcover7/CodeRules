@@ -1,0 +1,148 @@
+rules:
+    - id: dom_xss
+      options:
+        symbolic_propagation: true
+      pattern-either:
+        - patterns:
+          - pattern-either:
+            - patterns:
+              - pattern-either:
+                - pattern: $X.open($M, $D, ...)
+                - pattern: $X.send($D)
+                - pattern: $X.setRequestHeader($V, $D)
+                - pattern: $X.setRequestHeader($D, $V)
+              - metavariable-pattern:
+                  metavariable: $X
+                  patterns:
+                    - pattern: |
+                        ($XHR: $XMLHTTPREQUEST)
+                    - metavariable-regex:
+                        metavariable: $XMLHTTPREQUEST
+                        regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(XMLHttpRequest)
+            - pattern: |
+                ($X: DOMParser).parseFromString($D, ...)
+            - pattern: |
+                document.createRange().createContextualFragment($D, ...)
+            - pattern: |
+                ($R: Range).createContextualFragment($D, ...)
+            - pattern: |
+                ($REG: RegExp).exec($D)
+            - pattern: |
+                ($REG: RegExp).test($D)
+            - patterns:
+              - pattern: |
+                  $D.$M(($REG: RegExp), ...)
+              - metavariable-regex:
+                  metavariable: $M
+                  regex: match.*|replace.*|search|split
+            - patterns:
+              - pattern: new $CONSTRUCTOR($D, ...)
+              - metavariable-regex:
+                  metavariable: $CONSTRUCTOR
+                  regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(SharedWorker|Worker|Response|RegExp)
+            - patterns:
+              - pattern-either:
+                - pattern: $METHODSETTER($V, $D)
+                - pattern: $METHODSETTER($D, $V)
+              - metavariable-regex:
+                  metavariable: $METHODSETTER
+                  regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*((local|session|cache)Storage\.setItem|cookieStore.set)
+            - patterns:
+              - pattern: $METHOD($D, ...)
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(eval|execScript|document\.(write|writeln|execCommand)|parseFromString|send|globalEval|(document\.)?location\.(replace|assign)|open|fetch|navigation\.navigate|set(Timeout|Interval|Immediate)|document\.implementation\.createHTMLDocument|navigator\.(sendBeacon|serviceWorker\.register)|URL\.createObjectURL)
+            - patterns:
+              - pattern: $JQUERY.$METHOD($D, ...)
+              - metavariable-pattern:
+                  metavariable: $JQUERY
+                  pattern-either:
+                    - pattern: $
+                    - pattern: $(...)
+                    - pattern: jQuery
+                    - pattern: jQuery(...)
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ^(html|append|prepend|wrap|wrapInner|wrapAll|before|after|globalEval|getScript)$
+            - patterns:
+              - pattern: $JQUERY($D).$METHOD(...)
+              - metavariable-pattern:
+                  metavariable: $JQUERY
+                  pattern-either:
+                    - pattern: $
+                    - pattern: jQuery
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ^(appendTo|insertAfter|insertBefore|prependTo)$
+            - pattern: $ELEM.insertAdjacentHTML($V, $D)
+            - pattern: $ELEM.insertAdjacentElement($V, $D)
+            - patterns:
+              - pattern-either:
+                - pattern: $ELEMSETTER($V, $D)
+                - pattern: $ELEMSETTER($D, $V)
+              - metavariable-pattern:
+                  metavariable: $ELEMSETTER
+                  patterns:
+                    - pattern-either:
+                      - pattern: $ELEM.$S
+                      - patterns:
+                        - pattern: $G.$ELEM.$S
+                        - metavariable-regex:
+                            metavariable: $G
+                            regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(window|self|_self|top|parent|frames|this|globalThis)\Z
+                    - metavariable-regex:
+                        metavariable: $S
+                        regex: setAttribute.*|toggleAttribute
+            - patterns:
+              - pattern: $ELEMMETHOD($D, ...)
+              - metavariable-pattern:
+                  metavariable: $ELEMMETHOD
+                  patterns:
+                    - pattern-either:
+                      - pattern: $ELEM.$S
+                      - patterns:
+                        - pattern: $G.$ELEM.$S
+                        - metavariable-regex:
+                            metavariable: $G
+                            regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(window|self|_self|top|parent|frames|this|globalThis)\Z
+                    - metavariable-regex:
+                        metavariable: $S
+                        regex: setAttributeNode.*|setNamedItem.*
+            - patterns:
+              - pattern: $PROP = $D
+              - metavariable-pattern:
+                  metavariable: $PROP
+                  pattern-either:
+                    - patterns:
+                      - pattern: $P
+                      - metavariable-regex:
+                          metavariable: $P
+                          regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(on.*|document\.(cookie|domain)|(document\.)?location(\.href)?|fetch\.(url|body|header))
+                    - patterns:
+                      - pattern-either:
+                        - pattern: $ELEM.$P
+                        - patterns:
+                            - pattern: $G.$ELEM.$P
+                            - metavariable-regex:
+                                metavariable: $G
+                                regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(window|self|_self|top|parent|frames|this|globalThis)\Z
+                      - metavariable-regex:
+                          metavariable: $P
+                          regex: on.*|innerHTML|outerHTML|innerText|outerText|href|src|srcdoc|action|formaction|rel|relList|data|attributeName|from|to|nonce|textContent
+          - metavariable-pattern:
+              metavariable: $D
+              patterns:
+                - pattern-not: |
+                    "..."
+        - pattern-either:
+          - pattern: postMessage(...,'*')
+          - pattern: $G.postMessage(...,'*')
+          - pattern: addEventListener('...', $FUNC, ...)
+          - pattern: $G.addEventListener('...', $FUNC, ...)
+          - pattern: $T.createPolicy('default', ...)
+      message: Semgrep found a match
+      languages:
+        - javascript
+        - typescript
+      severity: WARNING
+  

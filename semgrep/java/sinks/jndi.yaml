@@ -1,0 +1,57 @@
+rules:
+  - id: jndi
+    options:
+      symbolic_propagation: true
+    patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: ($CLS $CTX).$METHOD($D, ...)
+          - metavariable-regex:
+              metavariable: $CLS
+              regex: javax.naming.(Context|InitialContext|directory.(InitialDirContext|DirContext)|ldap.InitialLdapContext)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: lookup|lookupLink|rename|list|listBindings|doLookup
+        - pattern: (com.sun.jndi.ldap.LdapCtx $CTX).c_lookup($D, ...)
+        - pattern: (com.sun.jndi.ldap.LdapCtx $CTX).c_lookupLink($D, ...)
+        - pattern: (com.sun.jndi.rmi.registry.RegistryContext $CTX).lookup($D, ...)
+        - pattern: (com.sun.jndi.rmi.registry.RegistryContext $CTX).lookupLink($D, ...)
+        - pattern: (com.sun.jndi.url.ldap.ldapURLContext $CTX).lookup($D, ...)
+        - pattern: (com.sun.jndi.url.ldap.ldapURLContext $CTX).lookupLink($D, ...)
+        - pattern: (javax.management.remote.JMXConnector $JMX).connect($D, ...)
+        - pattern: (javax.management.remote.JMXConnectorFactory $JMX).connect($D, ...)
+        - patterns:
+          - pattern: ($CLS $LDAP).$METHOD($A, ...)
+          - metavariable-regex:
+              metavariable: $CLS
+              regex: org.springframework.ldap.(LdapOperations|core.LdapOperations)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: lookup|lookupContext|findByDn|rename|list|listBindings|search|searchForObject
+          - metavariable-pattern:
+              metavariable: $A
+              patterns:
+                - pattern-either:
+                  - pattern: (String $D)
+                  - pattern: (javax.naming.Name $D)
+                - pattern-not: |
+                    "..."
+        - patterns:
+          - pattern: ($CLS $CTX).connect($D, ...)
+          - metavariable-regex:
+              metavariable: $CLS
+              regex: javax.management.remote.(JMX|rmi.RMI)Connector
+        - patterns:
+          - pattern: ($CLS $TMP).lookup($D, ...)
+          - metavariable-regex:
+              metavariable: $CLS
+              regex: org.(springframework|apache.shiro).jndi.JndiTemplate
+      - metavariable-pattern:
+          metavariable: $D
+          patterns:
+            - pattern-not: |
+                "..."
+    message: Semgrep found a JNDI lookup usage
+    languages:
+      - java
+    severity: WARNING

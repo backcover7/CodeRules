@@ -1,0 +1,16 @@
+jakarta.annotation.security:jakarta.annotation.security.DeclareRoles:3PP
+jakarta.annotation.security:jakarta.annotation.security.PermitAll:3PP
+jakarta.annotation.security:jakarta.annotation.security.DenyAll:3PP
+jakarta.annotation.security:jakarta.annotation.security.RolesAllowed:3PP
+jakarta.annotation.security:jakarta.annotation.security.RunAs:3PP
+jakarta.annotation:jakarta.annotation.Resource$AuthenticationType:3PP
+jakarta.annotation:jakarta.annotation.Resource:3PP
+jakarta.annotation.sql:jakarta.annotation.sql.DataSourceDefinitions:3PP
+jakarta.annotation.sql:jakarta.annotation.sql.DataSourceDefinition:3PP
+jakarta.annotation:jakarta.annotation.Resources:3PP
+jakarta.annotation:jakarta.annotation.PostConstruct:3PP
+jakarta.annotation:jakarta.annotation.PreDestroy:3PP
+jakarta.annotation:jakarta.annotation.Priority:3PP
+jakarta.annotation:jakarta.annotation.Generated:3PP
+jakarta.annotation:jakarta.annotation.ManagedBean:3PP
+:module-info:3PP

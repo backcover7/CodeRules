@@ -1,0 +1,5 @@
+play:play.TemplateImports:3PP
+play.core:play.core.BuildLink:3PP
+play.core.server:play.core.server.ReloadableServer:3PP
+play.core:play.core.BuildDocHandler:3PP
+play.core:play.core.Build:3PP

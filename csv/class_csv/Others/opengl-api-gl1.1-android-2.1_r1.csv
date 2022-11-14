@@ -1,0 +1,13 @@
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL11ExtensionPack:3PP
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL11Ext:3PP
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL10Ext:3PP
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL11:3PP
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL10:3PP
+javax.microedition.khronos.opengles:javax.microedition.khronos.opengles.GL:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGL11:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGLSurface:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGL:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGL10:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGLConfig:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGLContext:3PP
+javax.microedition.khronos.egl:javax.microedition.khronos.egl.EGLDisplay:3PP

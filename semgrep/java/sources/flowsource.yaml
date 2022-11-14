@@ -1,0 +1,35 @@
+rules:
+  - id: flowsource
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: public static void main(...) {...}
+      - patterns:
+        - pattern: ($SERVLET.servlet.ServletRequest $REQ).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: getParameter|getParameterValues|getParameterMap|getParameterNames|getServerName|getInputStream
+        - metavariable-regex:
+            metavariable: $SERVLET
+            regex: javax|jakarta
+      - patterns:
+        - pattern: ($SERVLET.servlet.http.HttpServletRequest $REQ).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: getParameter|getParameterValues|getParameterMap|getParameterNames|getInputStream|getQueryString|getServerName|getHeader|getHeaders|getHeaderNames|getPathInfo|getRequestURI|getRequestURL|getRemoteUser
+        - metavariable-regex:
+            metavariable: $SERVLET
+            regex: javax|jakarta
+      - pattern: |
+          @RequestMapping(...)
+          $RETURNTYPE $USERINPUTMETHOD(..., $TYPE $PARAMETER, ...) {
+            ...
+          }
+    message: Semgrep found a user input source
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      references:
+        - https://sourcegraph.com/github.com/github/codeql/-/blob/java/ql/lib/semmle/code/java/dataflow/ExternalFlow.qll
+        - https://stackoverflow.com/questions/55380813/require-assistance-with-simple-pure-java-11-websocket-client-example 

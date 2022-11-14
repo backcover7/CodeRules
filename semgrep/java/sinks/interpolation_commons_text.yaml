@@ -1,0 +1,25 @@
+rules:
+  - id: interpolator_commons_text
+    options:
+      symbolic_propagation: true
+    patterns:
+      - pattern-either:
+        - pattern: (org.apache.commons.text.StringSubstitutor $INTERPOLATOR).replace($TEMPLATE, ...)
+        - pattern: org.apache.commons.text.StringSubstitutor.createInterpolator().replace($TEMPLATE, ...)
+        - pattern: new org.apache.commons.text.StringSubstitutor(org.apache.commons.text.lookup.StringLookupFactory.INSTANCE.interpolatorStringLookup(...)).replace($TEMPLATE, ...)
+        - pattern: new org.apache.commons.text.StringSubstitutor((org.apache.commons.text.lookup.StringLookup $LOOKUP)).replace($TEMPLATE, ...)
+        - patterns:
+          - pattern: org.apache.commons.text.lookup.StringLookupFactory.INSTANCE.$LOOKUP(...).lookup($TEMPLATE, ...)
+          - metavariable-regex:
+              metavariable: $LOOKUP
+              regex: ^.*StringLookup$
+        - pattern: ConfigurationInterpolator.fromSpecification(...).interpolate($TEMPLATE)
+        - pattern: (org.apache.commons.configuration2.interpol.ConfigurationInterpolator $CI).interpolate($TEMPLATE)
+      - metavariable-pattern:
+          metavariable: $TEMPLATE
+          patterns:
+            - pattern-not: |
+                "..."
+    message: Semgrep found a match of interpolator code pattern when using Apache Commons Text
+    languages: [java]
+    severity: WARNING

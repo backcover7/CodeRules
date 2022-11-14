@@ -1,0 +1,12 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: javax.xml.transform.TransformerFactory.newInstance(...). ... .newTransformer(...)
+        - pattern: com.sun.xml.bind.v2.util.XmlFactory.createTransformerFactory(...). ... .newTransformer(...)
+        - pattern: (javax.xml.transform.TransformerFactory $A).newTransformer(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

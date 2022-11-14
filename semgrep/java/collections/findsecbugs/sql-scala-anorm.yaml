@@ -1,0 +1,49 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (anorm.package$SqlStringInterpolation$ $A).SQL$extension(...). ... .execute(...)
+        - pattern: anorm.SimpleSql.apply(...). ... .execute(...)
+        - pattern: (anorm.SimpleSql $A).execute(...)
+        - pattern: anorm.SqlQuery.class.asSimple(...). ... .execute(...)
+        - pattern: (anorm.package.SqlStringInterpolation $A).SQL(...). ... .execute(...)
+        - pattern: (anorm.SimpleSql $A).sql(...). ... .execute(...)
+        - pattern: (anorm.SqlQuery $A).asSimple(...). ... .execute(...)
+      - pattern-either:
+        - pattern: (anorm.SimpleSql $A).sql(...). ... .executeUpdate(...)
+        - pattern: (anorm.package$SqlStringInterpolation$ $A).SQL$extension(...). ... .executeUpdate(...)
+        - pattern: (anorm.package.SqlStringInterpolation $A).SQL(...). ... .executeUpdate(...)
+        - pattern: (anorm.SimpleSql $A).executeUpdate(...)
+        - pattern: anorm.SimpleSql.apply(...). ... .executeUpdate(...)
+        - pattern: anorm.SqlQuery.class.asSimple(...). ... .executeUpdate(...)
+        - pattern: (anorm.SqlQuery $A).asSimple(...). ... .executeUpdate(...)
+      - pattern-either:
+        - pattern: (anorm.SimpleSql $A).executeQuery(...)
+        - pattern: (anorm.SqlQuery $A).asSimple(...). ... .executeQuery(...)
+        - pattern: (anorm.SimpleSql $A).sql(...). ... .executeQuery(...)
+        - pattern: anorm.SimpleSql.apply(...). ... .executeQuery(...)
+        - pattern: (anorm.package$SqlStringInterpolation$ $A).SQL$extension(...). ... .executeQuery(...)
+        - pattern: (anorm.package.SqlStringInterpolation $A).SQL(...). ... .executeQuery(...)
+        - pattern: anorm.SqlQuery.class.asSimple(...). ... .executeQuery(...)
+      - pattern-either:
+        - pattern: (anorm.package.SqlStringInterpolation $A).SQL(...). ... .executeInsert(...)
+        - pattern: (anorm.SimpleSql $A).executeInsert(...)
+        - pattern: anorm.SimpleSql.apply(...). ... .executeInsert(...)
+        - pattern: anorm.SqlQuery.class.asSimple(...). ... .executeInsert(...)
+        - pattern: (anorm.SqlQuery $A).asSimple(...). ... .executeInsert(...)
+        - pattern: (anorm.SimpleSql $A).sql(...). ... .executeInsert(...)
+        - pattern: (anorm.package$SqlStringInterpolation$ $A).SQL$extension(...). ... .executeInsert(...)
+      - pattern-either:
+        - pattern: anorm.SqlQuery.class.asSimple(...). ... .as(...)
+        - pattern: (anorm.SqlQuery $A).asSimple(...). ... .as(...)
+        - pattern: (anorm.SimpleSql $A).sql(...). ... .as(...)
+        - pattern: (anorm.SimpleSql $A).as(...)
+        - pattern: (anorm.package$SqlStringInterpolation$ $A).SQL$extension(...). ... .as(...)
+        - pattern: (anorm.package.SqlStringInterpolation $A).SQL(...). ... .as(...)
+        - pattern: anorm.SimpleSql.apply(...). ... .as(...)
+      - pattern: (anorm.BatchSql$ $A).apply(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

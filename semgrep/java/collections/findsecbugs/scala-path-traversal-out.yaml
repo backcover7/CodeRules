@@ -1,0 +1,9 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (scala.reflect.io.File$ $A).apply(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

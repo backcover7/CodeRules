@@ -1,0 +1,2 @@
+javax.inject:Named:public,abstract,interface::java.lang.annotation.Annotation:value:public,abstract:0::java.lang.String::3PP
+javax.inject:Provider:public,abstract,interface:::get:public,abstract:0::java.lang.Object::3PP

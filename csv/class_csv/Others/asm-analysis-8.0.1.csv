@@ -1,0 +1,15 @@
+:module-info:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.Analyzer:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.AnalyzerException:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.BasicInterpreter:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.BasicValue:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.BasicVerifier:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.Frame:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.Interpreter:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.SimpleVerifier:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.SmallSet$IteratorImpl:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.SmallSet:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.SourceInterpreter:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.SourceValue:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.Subroutine:3PP
+org.objectweb.asm.tree.analysis:org.objectweb.asm.tree.analysis.Value:3PP

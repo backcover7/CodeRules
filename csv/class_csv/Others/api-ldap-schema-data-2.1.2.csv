@@ -1,0 +1,14 @@
+org.apache.directory.api.ldap.schema.extractor:org.apache.directory.api.ldap.schema.extractor.SchemaLdifExtractor:3PP
+org.apache.directory.api.ldap.schema.extractor:org.apache.directory.api.ldap.schema.extractor.UniqueResourceException:3PP
+org.apache.directory.api.ldap.schema.extractor.impl:org.apache.directory.api.ldap.schema.extractor.impl.DefaultSchemaLdifExtractor:3PP
+org.apache.directory.api.ldap.schema.extractor.impl:org.apache.directory.api.ldap.schema.extractor.impl.ResourceMap:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.AttributeClassLoader:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.EntityFactory:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.JarLdifSchemaLoader:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.LdifSchemaLoader$1:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.LdifSchemaLoader:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.SchemaEntityFactory$1:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.SchemaEntityFactory:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.SchemaMarker:3PP
+org.apache.directory.api.ldap.schema.loader:org.apache.directory.api.ldap.schema.loader.SingleLdifSchemaLoader:3PP
+org.apache.directory.api.ldap.schema.manager.impl:org.apache.directory.api.ldap.schema.manager.impl.DefaultSchemaManager:3PP

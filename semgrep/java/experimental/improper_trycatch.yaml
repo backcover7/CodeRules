@@ -1,0 +1,22 @@
+rules:
+  - id: improper_trycatch
+    options:
+      symbolic_propagation: true
+    patterns:
+      - pattern-either:
+        - patterns:
+          - pattern: try {...} catch(...) {$...CATBODY;} finally {$...FINBODY;}
+          - metavariable-pattern:
+              metavariable: $...FINBODY
+              patterns:
+                - pattern-not-regex: return|exit
+        - pattern: try {...} catch(...) {$...CATBODY;}
+      - metavariable-pattern:
+          metavariable: $...CATBODY
+          patterns:
+            - pattern-not-regex: return|exit
+    message: Semgrep found a match
+    languages:
+      - java
+      - javascript
+    severity: WARNING

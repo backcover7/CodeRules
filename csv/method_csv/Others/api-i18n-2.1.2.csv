@@ -1,0 +1,9 @@
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::values:public,static:0::org.apache.directory.api.i18n.I18n[]::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::valueOf:public,static:1:java.lang.String:org.apache.directory.api.i18n.I18n::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::<init>:private:3:java.lang.String,int,java.lang.String:void::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::getErrorCode:public:0::java.lang.String::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::err:public,static,transient:2:org.apache.directory.api.i18n.I18n,java.lang.Object[]:java.lang.String::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::msg:public,static,transient:2:org.apache.directory.api.i18n.I18n,java.lang.Object[]:java.lang.String::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::msg:public,static,transient:2:java.lang.String,java.lang.Object[]:java.lang.String::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::format:public,static,transient:2:java.lang.String,java.lang.Object[]:java.lang.String::3PP
+org.apache.directory.api.i18n:I18n:public,final:java.lang.Enum::<clinit>:static:0::void::3PP

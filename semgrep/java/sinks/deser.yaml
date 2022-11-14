@@ -1,0 +1,99 @@
+rules:
+  - id: deser
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: new java.io.ObjectInputStream($D, ...).readObject(...)
+      - pattern: new java.io.ObjectInputStream($D, ...).readUnshared(...)
+      - pattern: new java.beans.XMLDecoder($D, ...).readObject(...)
+      - pattern: (com.thoughtworks.xstream.XStream $XST).fromXML($D, ...)
+      - pattern: (com.thoughtworks.xstream.XStream $XST).unmarshal($D, ...)
+      - pattern: (com.esotericsoftware.kryo.Kryo $KRYO).readClassAndObject($D, ...)
+      - pattern: (com.esotericsoftware.kryo.Kryo $KRYO).readObject($D, ...)
+      - pattern: (com.esotericsoftware.kryo.Kryo $KRYO).readObjectOrNull($D, ...)
+      - pattern: (com.esotericsoftware.kryo5.Kryo $KRYO).readClassAndObject($D, ...)
+      - pattern: (com.esotericsoftware.kryo5.Kryo $KRYO).readObject($D, ...)
+      - pattern: (com.esotericsoftware.kryo5.Kryo $KRYO).readObjectOrNull($D, ...)
+      - pattern: org.apache.commons.lang.SerializationUtils.deserialize($D, ...)
+      - pattern: org.apache.commons.lang3.SerializationUtils.deserialize($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).compose($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).composeAll($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).load($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).loadAll($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).loadAs($D, ...)
+      - pattern: (org.yaml.snakeyaml.Yaml $YML).parse($D, ...)
+      - pattern: com.alibaba.fastjson.JSON.parse($D, ...)
+      - pattern: com.alibaba.fastjson.JSON.parseObject($D, ...)
+      - pattern: org.ho.yaml.Yaml.load($D, ...)
+      - pattern: org.ho.yaml.Yaml.loadType($D, ...)
+      - pattern: org.ho.yaml.Yaml.loadStream($D, ...)
+      - pattern: org.ho.yaml.Yaml.loadStreamOfType($D, ...)
+      - pattern: (org.ho.yaml.YamlConfig $YML).load($D, ...)
+      - pattern: (org.ho.yaml.YamlConfig $YML).loadType($D, ...)
+      - pattern: (org.ho.yaml.YamlConfig $YML).loadStream($D, ...)
+      - pattern: (org.ho.yaml.YamlConfig $YML).loadStreamOfType($D, ...)
+      - pattern: com.cedarsoftware.util.io.JsonReader.jsonToJava($D, ...)
+      - pattern: new com.cedarsoftware.util.io.JsonReader($D, ...).readObject(...)
+      - pattern: new com.esotericsoftware.yamlbeans.YamlReader($D, ...).read(...)
+      - pattern: (com.caucho.hessian.io.AbstractHessianInput $HES).readObject(...)
+      - pattern: new com.caucho.hessian.io.Hessian2StreamingInput($D, ...).readObject(...)
+      - pattern: new om.caucho.hessian.io.Hessian2Input($D, ...).readObject(...)
+      - pattern: (com.alibaba.com.caucho.hessian.io.AbstractHessianInput $HES).readObject(...)
+      - pattern: new com.alibaba.com.caucho.hessian.io.Hessian2StreamingInput($D, ...).readObject(...)
+      - pattern: new com.alibaba.com.caucho.hessian.io.Hessian2Input($D, ...).readObject(...)
+      - pattern: (org.exolab.castor.xml.Unmarshaller $XML).unmarshal($D, ...)
+      - pattern: new com.caucho.burlap.io.BurlapInput($D, ...).readObject(...)
+      - pattern-either:
+        - patterns:
+          - pattern-inside: |
+              (com.fasterxml.jackson.databind.ObjectMapper $MAP).enableDefaultTyping(...);
+              ...
+          - pattern: (com.fasterxml.jackson.databind.ObjectMapper $MAP).$R($D, ...)
+          - metavariable-regex:
+              metavariable: $R
+              regex: readValue|readValues|teeToValue
+        - pattern: '@JsonTypeInfo(...)'
+      - pattern: (org.jabsorb.JSONSerializer $JSON).unmarshall($S, $C, $D)
+      - pattern: (org.jabsorb.JSONSerializer $JSON).fromJSON($D, ...)
+      - patterns:
+        - pattern: (jodd.json.JsonParser $JSON).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: (parse.*)
+      - patterns:
+        - pattern: (jodd.json.JsonParser $JSON).$METHOD($D, ...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: ^parse.*$
+      - pattern: (flexjson.JSONDeserializer $JSON). ... .deserialize($D, ...)
+      - pattern: (com.google.gson.Gson $GSON).fromJson($D, ...)
+      - patterns:
+        - pattern: |
+            interface $INTERFACE extends Remote {
+              $RETURNTYPE $METHOD($CLASS $PARAM) throws RemoteException;
+            }
+        - metavariable-regex:
+            metavariable: $CLASS
+            regex: (?!int|boolean|short|long|byte|char|float|double)
+      - patterns:
+        - pattern: |
+            interface $INTERFACE extends Remote {
+              $RETURNTYPE $METHOD(Object $PARAM) throws RemoteException;
+            }
+      - patterns:
+        - pattern-inside: |
+            public class $JMS_LISTENER implements javax.jms.MessageListener {
+              ...
+              public void onMessage(javax.jms.Message $JMS_MSG) {
+                  ...
+              }
+            }
+        - pattern-either:
+            - pattern-inside: $X = javax.jms.$Y.getObject(...);
+            - pattern-inside: $X = ($Z) javax.jms.$Y.getObject(...);
+    message: Semgrep found a match
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      source-rule-url: https://sourcegraph.com/github.com/github/codeql/-/blob/java/ql/lib/semmle/code/java/security/UnsafeDeserializationQuery.qll

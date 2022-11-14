@@ -1,0 +1,24 @@
+rules:
+  - id: ssrf
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (java.net.URL $URL).openConnection(...)
+      - pattern: (java.net.URL $URL).openStream(...)
+      - pattern: java.net.http.HttpRequest.newBuilder(...)
+      - pattern: java.net.http.HttpRequest. ... .uri(...)
+      - pattern: new java.net.URLClassLoader(..., new java.net.URL[]{...}, ...)
+      - pattern: (javax.validation.ConstraintValidatorContext $VAL).buildConstraintViolationWithTemplate(...)
+      - pattern: (jakarta.validation.ConstraintValidatorContext $VAL).buildConstraintViolationWithTemplate(...)
+      - pattern: (javax.net.ssl.HttpsURLConnection $CONN).setDefaultHostnameVerifier(...)
+      - pattern: (javax.net.ssl.HttpsURLConnection $CONN).setHostnameVerifier(...)
+      - pattern: com.sun.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(...)
+      - pattern: (com.sun.net.ssl.HttpsURLConnection $CONN).setHostnameVerifier(...)
+      - pattern: (retrofit2.Retrofit $RET). ... .baseUrl(...)
+      - pattern: (retrofit2.Retrofit.Builder $BUILDER). ... .baseUrl(...)
+      - pattern: (retrofit2.Retrofit $RET).newBuilder(...). ... .baseUrl(...)
+      - pattern: java.net.InetAddress.getByName(...)
+    message: Semgrep found a sink function
+    languages:
+      - java
+    severity: WARNING  

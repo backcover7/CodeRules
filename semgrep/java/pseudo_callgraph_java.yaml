@@ -1,0 +1,11 @@
+rules:
+  - id: pseudo_callgraph_java
+    patterns:
+      - pattern-inside: $TYPE $CALLER(...) {...}
+      - pattern-either:
+        - pattern: $OBJ.$CALLEE(...)
+        - pattern: $CALLEE(...)
+    message: $CALLER calls $CALLEE
+    languages:
+      - java
+    severity: INFO

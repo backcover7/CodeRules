@@ -1,0 +1,9 @@
+play.libs.ws:play.libs.ws.JsonBodyReadables:3PP
+play.libs.ws:play.libs.ws.JsonBodyWritables:3PP
+play.api.libs.ws:play.api.libs.ws.JsonBodyWritables$:3PP
+play.libs.ws:play.libs.ws.JsonBodyWritables$1:3PP
+play.libs.ws:play.libs.ws.DefaultObjectMapper:3PP
+play.api.libs.ws:play.api.libs.ws.JsonBodyReadables$:3PP
+play.api.libs.ws:play.api.libs.ws.JsonBodyWritables:3PP
+play.api.libs.ws:play.api.libs.ws.JsonBodyReadables:3PP
+play.libs.ws:play.libs.ws.JsonBodyReadables$1:3PP

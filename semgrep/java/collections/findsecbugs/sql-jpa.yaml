@@ -1,0 +1,54 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (org.hibernate.query.criteria.internal.CriteriaBuilderImpl $A).getEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (javax.persistence.spi.PersistenceProvider $A).createEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).build(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).withValidatorFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.query.criteria.internal.predicate.PredicateImplementor $A).criteriaBuilder(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).withValidatorFactory(...). ... .createQuery(...)
+        - pattern: (javax.persistence.spi.PersistenceProvider $A).createContainerEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).withDataSource(...). ... .createQuery(...)
+        - pattern: (javax.persistence.EntityManager $A).createQuery(...)
+        - pattern: (org.hibernate.engine.spi.SessionFactoryDelegatingImpl $A).createEntityManager(...). ... .createQuery(...)
+        - pattern: (org.hibernate.internal.SessionFactoryImpl $A).createEntityManager(...). ... .createQuery(...)
+        - pattern: (javax.persistence.EntityManagerFactory $A).createEntityManager(...). ... .createQuery(...)
+        - pattern: (org.hibernate.internal.SessionImpl $A).getEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.engine.spi.SessionDelegatorBaseImpl $A).getEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.HibernatePersistenceProvider $A).createEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.HibernatePersistenceProvider $A).createContainerEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).withDataSource(...). ... .createQuery(...)
+        - pattern: (javax.persistence.EntityManager $A).getEntityManagerFactory(...). ... .createQuery(...)
+        - pattern: (org.hibernate.query.criteria.internal.AbstractNode $A).criteriaBuilder(...). ... .createQuery(...)
+        - pattern: org.hibernate.jpa.boot.spi.Bootstrap.getEntityManagerFactoryBuilder(...). ... .createQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).build(...). ... .createQuery(...)
+        - pattern: javax.persistence.Persistence.createEntityManagerFactory(...). ... .createQuery(...)
+      - pattern-either:
+        - pattern: (org.hibernate.internal.SessionImpl $A).getEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (javax.persistence.spi.PersistenceProvider $A).createEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.HibernatePersistenceProvider $A).createContainerEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.HibernatePersistenceProvider $A).createEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (javax.persistence.EntityManager $A).createNativeQuery(...)
+        - pattern: (org.hibernate.query.criteria.internal.CriteriaBuilderImpl $A).getEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).build(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).withValidatorFactory(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder $A).withDataSource(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.query.criteria.internal.predicate.PredicateImplementor $A).criteriaBuilder(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).withDataSource(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.query.criteria.internal.AbstractNode $A).criteriaBuilder(...). ... .createNativeQuery(...)
+        - pattern: (javax.persistence.EntityManagerFactory $A).createEntityManager(...). ... .createNativeQuery(...)
+        - pattern: org.hibernate.jpa.boot.spi.Bootstrap.getEntityManagerFactoryBuilder(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.internal.SessionFactoryImpl $A).createEntityManager(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).build(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.engine.spi.SessionFactoryDelegatingImpl $A).createEntityManager(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl $A).withValidatorFactory(...). ... .createNativeQuery(...)
+        - pattern: (javax.persistence.EntityManager $A).getEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (javax.persistence.spi.PersistenceProvider $A).createContainerEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: (org.hibernate.engine.spi.SessionDelegatorBaseImpl $A).getEntityManagerFactory(...). ... .createNativeQuery(...)
+        - pattern: javax.persistence.Persistence.createEntityManagerFactory(...). ... .createNativeQuery(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

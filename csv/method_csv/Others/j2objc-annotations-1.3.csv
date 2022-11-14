@@ -1,0 +1,12 @@
+com.google.j2objc.annotations:LoopTranslation$LoopStyle:public,final:java.lang.Enum::values:public,static:0::com.google.j2objc.annotations.LoopTranslation$LoopStyle[]::3PP
+com.google.j2objc.annotations:LoopTranslation$LoopStyle:public,final:java.lang.Enum::valueOf:public,static:1:java.lang.String:com.google.j2objc.annotations.LoopTranslation$LoopStyle::3PP
+com.google.j2objc.annotations:LoopTranslation$LoopStyle:public,final:java.lang.Enum::<init>:private:2:java.lang.String,int:void::3PP
+com.google.j2objc.annotations:LoopTranslation$LoopStyle:public,final:java.lang.Enum::<clinit>:static:0::void::3PP
+com.google.j2objc.annotations:LoopTranslation:public,abstract,interface::java.lang.annotation.Annotation:value:public,abstract:0::com.google.j2objc.annotations.LoopTranslation$LoopStyle::3PP
+com.google.j2objc.annotations:ObjectiveCName:public,abstract,interface::java.lang.annotation.Annotation:value:public,abstract:0::java.lang.String::3PP
+com.google.j2objc.annotations:Property:public,abstract,interface::java.lang.annotation.Annotation:value:public,abstract:0::java.lang.String::3PP
+com.google.j2objc.annotations:ReflectionSupport$Level:public,final:java.lang.Enum::values:public,static:0::com.google.j2objc.annotations.ReflectionSupport$Level[]::3PP
+com.google.j2objc.annotations:ReflectionSupport$Level:public,final:java.lang.Enum::valueOf:public,static:1:java.lang.String:com.google.j2objc.annotations.ReflectionSupport$Level::3PP
+com.google.j2objc.annotations:ReflectionSupport$Level:public,final:java.lang.Enum::<init>:private:2:java.lang.String,int:void::3PP
+com.google.j2objc.annotations:ReflectionSupport$Level:public,final:java.lang.Enum::<clinit>:static:0::void::3PP
+com.google.j2objc.annotations:ReflectionSupport:public,abstract,interface::java.lang.annotation.Annotation:value:public,abstract:0::com.google.j2objc.annotations.ReflectionSupport$Level::3PP

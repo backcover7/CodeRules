@@ -1,0 +1,27 @@
+rules:
+  - id: sqli
+    options:
+      symbolic_propagation: true
+    patterns:
+      - pattern-either:
+        - pattern: org.springframework.jdbc.core.BatchUpdateUtils.executeBatchUpdate($D, ...)
+        - pattern: org.springframework.jdbc.core.namedparam.NamedParameterBatchUpdateUtils.executeBatchUpdate($D, ...)
+        - pattern: org.springframework.jdbc.core.namedparam.NamedParameterBatchUpdateUtils.executeBatchUpdateWithNamedParameters($D, ...)
+        - pattern: new org.springframework.jdbc.core.PreparedStatementCreatorFactory($D, ...)
+        - pattern-either:   # soql injection
+          - pattern: $DS.query(..., $D, ...)
+          - patterns:
+            - pattern-either:
+              - pattern: ($TYPE $DS).query(..., $D, ...)
+            - metavariable-regex:
+                metavariable: $TYPE
+                regex: com.salesforce.sds.core.gus.client.SfdcClient|common.api.soap.DirectSoap|.*
+      - metavariable-pattern:
+          metavariable: $D
+          patterns:
+            - pattern-not: |
+                "..."
+    message: Semgrep found a match related to sql injection
+    severity: WARNING
+    languages:
+      - java

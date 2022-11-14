@@ -1,0 +1,21 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (java.sql.Statement $A).executeQuery(...)
+      - pattern: (java.sql.Statement $A).execute(...)
+      - pattern: (java.sql.Statement $A).executeUpdate(...)
+      - pattern: (java.sql.Statement $A).executeLargeUpdate(...)
+      - pattern: (java.sql.Statement $A).addBatch(...)
+      - pattern: (java.sql.PreparedStatement $A).executeQuery(...)
+      - pattern: (java.sql.PreparedStatement $A).execute(...)
+      - pattern: (java.sql.PreparedStatement $A).executeUpdate(...)
+      - pattern: (java.sql.PreparedStatement $A).executeLargeUpdate(...)
+      - pattern: (java.sql.PreparedStatement $A).addBatch(...)
+      - pattern: (java.sql.Connection $A).prepareCall(...)
+      - pattern: (java.sql.Connection $A).prepareStatement(...)
+      - pattern: (java.sql.Connection $A).nativeSQL(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

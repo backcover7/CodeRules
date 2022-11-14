@@ -1,0 +1,63 @@
+rules:
+  - id: xml
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (javax.xml.parsers.DocumentBuilder $DB). ... .parse(...)
+      - pattern: (javax.xml.parsers.DocumentBuilderFactory $DBF). ... .parse(...)
+      - pattern: javax.xml.parsers.DocumentBuilderFactory. ... .parse(...)
+      - pattern: (javax.xml.stream.XMLInputFactory $XML). ... .createXMLStreamReader(...)
+      - pattern: (javax.xml.stream.XMLInputFactory $XML). ... .createXMLEventReader(...)
+      - pattern: javax.xml.stream.XMLInputFactory. ... .createXMLStreamReader(...)
+      - pattern: javax.xml.stream.XMLInputFactory. ... .createXMLEventReader(...)
+      - pattern: (org.jdom.input.SAXBuilder $SAX). ... .build(...)
+      - pattern: (org.jdom2.input.SAXBuilder $SAX). ... .build(...)
+      - pattern: (javax.xml.parsers.SAXParser $SAX). ... .parse(...)
+      - pattern: (javax.xml.parsers.SAXParserFactory $SAXFCT). ... .parse(...)
+      - pattern: javax.xml.parsers.SAXParserFactory. ... .parse(...)
+      - pattern: (org.dom4j.io.SAXReader $SAX). ... .read(...)
+      - pattern: (org.xml.sax.XMLReader $SAX). ... .parse(...)
+      - pattern: org.xml.sax.helpers.XMLReaderFactory. ... .parse(...)
+      - pattern: (javax.xml.transform.Transformer $XML). ... .transform(...)
+      - pattern: (javax.xml.transform.TransformerFactory $TRANSFCT). ... .transform(...)
+      - pattern: javax.xml.transform.TransformerFactory. ... .transform(...)
+      - pattern: (javax.xml.transform.sax.SAXTransformerFactory $SAXTRANS). ... .newTransformerHandler(...)
+      - pattern: (javax.xml.transform.sax.SAXTransformerFactory $SAXTRANS). ... .newXMLFilter(...)
+      - pattern: javax.xml.transform.sax.SAXTransformerFactory. ... .newTransformerHandler(...)
+      - pattern: javax.xml.transform.sax.SAXTransformerFactory. ... .newXMLFilter(...)
+      - pattern: (javax.xml.validation.Schema $SCM). ... .newSchema(...)
+      - pattern: (javax.xml.validation.SchemaFactory $SCMFCT). ... .newSchema(...)
+      - pattern: javax.xml.validation.SchemaFactory. ... .newSchema(...)
+      - pattern: javax.xml.validation.Validator. ... .validate(...)
+      - pattern: (javax.xml.bind.Unmarshaller $UNMCTX). ... .unmarshal(...)
+      - pattern: (javax.xml.bind.JAXBContext $JAXB). ... .unmarshal(...)
+      - pattern: javax.xml.bind.JAXBContext. ... .unmarshal(...)
+      - pattern: (javax.xml.xpath.XPathExpression $XPATHEXPR). ... .evaluate(...)
+      - pattern: javax.xml.xpath.XPathFactory. ... .evaluate(...)
+      - pattern: (org.simpleframework.xml.core.Persister $PER). ... .read(...)
+      - pattern: (org.simpleframework.xml.core.Persister $PER). ... .validate(...)
+      - pattern: (org.simpleframework.xml.Serializer $SER). ... .read(...)
+      - pattern: (org.simpleframework.xml.Serializer $SER). ... .validate(...)
+      - pattern: (org.simpleframework.xml.stream.DocumentProvider $DOC). ... .provide(...)
+      - pattern: (org.simpleframework.xml.stream.StreamProvider $STREAM). ... .provide(...)
+      - pattern: (org.simpleframework.xml.stream.NodeBuilder $NODE). ... .read(...)
+      - pattern: (org.simpleframework.xml.stream.Formatter $FORM). ... .format(...)
+      - pattern: org.rundeck.api.parser.ParserHelper. ... .loadDocument(...)
+      - pattern: (org.apache.commons.digester3.Digester $DIG). ... .parse(...)
+      - pattern: (org.apache.commons.digester.Digester $DIG). ... .parse(...)
+      - pattern: (org.apache.tomcat.util.digester.Digester $DIG). ... .parse(...)
+    message: Semgrep found a XML parser
+    languages:
+      - java
+    severity: WARNING
+    metadata:
+      references:
+        - https://sourcegraph.com/github.com/github/codeql/-/blob/java/ql/lib/semmle/code/java/security/XmlParsers.qll
+        - https://sourcegraph.com/github.com/github/codeql/-/blob/java/ql/src/experimental/Security/CWE/CWE-611/XXELib.qll
+        - https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html
+        - http://www.lmxspace.com/2019/10/31/Java-XXE-%E6%80%BB%E7%BB%93/
+        - http://scz.617.cn:8/misc/201911211542.txt
+        - https://zhuanlan.zhihu.com/p/265402618
+        - https://xz.aliyun.com/t/3372#toc-2
+        - https://sourcegraph.com/github.com/github/codeql/-/blob/java/ql/lib/semmle/code/java/security/XsltInjection.qll
+  

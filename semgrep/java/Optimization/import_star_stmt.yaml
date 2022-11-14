@@ -1,0 +1,12 @@
+rules:
+  - id: import_star_stmt
+    options:
+      symoblic_propagation: true
+    patterns:
+      - pattern: import $CLS.*;
+      - pattern-not: import $CLS.$FOO.*;
+      - focus-metavariable: $CLS
+    message: Semgrep found a match of star symbol in import statement
+    languages:
+      - java
+    severity: WARNING

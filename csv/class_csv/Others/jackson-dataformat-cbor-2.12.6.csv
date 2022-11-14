@@ -1,0 +1,15 @@
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORConstants:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORFactory:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORFactoryBuilder:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORGenerator$Feature:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORGenerator:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORParser$Feature:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORParser:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORParserBootstrapper:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORReadContext:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORSimpleValue:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.CBORWriteContext:3PP
+com.fasterxml.jackson.dataformat.cbor:com.fasterxml.jackson.dataformat.cbor.PackageVersion:3PP
+com.fasterxml.jackson.dataformat.cbor.databind:com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper$Builder:3PP
+com.fasterxml.jackson.dataformat.cbor.databind:com.fasterxml.jackson.dataformat.cbor.databind.CBORMapper:3PP
+:module-info:3PP

@@ -1,0 +1,11 @@
+rules:
+  - id: mybatis
+    pattern: |
+        <...>
+        ...
+        #{...}
+        ...
+        </...>
+    message: Semgrep found a SQL injection using Mybatis
+    languages: [generic]
+    severity: WARNING

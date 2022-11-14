@@ -1,0 +1,28 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (javax.xml.xpath.XPath $A).compile(...)
+        - pattern: (com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl $A).newXPath(...). ... .compile(...)
+        - pattern: com.amazonaws.util.XpathUtils.xpath(...). ... .compile(...)
+        - pattern: (org.apache.xpath.jaxp.XPathFactoryImpl $A).newXPath(...). ... .compile(...)
+        - pattern: javax.xml.xpath.XPathFactory.newInstance(...). ... .compile(...)
+        - pattern: (javax.xml.xpath.XPathFactory $A).newXPath(...). ... .compile(...)
+        - pattern: (javax.xml.xpath.XPathFactoryFinder.2 $A).run(...). ... .compile(...)
+        - pattern: (javax.xml.xpath.XPathFactoryFinder $A).newFactory(...). ... .compile(...)
+        - pattern: (net.sf.saxon.xpath.XPathFactoryImpl $A).newXPath(...). ... .compile(...)
+      - pattern-either:
+        - pattern: com.amazonaws.util.XpathUtils.xpath(...). ... .evaluate(...)
+        - pattern: (javax.xml.xpath.XPathFactory $A).newXPath(...). ... .evaluate(...)
+        - pattern: (javax.xml.xpath.XPathFactoryFinder $A).newFactory(...). ... .evaluate(...)
+        - pattern: javax.xml.xpath.XPathFactory.newInstance(...). ... .evaluate(...)
+        - pattern: (javax.xml.xpath.XPath $A).evaluate(...)
+        - pattern: (org.apache.xpath.jaxp.XPathFactoryImpl $A).newXPath(...). ... .evaluate(...)
+        - pattern: (javax.xml.xpath.XPathFactoryFinder.2 $A).run(...). ... .evaluate(...)
+        - pattern: (net.sf.saxon.xpath.XPathFactoryImpl $A).newXPath(...). ... .evaluate(...)
+        - pattern: (com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl $A).newXPath(...). ... .evaluate(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

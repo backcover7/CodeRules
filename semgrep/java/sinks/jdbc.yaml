@@ -1,0 +1,13 @@
+rules:
+  - id: jdbc
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: java.sql.Driver.connect("$URL", ...)
+      - pattern: (com.mysql.fabric.jdbc.FabricMySQLDriver $DR).connect("$URL", ...)
+      - pattern: (com.mysql.jdbc.NonRegisteringDriver $DR).parseURL("$URL", ...)
+      - pattern: (com.amazon.redshift.jdbc.DataSource $DS).setURL(...)    # https://github.com/p1n93r/redshift-jdbc-RCE/blob/main/src/main/webapp/index.jsp
+    message: Semgrep found a match
+    languages:
+      - java
+    severity: WARNING

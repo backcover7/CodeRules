@@ -1,0 +1,54 @@
+rules:
+  - id: gadget_source
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - patterns:
+        - pattern-inside: class $CLS implements java.io.Serializable {...}
+        - pattern: $METHOD(...) {...}
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: readObject|readObjectNoData|readResolve
+      - patterns:
+        - pattern-inside: class $CLS implements java.io.Externalizable {...}
+        - pattern: readExternal(...) {...}
+      - patterns:
+        - pattern-inside: class $CLS implements java.io.ObjectInputValidation {...}
+        - pattern: validateObject(...) {...}
+      - patterns:
+        - pattern: ($CLS $HANDLER).invoke(...)
+        - metavariable-regex:
+            metavariable: $CLS
+            regex: (java.lang.)?reflect.InvocationHandler|(javassist.util.proxy|org.jboss.weld.bean.proxy).MethodHandler
+      - patterns:
+        - pattern: ($CLS $OBJ).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $CLS
+            regex: groovy.lang.MetaClass|org.codehaus.groovy.runtime.InvokerHelper
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: invokeMethod|invokeConstructor|invokeStaticMethod
+      - patterns:
+        - pattern: (java.util.Map $MAP).$METHOD(...)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: get|put|entrySet
+      - patterns:
+        - pattern-inside: ($CLS $OBJ).finalize(...)
+        - metavariable-regex:
+            metavariable: $CLS
+            regex: (java.lang.)?Object
+      - pattern: (java.util.Comparators $CMP).compare(...)
+      - patterns:
+        - pattern-inside: class $CLS implements $SERINTERFACE {...}
+        - pattern: $OBJ.$METHOD(...)
+        - metavariable-regex:
+            metavariable: $SERINTERFACE
+            regex: java.io.(Serializable|Externalizable)
+        - metavariable-regex:
+            metavariable: $METHOD
+            regex: hashCode|equals|compare|compareTo|heapify|toString|setValue|finalize|connect
+    message: Semgrep found a match
+    languages:
+      - java
+    severity: WARNING

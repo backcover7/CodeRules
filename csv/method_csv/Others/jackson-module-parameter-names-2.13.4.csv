@@ -1,0 +1,15 @@
+com.fasterxml.jackson.module.paramnames:PackageVersion:public,final:java.lang.Object:com.fasterxml.jackson.core.Versioned:<init>:public:0::void::3PP
+com.fasterxml.jackson.module.paramnames:PackageVersion:public,final:java.lang.Object:com.fasterxml.jackson.core.Versioned:version:public:0::com.fasterxml.jackson.core.Version::3PP
+com.fasterxml.jackson.module.paramnames:PackageVersion:public,final:java.lang.Object:com.fasterxml.jackson.core.Versioned:<clinit>:static:0::void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterExtractor::java.lang.Object:java.io.Serializable:<init>::0::void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterExtractor::java.lang.Object:java.io.Serializable:getParameters:public:1:java.lang.reflect.Executable:java.lang.reflect.Parameter[]::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesAnnotationIntrospector:public:com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector::<init>::2:com.fasterxml.jackson.annotation.JsonCreator$Mode,com.fasterxml.jackson.module.paramnames.ParameterExtractor:void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesAnnotationIntrospector:public:com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector::findImplicitPropertyName:public:1:com.fasterxml.jackson.databind.introspect.AnnotatedMember:java.lang.String::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesAnnotationIntrospector:public:com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector::findParameterName:private:1:com.fasterxml.jackson.databind.introspect.AnnotatedParameter:java.lang.String::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesAnnotationIntrospector:public:com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector::getParameters:private:1:com.fasterxml.jackson.databind.introspect.AnnotatedWithParams:java.lang.reflect.Parameter[]::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesAnnotationIntrospector:public:com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector::findCreatorAnnotation:public:2:com.fasterxml.jackson.databind.cfg.MapperConfig,com.fasterxml.jackson.databind.introspect.Annotated:com.fasterxml.jackson.annotation.JsonCreator$Mode::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesModule:public:com.fasterxml.jackson.databind.module.SimpleModule::<init>:public:1:com.fasterxml.jackson.annotation.JsonCreator$Mode:void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesModule:public:com.fasterxml.jackson.databind.module.SimpleModule::<init>:public:0::void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesModule:public:com.fasterxml.jackson.databind.module.SimpleModule::setupModule:public:1:com.fasterxml.jackson.databind.Module$SetupContext:void::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesModule:public:com.fasterxml.jackson.databind.module.SimpleModule::hashCode:public:0::int::3PP
+com.fasterxml.jackson.module.paramnames:ParameterNamesModule:public:com.fasterxml.jackson.databind.module.SimpleModule::equals:public:1:java.lang.Object:boolean::3PP

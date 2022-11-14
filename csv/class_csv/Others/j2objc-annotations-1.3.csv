@@ -1,0 +1,12 @@
+com.google.j2objc.annotations:com.google.j2objc.annotations.AutoreleasePool:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.J2ObjCIncompatible:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.LoopTranslation$LoopStyle:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.LoopTranslation:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.ObjectiveCName:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.Property:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.ReflectionSupport$Level:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.ReflectionSupport:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.RetainedLocalRef:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.RetainedWith:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.Weak:3PP
+com.google.j2objc.annotations:com.google.j2objc.annotations.WeakOuter:3PP

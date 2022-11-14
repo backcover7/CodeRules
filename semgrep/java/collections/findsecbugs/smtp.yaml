@@ -1,0 +1,53 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (javax.mail.MessageAware $A).getMessageContext(...). ... .setSubject(...)
+        - pattern: (javax.mail.UIDFolder $A).getMessageByUID(...). ... .setSubject(...)
+        - pattern: (javax.mail.event.FolderEvent $A).getNewFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Message $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPFolder $A).getParent(...). ... .setSubject(...)
+        - pattern: (javax.mail.Session $A).getStore(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.DefaultFolder $A).getParent(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.DefaultFolder $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.ReadOnlyFolderException $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.POP3Folder $A).getParent(...). ... .setSubject(...)
+        - pattern: (javax.mail.FolderNotFoundException $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Store $A).getDefaultFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Store $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Folder $A).getParent(...). ... .setSubject(...)
+        - pattern: (javax.mail.Session $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Folder $A).getStore(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.POP3Folder $A).getMessage(...). ... .setSubject(...)
+        - pattern: (javax.mail.event.TransportEvent $A).getMessage(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPFolder $A).getMessage(...). ... .setSubject(...)
+        - pattern: (javax.mail.internet.MimeMessage $A).reply(...). ... .setSubject(...)
+        - pattern: (javax.mail.FolderClosedException $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.POP3Store $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.StoreClosedException $A).getStore(...). ... .setSubject(...)
+        - pattern: (javax.mail.Message $A).setSubject(...)
+        - pattern: (com.sun.mail.imap.DefaultFolder $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPStore $A).getDefaultFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Message $A).reply(...). ... .setSubject(...)
+        - pattern: (javax.mail.event.MessageChangedEvent $A).getMessage(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPFolder $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.POP3Folder $A).getFolder(...). ... .setSubject(...)
+        - pattern: javax.mail.Session.getDefaultInstance(...). ... .setSubject(...)
+        - pattern: (javax.mail.event.FolderEvent $A).getFolder(...). ... .setSubject(...)
+        - pattern: (javax.mail.Folder $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPFolder $A).getMessageByUID(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.DefaultFolder $A).getParent(...). ... .setSubject(...)
+        - pattern: (javax.mail.Folder $A).getMessage(...). ... .setSubject(...)
+        - pattern: (javax.mail.internet.MimePartDataSource $A).getMessageContext(...). ... .setSubject(...)
+        - pattern: (javax.mail.MessageContext $A).getMessage(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.imap.IMAPStore $A).getFolder(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.DefaultFolder $A).getMessage(...). ... .setSubject(...)
+        - pattern: (com.sun.mail.pop3.POP3Store $A).getDefaultFolder(...). ... .setSubject(...)
+      - pattern: (javax.mail.Message $A).addHeader(...)
+      - pattern: (javax.mail.Message $A).setDescription(...)
+      - pattern: (javax.mail.Message $A).setDisposition(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

@@ -1,0 +1,11 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (java.net.URL $A).openConnection(...)
+      - pattern: (java.net.URL $A).openStream(...)
+      - pattern: (java.net.URL $A).getContent(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

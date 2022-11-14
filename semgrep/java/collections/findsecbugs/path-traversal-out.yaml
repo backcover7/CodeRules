@@ -1,0 +1,10 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: new java.io.FileWriter(...)
+      - pattern: new java.io.FileOutputStream(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

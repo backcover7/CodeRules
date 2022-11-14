@@ -1,0 +1,12 @@
+io.netty.handler.proxy:io.netty.handler.proxy.HttpProxyHandler$1:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.Socks4ProxyHandler:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.HttpProxyHandler$HttpClientCodecWrapper:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyConnectException:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.HttpProxyHandler$HttpProxyConnectException:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyHandler$1:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyHandler:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyHandler$2:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyHandler$LazyChannelPromise:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.Socks5ProxyHandler:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.HttpProxyHandler:3PP
+io.netty.handler.proxy:io.netty.handler.proxy.ProxyConnectionEvent:3PP

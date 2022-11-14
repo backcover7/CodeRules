@@ -1,0 +1,14 @@
+org.apache.directory.api.asn1:org.apache.directory.api.asn1.Asn1Object:3PP
+org.apache.directory.api.asn1:org.apache.directory.api.asn1.Decoder:3PP
+org.apache.directory.api.asn1:org.apache.directory.api.asn1.DecoderException:3PP
+org.apache.directory.api.asn1:org.apache.directory.api.asn1.Encoder:3PP
+org.apache.directory.api.asn1:org.apache.directory.api.asn1.EncoderException:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Asn1Buffer:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Asn1Buffer2$1:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Asn1Buffer2$InternalBuffer:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Asn1Buffer2:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Asn1StringUtils:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.BitString:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Oid$1:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Oid$OidFSAState:3PP
+org.apache.directory.api.asn1.util:org.apache.directory.api.asn1.util.Oid:3PP

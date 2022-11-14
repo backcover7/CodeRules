@@ -1,0 +1,6 @@
+akka.event.slf4j:akka.event.slf4j.Logger$:3PP
+akka.event.slf4j:akka.event.slf4j.Logger:3PP
+akka.event.slf4j:akka.event.slf4j.SLF4JLogging:3PP
+akka.event.slf4j:akka.event.slf4j.Slf4jLogger$$anonfun$receive$1:3PP
+akka.event.slf4j:akka.event.slf4j.Slf4jLogger:3PP
+akka.event.slf4j:akka.event.slf4j.Slf4jLoggingFilter:3PP

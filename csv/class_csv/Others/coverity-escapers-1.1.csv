@@ -1,0 +1,4 @@
+com.coverity.security:com.coverity.security.Filter:3PP
+com.coverity.security:com.coverity.security.Escape:3PP
+com.coverity.security:com.coverity.security.FilterEL:3PP
+com.coverity.security:com.coverity.security.EscapeEL:3PP

@@ -1,0 +1,118 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: new org.springframework.jdbc.core.PreparedStatementCreatorFactory(...)
+      - pattern: (org.springframework.jdbc.core.PreparedStatementCreatorFactory $A).newPreparedStatementCreator(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .batchUpdate(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).execute(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .execute(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).query(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .query(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForList(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .queryForList(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForMap(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .queryForObject(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .queryForRowSet(...)
+      - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForInt(...)
+      - pattern: (org.springframework.jdbc.core.JdbcOperations $A).queryForLong(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcOperations(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.JdbcOperations $A).update(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations $A).getJdbcOperations(...). ... .update(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).batchUpdate(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .batchUpdate(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .batchUpdate(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).execute(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .execute(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .execute(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .query(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).query(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .query(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForList(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .queryForList(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .queryForList(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForMap(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .queryForMap(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .queryForObject(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .queryForObject(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .queryForRowSet(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForRowSet(...)
+      - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForInt(...)
+      - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).queryForLong(...)
+      - pattern-either:
+        - pattern: (org.springframework.jdbc.core.support.JdbcDaoSupport $A).getJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcCall $A).getJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport $A).getNamedParameterJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate $A).getJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.core.JdbcTemplate $A).update(...)
+        - pattern: (org.springframework.jdbc.core.simple.AbstractJdbcInsert $A).getJdbcTemplate(...). ... .update(...)
+        - pattern: (org.springframework.jdbc.object.RdbmsOperation $A).getJdbcTemplate(...). ... .update(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

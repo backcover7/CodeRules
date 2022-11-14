@@ -1,0 +1,5 @@
+sun.net.spi.nameservice.dns:sun.net.spi.nameservice.dns.DNSNameService$1:JDK
+sun.net.spi.nameservice.dns:sun.net.spi.nameservice.dns.DNSNameService$2:JDK
+sun.net.spi.nameservice.dns:sun.net.spi.nameservice.dns.DNSNameService$ThreadContext:JDK
+sun.net.spi.nameservice.dns:sun.net.spi.nameservice.dns.DNSNameService:JDK
+sun.net.spi.nameservice.dns:sun.net.spi.nameservice.dns.DNSNameServiceDescriptor:JDK

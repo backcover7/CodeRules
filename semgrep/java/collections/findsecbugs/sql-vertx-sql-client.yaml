@@ -1,0 +1,18 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern: (io.vertx.sqlclient.SqlClient $A).query(...)
+      - pattern: (io.vertx.sqlclient.SqlClient $A).preparedQuery(...)
+      - pattern-either:
+        - pattern: (io.vertx.sqlclient.SqlConnection $A).prepare(...)
+        - pattern: (io.vertx.sqlclient.impl.SqlConnectionImpl $A).exceptionHandler(...). ... .prepare(...)
+        - pattern: (io.vertx.sqlclient.impl.SqlConnectionImpl $A).closeHandler(...). ... .prepare(...)
+        - pattern: (io.vertx.sqlclient.SqlConnection $A).closeHandler(...). ... .prepare(...)
+        - pattern: (io.vertx.sqlclient.SqlConnection $A).exceptionHandler(...). ... .prepare(...)
+        - pattern: (io.vertx.sqlclient.impl.SqlConnectionImpl $A).prepare(...). ... .prepare(...)
+        - pattern: (io.vertx.sqlclient.SqlConnection $A).prepare(...). ... .prepare(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING

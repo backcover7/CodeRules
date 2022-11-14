@@ -1,0 +1,50 @@
+rules:
+  - id: ${node} 
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - pattern-either:
+        - pattern: (play.api.libs.ws.WSRequest $A).withRequestFilter(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).addHttpHeaders(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).addQueryStringParameters(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withProxyServer(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withHttpHeaders(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSClient $A).url(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withQueryString(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withMethod(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withQueryStringParameters(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withVirtualHost(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withBody(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withHeaders(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).addCookies(...). ... .get(...)
+        - pattern: (play.libs.ws.WSClient $A).asScala(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withFollowRedirects(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withRequestTimeout(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).sign(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withCookies(...). ... .get(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withAuth(...). ... .get(...)
+      - pattern-either:
+        - pattern: (play.api.libs.ws.WSRequest $A).addHttpHeaders(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withCookies(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).post(...)
+        - pattern: (play.libs.ws.WSClient $A).asScala(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withRequestTimeout(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withHttpHeaders(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withFollowRedirects(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withQueryString(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withAuth(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withHeaders(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).sign(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withVirtualHost(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).addQueryStringParameters(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSClient $A).url(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withRequestFilter(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withBody(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withMethod(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withQueryStringParameters(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).withProxyServer(...). ... .post(...)
+        - pattern: (play.api.libs.ws.WSRequest $A).addCookies(...). ... .post(...)
+    message: Semgrep found a match of method in ${node} csv
+    languages: [java]
+    severity: WARNING
