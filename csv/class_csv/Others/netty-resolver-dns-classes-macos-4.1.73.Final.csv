@@ -1,3 +1,0 @@
-io.netty.resolver.dns.macos:io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider$1:3PP
-io.netty.resolver.dns.macos:io.netty.resolver.dns.macos.DnsResolver:3PP
-io.netty.resolver.dns.macos:io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider:3PP

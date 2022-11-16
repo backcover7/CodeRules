@@ -30,10 +30,10 @@ rules:
                 - pattern: (jakarta.faces.context $CTX).getResponseWriter(...)
                 - pattern: (javax.faces.context.FacesContext $CTX).getResponseStream(...)
                 - pattern: (jakarta.faces.context $CTX).getResponseStream(...)
-                - pattern: javax.faces.context.ResponseWriter
-                - pattern: javax.faces.context.ResponseStream
-                - pattern: jakarta.faces.context.ResponseWriter
-                - pattern: jakarta.faces.context.ResponseStream
+                - pattern: javax.faces.context.ResponseWriter(...)
+                - pattern: javax.faces.context.ResponseStream(...)
+                - pattern: jakarta.faces.context.ResponseWriter(...)
+                - pattern: jakarta.faces.context.ResponseStream(...)
         - pattern: (org.apache.batik.swing.svg.JSVGComponent $JSVGC).loadSVGDocument($URL)
       - metavariable-regex:
           metavariable: $METHOD

@@ -4,6 +4,7 @@ rules:
       symbolic_propagation: true
     patterns:
       - pattern-either:
+        - pattern: (java.sql.Connection $C).setCatalog(..., "EXTERNAL_CONFIG_CONTROL")
         - pattern: org.springframework.jdbc.core.BatchUpdateUtils.executeBatchUpdate($D, ...)
         - pattern: org.springframework.jdbc.core.namedparam.NamedParameterBatchUpdateUtils.executeBatchUpdate($D, ...)
         - pattern: org.springframework.jdbc.core.namedparam.NamedParameterBatchUpdateUtils.executeBatchUpdateWithNamedParameters($D, ...)

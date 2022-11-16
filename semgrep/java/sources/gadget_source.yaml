@@ -8,7 +8,7 @@ rules:
         - pattern: $METHOD(...) {...}
         - metavariable-regex:
             metavariable: $METHOD
-            regex: readObject|readObjectNoData|readResolve
+            regex: readObject|readObjectNoData|readUnshared|readArray|readResolve
       - patterns:
         - pattern-inside: class $CLS implements java.io.Externalizable {...}
         - pattern: readExternal(...) {...}

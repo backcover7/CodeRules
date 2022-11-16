@@ -5,10 +5,6 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class ClasspathUtils {
-    /**
-     *   Add the following directories to Library in Project Structure of IDEA
-     *   JDK, Dependencies_LIB, TRANSITIVE_LIB, SECONDARY_TRANSITIVE_LIB, SRC_MAIN_LIB/DONT_DELETE
-     */
     public final static String SRC_MAIN = Paths.get("src/main").toAbsolutePath().toString();
     public final static String Current_POM = Paths.get("pom.xml").toAbsolutePath().toString();
     public final static String SRC_MAIN_LIB = Paths.get(SRC_MAIN, "Lib").toString();
@@ -45,36 +41,7 @@ public class ClasspathUtils {
         // Download Maven Jars
         if (MavenFlag) {
             System.out.println("[+] Downloading all direct dependencies ...");
-            DownloadPOMDeps(ClasspathUtils.Current_POM, ClasspathUtils.Dependencies, false);
-//            System.out.println("[+] Downloading all transitive dependencies ...");
-//            DownloadPOMDeps(ClasspathUtils.Current_POM, ClasspathUtils.TRANSITIVE_LIB, false);
-//
-//            ArrayList<String> LibJarFiles = FilesUtils.getExtensionFiles(ClasspathUtils.Dependencies, StringsUtils.JarExtension, true);
-//            ArrayList<String> TRANSITIVE_LIB = FilesUtils.getExtensionFiles(ClasspathUtils.TRANSITIVE_LIB, StringsUtils.JarExtension, true);
-//
-//            System.out.println("[+] Downloading all secondary transitive dependencies ...");
-//            for (String jar : TRANSITIVE_LIB) {
-//                if (!LibJarFiles.contains(jar)) {
-//                    List<String> resources = FilesUtils.getResourcesFromJar(jar, StringsUtils.POM_XML, true);
-//                    if (resources.size() == 0) {
-//                        continue;
-//                    }
-//                    String TransitivePomPath = resources.get(0);
-//                    try (JarFile jarFile = new JarFile(Paths.get(jar).toAbsolutePath().toString())){
-//                        JarEntry entry = jarFile.getJarEntry(TransitivePomPath);
-//                        InputStream inputStream = jarFile.getInputStream(entry);
-//                        String CopyTransitivePomPath = Paths.get(ClasspathUtils.Dependency, StringsUtils.POM_XML).toString();
-//                        File outputFile = new File(CopyTransitivePomPath);
-//                        FileUtils.copyInputStreamToFile(inputStream, outputFile);
-//                        ClasspathUtils.DownloadPOMDeps(CopyTransitivePomPath,
-//                                Paths.get(ClasspathUtils.SECONDARY_TRANSITIVE_LIB).toAbsolutePath().toString(),
-//                                true);
-//                        FileUtils.delete(new File(CopyTransitivePomPath));
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
+            DownloadPOMDeps(Current_POM, Dependencies, false);
         }
     }
 }

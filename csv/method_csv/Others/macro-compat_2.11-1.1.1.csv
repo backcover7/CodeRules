@@ -1,4 +1,0 @@
-macrocompat:bundle:public:scala.annotation.Annotation:scala.annotation.StaticAnnotation:<init>:public:0::void::3PP
-macrocompat:BundleMacro:public:java.lang.Object::c:public:0::scala.reflect.macros.blackbox.Context::3PP
-macrocompat:BundleMacro:public:java.lang.Object::bundleImpl:public:1:scala.collection.Seq:scala.reflect.api.Trees$TreeApi::3PP
-macrocompat:BundleMacro:public:java.lang.Object::<init>:public:1:scala.reflect.macros.blackbox.Context:void::3PP

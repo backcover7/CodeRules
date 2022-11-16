@@ -14,7 +14,7 @@ rules:
       - pattern: (java.lang.reflect.Method $METHOD).invoke(...)
       - pattern: (Class $CLS).newInstance(...)
       - pattern: (ClassLoader $CLS)
-      - pattern: (java.net.ClassLoader $CLS)
+      - pattern: (java.net.URLClassLoader $CLS)
       - patterns:
         - pattern: (ClassLoader $CL).$METHOD(...)
         - metavariable-regex:

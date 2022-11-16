@@ -5,6 +5,18 @@ rules:
     pattern-either:
       - pattern: new java.io.ObjectInputStream($D, ...).readObject(...)
       - pattern: new java.io.ObjectInputStream($D, ...).readUnshared(...)
+      - pattern: new java.io.ObjectInputStream($D, ...).readArray(...)
+      - patterns:
+        - pattern: class $CLS implements $INTERFACE {...}
+        - metavariable-regex:
+            metavariable: $INTERFACE
+            regex: java.io.Serializable|java.lang.reflect.InvocationHandler
+        - pattern-inside:
+          - pattern-either:
+            - pattern: readObject(...) {...}
+            - pattern: readUnshared(...) {...}
+            - pattern: readArray(...) {...}
+            - pattern: readResolve(...) {...}
       - pattern: new java.beans.XMLDecoder($D, ...).readObject(...)
       - pattern: (com.thoughtworks.xstream.XStream $XST).fromXML($D, ...)
       - pattern: (com.thoughtworks.xstream.XStream $XST).unmarshal($D, ...)
@@ -37,7 +49,7 @@ rules:
       - pattern: new com.esotericsoftware.yamlbeans.YamlReader($D, ...).read(...)
       - pattern: (com.caucho.hessian.io.AbstractHessianInput $HES).readObject(...)
       - pattern: new com.caucho.hessian.io.Hessian2StreamingInput($D, ...).readObject(...)
-      - pattern: new om.caucho.hessian.io.Hessian2Input($D, ...).readObject(...)
+      - pattern: new com.caucho.hessian.io.Hessian2Input($D, ...).readObject(...)
       - pattern: (com.alibaba.com.caucho.hessian.io.AbstractHessianInput $HES).readObject(...)
       - pattern: new com.alibaba.com.caucho.hessian.io.Hessian2StreamingInput($D, ...).readObject(...)
       - pattern: new com.alibaba.com.caucho.hessian.io.Hessian2Input($D, ...).readObject(...)
@@ -51,15 +63,10 @@ rules:
           - pattern: (com.fasterxml.jackson.databind.ObjectMapper $MAP).$R($D, ...)
           - metavariable-regex:
               metavariable: $R
-              regex: readValue|readValues|teeToValue
+              regex: readValue|readValues|teeToValue|readTree
         - pattern: '@JsonTypeInfo(...)'
       - pattern: (org.jabsorb.JSONSerializer $JSON).unmarshall($S, $C, $D)
       - pattern: (org.jabsorb.JSONSerializer $JSON).fromJSON($D, ...)
-      - patterns:
-        - pattern: (jodd.json.JsonParser $JSON).$METHOD(...)
-        - metavariable-regex:
-            metavariable: $METHOD
-            regex: (parse.*)
       - patterns:
         - pattern: (jodd.json.JsonParser $JSON).$METHOD($D, ...)
         - metavariable-regex:

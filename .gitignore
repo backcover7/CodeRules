@@ -2,3 +2,6 @@
 csv/relationships.db
 SemCSV/src/main/Lib/Dependencies
 SemCSV/target/
+
+SemSpoon/target/
+SemSpoon/src/main/lib/

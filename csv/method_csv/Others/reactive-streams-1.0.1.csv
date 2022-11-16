@@ -1,7 +1,0 @@
-org.reactivestreams:Publisher:public,abstract,interface:::subscribe:public,abstract:1:org.reactivestreams.Subscriber:void::3PP
-org.reactivestreams:Subscriber:public,abstract,interface:::onSubscribe:public,abstract:1:org.reactivestreams.Subscription:void::3PP
-org.reactivestreams:Subscriber:public,abstract,interface:::onNext:public,abstract:1:java.lang.Object:void::3PP
-org.reactivestreams:Subscriber:public,abstract,interface:::onError:public,abstract:1:java.lang.Throwable:void::3PP
-org.reactivestreams:Subscriber:public,abstract,interface:::onComplete:public,abstract:0::void::3PP
-org.reactivestreams:Subscription:public,abstract,interface:::request:public,abstract:1:long:void::3PP
-org.reactivestreams:Subscription:public,abstract,interface:::cancel:public,abstract:0::void::3PP
