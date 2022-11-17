@@ -10,5 +10,8 @@ https://github.com/github/codeql/blob/main/java/ql/lib/semmle/code/java/dataflow
 4. The `calltype` column is type of the method, static or instance.
 5. The `kind` column is a tag that to determine to which classes the interpreted elements should be added. For example, for sources "remote" indicates a default remote flow source, and for summaries "taint" indicates a default additional taint step and "value" indicates a globally applicable value-preserving step.
 
+If kind has "annotation" keyword then the method should be empty.
+If method column is wrapped with brackets then it might be a regex.
+
 ## Database
 https://dbdiagram.io/

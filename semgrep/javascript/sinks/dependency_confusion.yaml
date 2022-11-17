@@ -1,0 +1,29 @@
+rules:
+  - id: dependency_confusion
+    patterns:
+      - pattern-either:
+        - pattern-inside: |
+            "dependencies":{...}
+        - pattern-inside: |
+            "devDependencies":{...}
+        - pattern-inside: |
+            "peerDependencies":{...}
+        - pattern-inside: |
+            "optionalDependencies":{...}
+      - pattern: |
+          "$DEPS" : "$VERSION"
+      - metavariable-regex:
+          metavariable: $VERSION
+          regex: ^\^
+    paths:
+      include:
+        - package.json
+    message: Semgrep found a match of dependency confusion in package.json
+    languages:
+      - json
+    severity: WARNING
+    metadata:
+      references:
+        - https://www.npmjs.com/org/{org}
+        - https://www.npmjs.com/package/{package}/v/{version}
+        - https://www.npmjs.com/package/@{org}/{package}/v/{version}
