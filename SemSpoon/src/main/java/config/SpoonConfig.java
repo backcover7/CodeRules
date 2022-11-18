@@ -21,13 +21,13 @@ public class SpoonConfig {
 //    https://spoon.gforge.inria.fr/launcher.html
     public CtModel getSpoonMavenLauncher(String codebase) {
         MavenLauncher launcher = new MavenLauncher(codebase, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
+        launcher.addInputResource(codebase);
         launcher.buildModel();
         return launcher.getModel();
     }
 
     public CtModel getSpoonModel(String codebase) {
         Launcher launcher = getSpoonLauncher(codebase);
-        launcher.addInputResource(codebase);
         launcher.buildModel();
         return launcher.getModel();
     }

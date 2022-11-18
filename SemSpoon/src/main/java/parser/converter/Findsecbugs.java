@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.nio.file.Paths;
 import java.util.*;
 
-public class Findsecbugs extends Converter {
+public class Findsecbugs {
     private final String separator = CharUtils.colon;
     private final String tag = "findsecbugs";
     public final String csvDirectory = Paths.get(FileUtils.collections, this.tag, "injection-sinks").toString();
@@ -74,13 +74,13 @@ public class Findsecbugs extends Converter {
     private void MergetMethod(String[] csvArray, HashSet<String> MethodSet) {
         String unique = String.join(
                 CharUtils.colon,
-                csvArray[NAMESPACEINDEX],
-                csvArray[CLASSTYPEINDEX],
-                csvArray[METHODINDEX],
-                csvArray[KINDINDEX]
+                csvArray[CSVDefinition.NAMESPACEINDEX],
+                csvArray[CSVDefinition.CLASSTYPEINDEX],
+                csvArray[CSVDefinition.METHODINDEX],
+                csvArray[CSVDefinition.KINDINDEX]
         );
 
-        if (csvArray[NAMESPACEINDEX].contains("(")) {
+        if (csvArray[CSVDefinition.NAMESPACEINDEX].contains("(")) {
             System.out.println("a");
         }
 

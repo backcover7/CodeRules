@@ -12,6 +12,7 @@ https://github.com/github/codeql/blob/main/java/ql/lib/semmle/code/java/dataflow
 
 If kind has "annotation" keyword then the method should be empty.
 If method column is wrapped with brackets then it might be a regex.
+If method column is "ANNOTATION" then it means this classtype might be used in annotation type.
 
 ## Database
 https://dbdiagram.io/

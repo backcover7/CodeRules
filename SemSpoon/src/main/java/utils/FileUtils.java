@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class FileUtils {
     public static String csv = Paths.get("../csv").toAbsolutePath().toString();
     public static String collections = Paths.get(csv, "collections").toString();
-    public static String sinks = Paths.get(csv, "sinks.csv").toString();
-    public static String sources = Paths.get(csv, "sources.csv").toString();
+    public static String sinks = Paths.get(collections, "sinks.csv").toString();
+    public static String sources = Paths.get(collections, "sources.csv").toString();
 
     public static String Expanduser(String path) {
         String user=System.getProperty("user.home");

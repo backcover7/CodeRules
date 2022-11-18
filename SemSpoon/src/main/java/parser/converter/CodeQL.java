@@ -6,9 +6,8 @@ import utils.FileUtils;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class CodeQL extends Converter {
+public class CodeQL {
     private final static int CODEQL_NAMESPACEINDEX = 0;
     private final static int CODEQL_CLASSTYPEINDEX = 1;
     private final static int CODEQL_METHODINDEX = 3;
