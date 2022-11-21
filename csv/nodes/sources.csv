@@ -173,6 +173,8 @@ javax.ws.rs.container:ContainerRequestContext:getHeaderString:remote
 javax.ws.rs.container:ContainerRequestContext:getLanguage:remote
 javax.ws.rs.container:ContainerRequestContext:getMediaType:remote
 javax.ws.rs.container:ContainerRequestContext:getUriInfo:remote
+org.apache.commons.httpclient:HttpMethod:getPath:remote
+org.apache.commons.httpclient:HttpMethod:getURI:remote
 org.apache.hc.core5.http.io:HttpRequestHandler:handle:remote
 org.apache.hc.core5.http.io:HttpServerRequestHandler:handle:remote
 org.apache.http:HttpEntity:getContent:remote
