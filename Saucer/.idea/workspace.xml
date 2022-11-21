@@ -5,79 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/libraries/Dependencies.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/libraries/JDK.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/config/DbConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/config/SootConfiguration.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/analyzer/AnalyzeJDK.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/analyzer/AnalyzeJarFile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/analyzer/AnalyzeMaven.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/analyzer/AnalyzeSoot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/ClassInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/ConstructorInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/ExtractorFromClass.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/ExtractorFromSoot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/FunctionInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/info/MethodInfo.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/CodeQLCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/CommonCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/CustomCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/FindsecbugsCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/ParseNodes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/SeekVariants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/csv/resolver/taint/SemCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/optimization/AutoFix.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/run/Analyze.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/run/Clean.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/run/Init.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/run/Ruler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/ClasspathUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/CsvUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/DbUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/FilesUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/JDKUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/ProcessUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/RuleUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/StringsUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/TableUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/narytree/Node.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemCSV/src/main/java/utils/narytree/Tree.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/libraries/spoon.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/config/ClassPath.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/config/SpoonConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/ast/MethodHierarchy.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/ast/Scanner.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/CSVDefinition.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/CodeQL.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/CodeScan.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/Findsecbugs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/Fortify.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/converter/Mannual.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/parser/loader/LoadNodes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/utils/CharUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/utils/DbUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/java/utils/FileUtils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/resources/simplexmltest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/resources/sink1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/resources/src.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/resources/test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SemSpoon/src/main/spoon/spoon-core-10.3.0-beta-2-jar-with-dependencies.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/Mannual.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/Mannual.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Scanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv/nodes/sources.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sources.csv" afterDir="false" />
     </list>
@@ -89,9 +20,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="AnnotationType" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -123,10 +54,10 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Problems" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.39425287" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.grazie" />
   </component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
@@ -145,7 +76,7 @@
       <command value="mvn -f /Users/kang.hou/Documents/CodeRules/SemSpoon/pom.xml dependency:copy-dependencies -DoutputDirectory=/Users/kang.hou/Documents/CodeRules/SemSpoon/src/main/Lib/Dependencies" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.App">
+  <component name="RunManager" selected="Application.Mannual">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="App" />
       <module name="Saucer" />
@@ -201,7 +132,7 @@
       <workItem from="1668475524482" duration="518000" />
       <workItem from="1668476118022" duration="12371000" />
       <workItem from="1668531624777" duration="109371000" />
-      <workItem from="1669015780703" duration="64000" />
+      <workItem from="1669015780703" duration="13137000" />
     </task>
     <servers />
   </component>
@@ -222,10 +153,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <breakpoint type="java-exception">
-          <properties class="java.lang.ClassNotFoundException" package="java.lang" />
-          <option name="timeStamp" value="88" />
-        </breakpoint>
         <breakpoint type="java-exception">
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="127" />

@@ -1,6 +1,5 @@
 package lang.java.parser.core;
 
-import lang.java.config.SpoonConfig;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.CtModel;
 import spoon.reflect.code.*;
@@ -21,6 +20,8 @@ public class Scanner {
             Set<CtMethod<?>> methods = classtype.getMethods();
 
             for (CtMethod<?> method : methods) {
+                // TODO: Check superclass of annotation
+                //  Add prompt if its superclass is matched. There might be a ignorance in sink/source.csv
                 List<CtAnnotation<?>> ctAnnotationList = method.getElements(new TypeFilter<>(CtAnnotation.class));
                 for (CtAnnotation<?> annotation : ctAnnotationList) {
                     String position = annotation.getPosition().toString();
@@ -37,6 +38,9 @@ public class Scanner {
                     FlagBug(position, node);
                 }
 
+                // TODO: Check the following cases
+                //  itself, its implemented interface, its super abstract class, the interface of the super abstract class. Recursively
+                //  Add prompt if its super type is matched. There might be a ignorance in sink/source.csv
                 List<CtInvocation<?>> ctInvocationList = method.getElements(new TypeFilter<>(CtInvocation.class));
                 for (CtInvocation<?> invocation : ctInvocationList) {
                     CtMethod<?> executableInvocation = (CtMethod<?>) invocation.getExecutable().getExecutableDeclaration();
@@ -68,6 +72,7 @@ public class Scanner {
         return DbUtils.QueryMethod(namespace, classtype, methodName);
     }
 
+    // TODO: Take considerations on innerclass com.example.A$B
     private void FlagBug(String position, Node node) {
         node.setPosition(position);
         CharUtils.ReportNode(node);
