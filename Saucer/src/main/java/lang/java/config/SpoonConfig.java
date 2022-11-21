@@ -19,7 +19,7 @@ public class SpoonConfig {
         return launcher;
     }
 
-//    https://spoon.gforge.inria.fr/launcher.html
+    //    https://spoon.gforge.inria.fr/launcher.html
     public MavenLauncher getSpoonMavenLauncher(String codebase) {
         MavenLauncher launcher = new MavenLauncher(codebase, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         launcher.addInputResource(codebase);
