@@ -122,6 +122,8 @@ public class DbUtils {
     }
 
     public static Node QueryMethod(String namespace, String classtype, String methodname) throws SQLException {
+        // TODO: methodname like ... But this needs to store the all executablereference and then query on them.
+        //  This will also convert some nodes to simplied version even with namespace & classtype
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ?";
 
         PreparedStatement statement = conn.prepareStatement(sql);

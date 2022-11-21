@@ -1,7 +1,11 @@
-import java.io.ByteArrayOutputStream;
+import javax.naming.Context;
+import org.springframework.jmx.export.annotation.ManagedOperationParameters;
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JxltEngine;
+import java.io.Writer;
 
 public class test {
-    public void x(JsonParser p, Class<T> valueType throws NamingException {
-        new org.springframework.http.HttpHeaders().setAccessControlAllowOrigin("*");
+    void x(JxltEngine.Template template, JexlContext var1, Writer var2) {
+        template.evaluate(var1, var2);
     }
 }
