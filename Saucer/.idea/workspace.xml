@@ -6,10 +6,50 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/VulnScan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/VulnScan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/Fortify.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_cloud.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_php.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_universal.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_abap.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_actionscript.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_android.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_annotations.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_apex.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cfml.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cobol.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cpp.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_dotnet.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_golang.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_java.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_javascript.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_kotlin.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_objc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_php.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_python.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_ruby.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_scala.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_sql.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_swift.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_swift2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_universal.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_vb.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_config.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_content.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_cpp.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_dotnet.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_java.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_javascript.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_jsp.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_sql.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/Fortify_Rules_en_2022_10_11.rar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则1.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则2.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则3 调试规则.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/call_chain.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/import_star_stmt.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/java_lang.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/dos.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/experimental/dos.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +178,7 @@
       <workItem from="1669062509552" duration="58000" />
       <workItem from="1669062684724" duration="53000" />
       <workItem from="1669094077875" duration="4469000" />
-      <workItem from="1669098563747" duration="19266000" />
+      <workItem from="1669098563747" duration="22037000" />
     </task>
     <servers />
   </component>
@@ -171,11 +211,6 @@
           <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="174" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="236" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

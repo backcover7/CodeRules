@@ -632,6 +632,9 @@ java.lang:String:matches:regex-use[f-1]
 java.util.regex:Matcher:matches:regex-use[f]
 java.util.regex:Pattern:asMatchPredicate:regex-use[f]
 java.util.regex:Pattern:matches:regex-use[f1]
+org.apache.commons.lang3:RegExUtils:removeAll:regex-use
+org.apache.commons.lang3:RegExUtils:removeFirst:regex-use
+org.apache.commons.lang3:RegExUtils:removePattern:regex-use
 com.salesforce.sds.core.gus.client:SfdcClient:query:sfdc-soql
 common.api.soap:DirectSoap:query:sfdc-soql
 javax.mail:Message:addHeader:smtp
