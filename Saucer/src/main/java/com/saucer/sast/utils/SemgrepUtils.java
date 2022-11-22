@@ -37,7 +37,6 @@ public class SemgrepUtils {
     public final static String Severity = "Severity";
     public final static String MatchCode = "MatchCode";
     public final static String Message = "Message";
-
     public final static int FilePathIndex = 0;
     public final static int PositionIndex = 1;
     public final static int IndexIndex = 2;
@@ -53,7 +52,6 @@ public class SemgrepUtils {
         cmd.add(codebase);
         Process process = Runtime.getRuntime().exec(cmd.toArray(new String[0]));
         System.out.println("[.] Running semgrep rule scan...");
-        process.waitFor();
         return ProcessJSONResult(process);
     }
 
