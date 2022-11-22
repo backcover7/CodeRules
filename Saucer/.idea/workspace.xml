@@ -6,9 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Scanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/MethodHierarchy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/MethodHierarchy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/deser.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/sinks/deser.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/el.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/infoleak.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/io.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/jdbc.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/jndi.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/open_redirection.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/sqli.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/sinks/sqli.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/ssrf.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/xml.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/xss.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,8 +30,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="AnnotationType" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
