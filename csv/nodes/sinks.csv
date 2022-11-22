@@ -200,8 +200,8 @@ org.yaml.snakeyaml:Yaml:loadAll:deserialization
 org.yaml.snakeyaml:Yaml:loadAs:deserialization
 org.yaml.snakeyaml:Yaml:parse:deserialization
 com.cedarsoftware.util.io:JsonReader:readObject:deserialization
-java.lang.Thread:sleep:dos
-java.lang.Thread:stop:dos
+java.lang:Thread:sleep:dos
+java.lang:Thread:stop:dos
 bsh:Interpreter:eval:el
 javax.el:ExpressionFactory:createMethodExpression:el
 javax.el:ExpressionFactory:createValueExpression:el

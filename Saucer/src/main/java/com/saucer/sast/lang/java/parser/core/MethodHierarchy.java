@@ -1,4 +1,4 @@
-package lang.java.parser.core;
+package com.saucer.sast.lang.java.parser.core;
 
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtTypeReference;

@@ -1,4 +1,4 @@
-package lang.java.parser.converter;
+package com.saucer.sast.lang.java.parser.converter;
 
 public class CSVDefinition {
     // NAMESPACE:CLASSTYPE:METHOD:KIND

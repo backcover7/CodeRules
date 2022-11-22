@@ -1,4 +1,4 @@
-package utils;
+package com.saucer.sast.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;

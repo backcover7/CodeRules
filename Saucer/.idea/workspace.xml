@@ -6,20 +6,26 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/MethodHierarchy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/MethodHierarchy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/config/ClassPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/ClassPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/config/SpoonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/CSVDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CSVDefinition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/CodeQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/CodeScan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeScan.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/Findsecbugs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/Findsecbugs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/Fortify.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/Fortify.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/converter/Mannual.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/MethodHierarchy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/MethodHierarchy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/ProcessUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/ProcessUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/deser.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/sinks/deser.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/el.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/infoleak.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/io.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/jdbc.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/jndi.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/open_redirection.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/sqli.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/sinks/sqli.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/ssrf.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/xml.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/xss.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/javascript/pseudo_callgraph_js.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,20 +91,33 @@
       <command value="mvn -f /Users/kang.hou/Documents/CodeRules/SemSpoon/pom.xml dependency:copy-dependencies -DoutputDirectory=/Users/kang.hou/Documents/CodeRules/SemSpoon/src/main/Lib/Dependencies" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.App">
-    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="App" />
+  <component name="RunManager" selected="Application.run_javascript">
+    <configuration name="gitClone" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.javascript.gitClone" />
+      <module name="Saucer" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.saucer.sast.lang.javascript.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="run_java" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.java.run" />
       <module name="Saucer" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Mannual" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="lang.java.parser.converter.Mannual" />
+    <configuration name="run_javascript" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.javascript.run" />
       <module name="Saucer" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="lang.java.parser.converter.*" />
+          <option name="PATTERN" value="com.saucer.sast.lang.javascript.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -107,13 +126,15 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.Mannual" />
-      <item itemvalue="Application.App" />
+      <item itemvalue="Application.run_java" />
+      <item itemvalue="Application.gitClone" />
+      <item itemvalue="Application.run_javascript" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.App" />
-        <item itemvalue="Application.Mannual" />
+        <item itemvalue="Application.run_javascript" />
+        <item itemvalue="Application.gitClone" />
+        <item itemvalue="Application.run_java" />
       </list>
     </recent_temporary>
   </component>
@@ -132,6 +153,8 @@
       <workItem from="1669061987952" duration="492000" />
       <workItem from="1669062509552" duration="58000" />
       <workItem from="1669062684724" duration="53000" />
+      <workItem from="1669094077875" duration="4469000" />
+      <workItem from="1669098563747" duration="17804000" />
     </task>
     <servers />
   </component>
@@ -160,6 +183,15 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="127" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="174" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java</url>
+          <line>42</line>
+          <option name="timeStamp" value="228" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

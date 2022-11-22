@@ -1,4 +1,4 @@
-package lang.java.parser.core;
+package com.saucer.sast.lang.java.parser.core;
 
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.CtModel;
@@ -6,8 +6,8 @@ import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.visitor.filter.TypeFilter;
-import utils.CharUtils;
-import utils.DbUtils;
+import com.saucer.sast.utils.CharUtils;
+import com.saucer.sast.utils.DbUtils;
 
 import java.sql.SQLException;
 import java.util.*;

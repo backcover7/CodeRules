@@ -1,7 +1,6 @@
-package utils;
+package com.saucer.sast.utils;
 
-import lang.java.parser.core.Node;
-import scala.Char;
+import com.saucer.sast.lang.java.parser.core.Node;
 
 import java.util.regex.Pattern;
 
@@ -14,7 +13,12 @@ public class CharUtils {
     public final static String dollarRegex = "\\$";
     public final static String dollar = "$";
     public final static String colon = ":";
+    public final static String at = "@";
     public final static String semicolon = ";";
+    public final static String carrot = "^";
+    public final static String singleQuote = "'";
+    public final static String doubleQuote = "\"";
+    public final static String sharp = "#";
     public final static String space = " ";
     public final static String leftbracket = "(";
     public final static String leftbracketRegex = "\\(";

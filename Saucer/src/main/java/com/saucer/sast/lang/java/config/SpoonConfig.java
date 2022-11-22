@@ -1,11 +1,10 @@
-package lang.java.config;
+package com.saucer.sast.lang.java.config;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
 import spoon.reflect.CtModel;
-import spoon.reflect.declaration.CtClass;
-import utils.CharUtils;
-import utils.FileUtils;
+import com.saucer.sast.utils.CharUtils;
+import com.saucer.sast.utils.FileUtils;
 
 import java.util.ArrayList;
 

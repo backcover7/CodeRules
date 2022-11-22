@@ -1,4 +1,4 @@
-package lang.java.config;
+package com.saucer.sast.lang.java.config;
 
 import java.nio.file.Paths;
 

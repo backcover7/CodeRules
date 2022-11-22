@@ -1,7 +1,7 @@
-package lang.java.parser.converter;
+package com.saucer.sast.lang.java.parser.converter;
 
-import utils.CharUtils;
-import utils.FileUtils;
+import com.saucer.sast.utils.CharUtils;
+import com.saucer.sast.utils.FileUtils;
 
 import java.io.*;
 import java.nio.file.Paths;

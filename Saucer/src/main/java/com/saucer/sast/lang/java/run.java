@@ -1,10 +1,12 @@
-import lang.java.config.SpoonConfig;
+package com.saucer.sast.lang.java;
 
-import lang.java.parser.core.Scanner;
+import com.saucer.sast.lang.java.config.SpoonConfig;
+
+import com.saucer.sast.lang.java.parser.core.Scanner;
 import spoon.reflect.CtModel;
-import utils.DbUtils;
+import com.saucer.sast.utils.DbUtils;
 
-public class App {
+public class run {
     public static void main(String[] args) throws Exception {
         DbUtils dbUtils = new DbUtils();
         dbUtils.init();

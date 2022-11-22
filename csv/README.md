@@ -16,3 +16,6 @@ If method column is "ANNOTATION" then it means this classtype might be used in a
 
 ## Database
 https://dbdiagram.io/
+
+##
+A* search algorithm

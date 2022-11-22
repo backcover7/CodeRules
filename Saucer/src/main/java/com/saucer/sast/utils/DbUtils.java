@@ -1,18 +1,19 @@
-package utils;
+package com.saucer.sast.utils;
 
-import lang.java.parser.converter.Mannual;
-import lang.java.parser.core.Node;
+import com.saucer.sast.lang.java.parser.core.Node;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.HashMap;
 
 public class DbUtils {
     public static Connection conn;
-    public final static String dbname = Paths.get(Mannual.csvDirectory, "nodes.db").toAbsolutePath().toString();
+
+    public final static String CSVDirectory = Paths.get(FileUtils.csv, "nodes").toString();
+    public final static String dbname = Paths.get(CSVDirectory, "nodes.db").toAbsolutePath().toString();
+
     public final static String SOURCE = "source";
     public final static String SINK = "sink";
 
@@ -61,8 +62,8 @@ public class DbUtils {
     }
 
     private static void ImportNodes() throws Exception {
-        ImportNodes(Paths.get(Mannual.csvDirectory, "sources.csv").toString(), SOURCE);
-        ImportNodes(Paths.get(Mannual.csvDirectory, "sinks.csv").toString(), SINK);
+        ImportNodes(Paths.get(CSVDirectory, "sources.csv").toString(), SOURCE);
+        ImportNodes(Paths.get(CSVDirectory, "sinks.csv").toString(), SINK);
     }
 
     private static void ImportNodes(String nodePath, String nodeType) throws Exception {
