@@ -6,50 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/Fortify.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_cloud.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/comm_universal.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_abap.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_actionscript.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_android.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_annotations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_apex.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cfml.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cobol.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_cpp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_dotnet.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_golang.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_java.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_javascript.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_kotlin.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_objc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_php.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_python.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_ruby.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_scala.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_sql.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_swift.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_swift2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_universal.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/core_vb.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_config.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_content.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_cpp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_dotnet.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_java.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_javascript.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_jsp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/2210/extended_sql.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/Fortify_Rules_en_2022_10_11.rar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则1.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则2.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/fortify规则3 调试规则.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/call_chain.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/import_star_stmt.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/Optimization/java_lang.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/dos.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/java/experimental/dos.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,20 +74,7 @@
       <command value="mvn -f /Users/kang.hou/Documents/CodeRules/SemSpoon/pom.xml dependency:copy-dependencies -DoutputDirectory=/Users/kang.hou/Documents/CodeRules/SemSpoon/src/main/Lib/Dependencies" />
     </option>
   </component>
-  <component name="RunManager" selected="Application.run_javascript">
-    <configuration name="gitClone" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.javascript.gitClone" />
-      <module name="Saucer" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.saucer.sast.lang.javascript.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Application.run_java">
     <configuration name="run_java" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.java.run" />
       <module name="Saucer" />
@@ -151,14 +97,12 @@
     </configuration>
     <list>
       <item itemvalue="Application.run_java" />
-      <item itemvalue="Application.gitClone" />
       <item itemvalue="Application.run_javascript" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.run_javascript" />
-        <item itemvalue="Application.gitClone" />
         <item itemvalue="Application.run_java" />
+        <item itemvalue="Application.run_javascript" />
       </list>
     </recent_temporary>
   </component>
@@ -178,7 +122,7 @@
       <workItem from="1669062509552" duration="58000" />
       <workItem from="1669062684724" duration="53000" />
       <workItem from="1669094077875" duration="4469000" />
-      <workItem from="1669098563747" duration="22037000" />
+      <workItem from="1669098563747" duration="23140000" />
     </task>
     <servers />
   </component>

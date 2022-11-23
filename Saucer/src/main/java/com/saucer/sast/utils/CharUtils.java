@@ -35,18 +35,16 @@ public class CharUtils {
         return Pattern.compile(regex, Pattern.MULTILINE).matcher(string).find();
     }
 
-    public static void ReportNode(Node node) {
-        if (node.getKind() != null) {
-            System.out.println("[+] Found " + node.getKind() + " kind of " + node.getNodetype() + "!");
-            if (node.getKind().contains("annotation")) {
-                System.out.println("    " +
-                        String.join(CharUtils.dot, node.getNamespace(), node.getClasstype() +
-                        " in the position " + node.getPosition() ));
-            } else {
-                System.out.println("    " +
-                        String.join(CharUtils.dot, node.getNamespace(), node.getClasstype(), node.getMethod() +
-                        " in the position " + node.getPosition() ));
-            }
+    public static void FlagBug(Node node, String code) {
+        System.out.println("[+] Found " + node.getKind() + " kind of " + node.getNodetype() + "!");
+        if (node.getKind().contains("annotation")) {
+            System.out.println("    " +
+                    String.join(CharUtils.dot, node.getNamespace(), node.getClasstype() +
+                    " in the position " + node.getPosition() ) + ", " + code);
+        } else {
+            System.out.println("    " +
+                    String.join(CharUtils.dot, node.getNamespace(), node.getClasstype(), node.getMethod() +
+                    " in the position " + node.getPosition() ) + ", " + code);
         }
     }
 }

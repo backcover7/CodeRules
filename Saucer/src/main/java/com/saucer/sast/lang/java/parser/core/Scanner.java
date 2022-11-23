@@ -20,12 +20,11 @@ public class Scanner {
             Set<CtMethod<?>> methods = classtype.getMethods();
 
             for (CtMethod<?> method : methods) {
-                // TODO: Check superclass of annotation
                 List<CtAnnotation<?>> ctAnnotationList = method.getElements(new TypeFilter<>(CtAnnotation.class));
                 for (CtAnnotation<?> annotation : ctAnnotationList) {
                     String position = annotation.getPosition().toString();
                     Node node = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
-                    FlagBug(position, node);
+                    CheckBug(position, node, annotation.toString());
                 }
 
                 List<CtConstructorCall<?>> constructorCallList = method.getElements(new TypeFilter<>(CtConstructorCall.class));
@@ -34,7 +33,7 @@ public class Scanner {
 
                     String position = executableReference.getParent().getPosition().toString();
                     Node node = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
-                    FlagBug(position, node);
+                    CheckBug(position, node, constructorCall.toString());
                 }
 
                 List<CtInvocation<?>> ctInvocationList = method.getElements(new TypeFilter<>(CtInvocation.class));
@@ -52,7 +51,7 @@ public class Scanner {
                     for (String methodInHierarchy : methodSet) {
                         Node node = CheckMethod(methodInHierarchy,
                                 invocation.getExecutable().getSimpleName());
-                        FlagBug(position, node);
+                        CheckBug(position, node, invocation.toString());
                     }
                 }
             }
@@ -77,8 +76,10 @@ public class Scanner {
         return DbUtils.QueryMethod(namespace, classtype, methodName);
     }
 
-    private void FlagBug(String position, Node node) {
-        node.setPosition(position);
-        CharUtils.ReportNode(node);
+    private void CheckBug(String position, Node node, String code) {
+        if (node.getKind() != null) {
+            node.setPosition(position);
+            CharUtils.FlagBug(node, code);
+        }
     }
 }

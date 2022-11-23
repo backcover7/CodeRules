@@ -16,7 +16,7 @@ public class run {
 //        String codebase = Paths.get(FileUtils.Expanduser("~/Documents/CodeRules/SemSpoon")).toAbsolutePath().toString();
 //        CtModel model = spoonConfig.getSpoonMavenLauncher(codebase);
 
-        String codebase = "src/main/test-cases/java/test.java";
+        String codebase = "src/main/test-cases/java/";
         CtModel model = spoonConfig.getSpoonModel(codebase);
 
         Scanner scanner = new Scanner();
