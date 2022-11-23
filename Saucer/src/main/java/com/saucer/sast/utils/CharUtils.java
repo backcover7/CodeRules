@@ -38,13 +38,12 @@ public class CharUtils {
     public static void FlagBug(Node node, String code) {
         System.out.println("[+] Found " + node.getKind() + " kind of " + node.getNodetype() + "!");
         if (node.getKind().contains("annotation")) {
-            System.out.println("    " +
-                    String.join(CharUtils.dot, node.getNamespace(), node.getClasstype() +
-                    " in the position " + node.getPosition() ) + ", " + code);
+            System.out.println("    " + String.join(CharUtils.dot, node.getNamespace(), node.getClasstype()));
         } else {
             System.out.println("    " +
-                    String.join(CharUtils.dot, node.getNamespace(), node.getClasstype(), node.getMethod() +
-                    " in the position " + node.getPosition() ) + ", " + code);
+                    String.join(CharUtils.dot, node.getNamespace(), node.getClasstype(), node.getMethod()));
         }
+        System.out.println("    " + node.getPosition());
+        System.out.println("    " + code);
     }
 }
