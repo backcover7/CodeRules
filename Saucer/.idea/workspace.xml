@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +120,7 @@
       <workItem from="1669062509552" duration="58000" />
       <workItem from="1669062684724" duration="53000" />
       <workItem from="1669094077875" duration="4469000" />
-      <workItem from="1669098563747" duration="23140000" />
+      <workItem from="1669098563747" duration="25677000" />
     </task>
     <servers />
   </component>

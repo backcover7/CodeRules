@@ -112,7 +112,6 @@ public class DependencyConfusion implements VulnScan {
     }
 
     private boolean CheckWithURL(String endpoint) throws IOException, InterruptedException {
-        Thread.sleep(5000);
         URL url = new URL(endpoint);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("GET");
@@ -124,13 +123,9 @@ public class DependencyConfusion implements VulnScan {
             return false;
         } else {
 //            System.out.println("[!] Too fast! Waiting for 5 seconds...");
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             return CheckWithURL(endpoint);
         }
-    }
-
-    private String removeQutoesAndSpaces(String str) {
-        return str.trim().replaceAll(CharUtils.doubleQuote, CharUtils.empty).replaceAll(CharUtils.singleQuote, CharUtils.empty);
     }
 }
 

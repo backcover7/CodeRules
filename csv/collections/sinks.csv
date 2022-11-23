@@ -16,15 +16,12 @@ android.app:NotificationManager:notify:pending-intent-sent
 android.app:NotificationManager:notifyAsPackage:pending-intent-sent
 android.app:NotificationManager:notifyAsUser:pending-intent-sent
 android.app:PendingIntent:send:pending-intent-sent
-android.content:ContentProvider:delete:sql
 android.content:ContentProvider:delete:sql-android
-android.content:ContentProvider:query:sql
 android.content:ContentProvider:query:sql-android
-android.content:ContentProvider:update:sql
 android.content:ContentProvider:update:sql-android
-android.content:ContentResolver:delete:sql
-android.content:ContentResolver:query:sql
-android.content:ContentResolver:update:sql
+android.content:ContentResolver:delete:sql-android
+android.content:ContentResolver:query:sql-android
+android.content:ContentResolver:update:sql-android
 android.content:Context:sendBroadcast:intent-start
 android.content:Context:sendBroadcastAsUser:intent-start
 android.content:Context:sendBroadcastWithMultiplePermissions:intent-start
@@ -151,7 +148,6 @@ com.sun.org.apache.xpath.internal:XPathAPI:selectNodeIterator:xpath-apache
 com.sun.org.apache.xpath.internal:XPathAPI:selectNodeList:xpath-apache
 com.sun.org.apache.xpath.internal:XPathAPI:selectSingleNode:xpath-apache
 com.unboundid.ldap.sdk:LDAPConnection:asyncSearch:ldap
-com.unboundid.ldap.sdk:LDAPConnection:search:ldap
 com.unboundid.ldap.sdk:LDAPConnection:search:ldap
 com.unboundid.ldap.sdk:LDAPConnection:searchForEntry:ldap
 com.zaxxer.hikari:HikariConfig:<init>:jdbc-url
@@ -301,7 +297,6 @@ javax.naming:Context:lookupLink:jndi-injection
 javax.naming:Context:rename:jndi-injection
 javax.naming:InitialContext:doLookup:jndi-injection
 javax.naming.directory:DirContext:lookup:ldap
-javax.naming.directory:DirContext:search:ldap
 javax.naming.directory:DirContext:search:ldap
 javax.naming.directory:InitialDirContext:lookup:ldap
 javax.naming.directory:InitialDirContext:search:ldap
@@ -658,7 +653,6 @@ org.springframework.ldap.core:LdapTemplate:find:ldap
 org.springframework.ldap.core:LdapTemplate:findOne:ldap
 org.springframework.ldap.core:LdapTemplate:list:ldap
 org.springframework.ldap.core:LdapTemplate:lookup:ldap
-org.springframework.ldap.core:LdapTemplate:search:ldap
 org.springframework.ldap.core:LdapTemplate:search:ldap
 org.springframework.ldap.core:LdapTemplate:searchForContext:ldap
 org.springframework.ldap.core:LdapTemplate:searchForObject:ldap
