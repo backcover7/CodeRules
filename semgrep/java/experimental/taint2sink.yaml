@@ -1,0 +1,17 @@
+rules:
+  - id: taint2sink
+    options:
+      symbolic_propagation: true
+      taint_unify_mvars: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: ${signature} {$...BODY;}
+        - pattern-inside: $BODY
+        - pattern: |
+            <... $VAR ...>
+    pattern-sinks:
+      - pattern: ${invocation}
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING

@@ -1,0 +1,16 @@
+rules:
+  - id: taint4source
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: ${signature} {$...BODY;}
+        - pattern-inside: $BODY
+        - pattern: ${source}
+    pattern-sinks:
+      - pattern: ${invocation}
+    message: Semgrep found a tained data flow from source
+    languages:
+      - java
+    severity: WARNING

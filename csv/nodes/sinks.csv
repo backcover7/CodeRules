@@ -171,6 +171,12 @@ java.io:Externalizable:readExternal:deserialization
 java.io:ObjectInputStream:readArray:deserialization
 java.io:ObjectInputStream:readObject:deserialization
 java.io:ObjectInputStream:readUnshared:deserialization
+java.io:ObjectInputValidation:validateObject:deserialization
+java.io:Serializable:readObject:deserialization
+java.io:Serializable:readObjectNoData:deserialization
+java.io:Serializable:readUnshared:deserialization
+java.io:Serializable:readArray:deserialization
+java.io:Serializable:readResolve:deserialization
 jodd.json:JsonParser:(parse.*):deserialization
 org.codehaus.jackson.map:ObjectMapper:enableDefaultTyping:deserialization
 org.codehaus.jackson.map:ObjectMapper:readTree:deserialization
@@ -219,6 +225,7 @@ javax.script:ScriptEngineFactory:getMethodCallSyntax:el
 javax.script:ScriptEngineFactory:getProgram:el
 jdk.jshell:JShell:eval:el
 jdk.jshell:SourceCodeAnalysis:wrappers:el
+org.apache.commons.jxpath:JXPathContext:getValue:el
 org.mozilla.javascript:Context:compileFunction:el
 org.mozilla.javascript:Context:compileReader:el
 org.mozilla.javascript:Context:compileString:el
@@ -233,7 +240,7 @@ org.python.util:PythonInterpreter:(exec.*):el
 org.python.util:PythonInterpreter:(run.*):el
 org.python.util:PythonInterpreter:compile:el
 org.python.util:PythonInterpreter:eval:el
-org.springframework.expression:ExpressionParser:parseExpression:spel
+org.springframework.expression:ExpressionParser:parseExpression:el
 org.springframework.scripting.bsh:BshScriptEvaluator:evaluate:el
 groovy.lang:GroovyClassLoader:parseClass:groovy
 groovy.lang:GroovyShell:evaluate:groovy
@@ -600,6 +607,9 @@ com.sun.org.apache.xalan.internal.xsltc.trax:TemplatesImpl:newTransformer:reflec
 groovy.lang:MetaClass:invokeConstructor:reflect
 groovy.lang:MetaClass:invokeMethod:reflect
 groovy.lang:MetaClass:invokeStaticMethod:reflect
+org.codehaus.groovy.runtime:InvokerHelper:invokeConstructor:reflect
+org.codehaus.groovy.runtime:InvokerHelper:invokeMethod:reflect
+org.codehaus.groovy.runtime:InvokerHelper:invokeStaticMethod:reflect
 groovy.lang:MetaObjectProtocol:invokeConstructor:reflect
 groovy.lang:MetaObjectProtocol:invokeMethod:reflect
 groovy.lang:MetaObjectProtocol:invokeStaticMethod:reflect

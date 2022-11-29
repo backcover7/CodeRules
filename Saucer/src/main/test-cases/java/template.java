@@ -1,8 +1,9 @@
-import org.apache.commons.text.StringSubstitutor;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 
 public class template {
-    void commonsText(String payload) {
-        StringSubstitutor stringSubstitutor = StringSubstitutor.createInterpolator();
-        stringSubstitutor.replace(payload);
+    void x() {
+        Context ctx = new InitialContext();
+        ctx.lookup("ss");
     }
 }

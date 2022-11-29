@@ -1,0 +1,17 @@
+rules:
+  - id: taint2return
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: taint (..., $VAR, ...) {...}
+        - pattern: $VAR
+    pattern-sinks:
+      - pattern: return ...;
+    paths:
+      include:
+        - test.java
+    message: Semgrep found a taint flow from argument to return value
+    languages: [java]
+    severity: WARNING

@@ -13,7 +13,11 @@ public class AccessControlAllowOriginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = new HttpServletResponse();
 
-        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+
+        String hello = req.getParameter("hello");
+        javax.naming.Context ctx = new javax.naming.InitialContext();
+        ctx.lookup(hello);
     }
 
     @Path("/message")

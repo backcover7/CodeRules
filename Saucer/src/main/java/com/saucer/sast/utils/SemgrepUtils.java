@@ -44,14 +44,18 @@ public class SemgrepUtils {
     public final static int MatchCodeIndex = 4;
     public final static int MessageIndex = 5;
 
+    public final static String DATAFLOWTRACE_FLAG = "--dataflow-traces";
+
+    public final static String EllipsisBody = "{...}";
+
     public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", JSON_FORMAT, "-f"};
 
     public static ArrayList<HashMap<String, Object>> RunSemgrepRule(String yaml, String codebase) throws IOException, InterruptedException {
         ArrayList<String> cmd = new ArrayList<>(Arrays.asList(SemgrepCLI));
         cmd.add(yaml);
         cmd.add(codebase);
+//        System.out.println("[.] Running semgrep rule scan...");
         Process process = Runtime.getRuntime().exec(cmd.toArray(new String[0]));
-        System.out.println("[.] Running semgrep rule scan...");
         return ProcessJSONResult(process);
     }
 
@@ -59,7 +63,7 @@ public class SemgrepUtils {
      * @return ArrayList or null
      */
     public static ArrayList<HashMap<String, Object>> ProcessJSONResult(Process process) throws IOException {
-        System.out.println("[.] Processing JSON format result...");
+//        System.out.println("[.] Processing JSON format result...");
         String stdout = ProcessUtils.StdoutProcess(process);
 
         ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();

@@ -14,6 +14,3 @@ If method column is wrapped with brackets then it might be a regex.
 
 ## Database
 https://dbdiagram.io/
-
-##
-A* search algorithm

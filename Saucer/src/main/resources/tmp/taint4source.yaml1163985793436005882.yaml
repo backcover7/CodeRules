@@ -1,0 +1,18 @@
+rules:
+  - id: taint4source
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: doFilter($VAR0,$VAR1,$VAR2){...}
+        - pattern-inside: $BODY
+        - pattern: response.setHeader("Access-Control-Allow-Origin", "*")
+    pattern-sinks:
+      - pattern: response.setHeader("Access-Control-Allow-Origin", "*")
+    paths:
+      include:
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/sink1.java
+    message: Semgrep found a tained data flow from source
+    languages: [java]
+    severity: WARNING

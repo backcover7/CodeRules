@@ -6,10 +6,38 @@ import spoon.reflect.CtModel;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.FileUtils;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class SpoonConfig {
-    public Launcher getSpoonLauncher(String codebase) {
+    public final static String CommonLauncherFlag = "COMMON";
+    public final static String MavenLauncherFlag = "MAVEN";
+
+    public static String codebase;
+    public static Launcher launcher;
+    public static CtModel model;
+
+    public void init(String codebase, String LauncherFlag) throws Exception {
+        SpoonConfig.codebase = Paths.get(codebase).toAbsolutePath().toString();
+        switch (LauncherFlag) {
+            case CommonLauncherFlag:
+                launcher = getSpoonLauncher();
+                break;
+            case MavenLauncherFlag:
+                launcher = getSpoonMavenLauncher();
+                break;
+            default:
+                break;
+        }
+        if (launcher != null) {
+            launcher.buildModel();
+            model = launcher.getModel();
+        } else {
+            throw new Exception("[!] Failed in getting launcher from codebase");
+        }
+    }
+
+    private Launcher getSpoonLauncher() {
         ArrayList<String> jars = FileUtils.getExtensionFiles(ClassPath.SRC_MAIN_LIB, CharUtils.JarExtension, true);
 
         Launcher launcher = new Launcher();
@@ -19,21 +47,9 @@ public class SpoonConfig {
     }
 
     //    https://spoon.gforge.inria.fr/launcher.html
-    public MavenLauncher getSpoonMavenLauncher(String codebase) {
+    private MavenLauncher getSpoonMavenLauncher() {
         MavenLauncher launcher = new MavenLauncher(codebase, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         launcher.addInputResource(codebase);
         return launcher;
-    }
-
-    public CtModel getSpoonModel(String codebase) {
-        Launcher launcher = getSpoonLauncher(codebase);
-        launcher.buildModel();
-        return launcher.getModel();
-    }
-
-    public CtModel getSpoonMavenModel(String codebase) {
-        MavenLauncher launcher = getSpoonMavenLauncher(codebase);
-        launcher.buildModel();
-        return launcher.getModel();
     }
 }

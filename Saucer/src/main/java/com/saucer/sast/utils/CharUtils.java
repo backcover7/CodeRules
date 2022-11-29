@@ -1,7 +1,10 @@
 package com.saucer.sast.utils;
 
 import com.saucer.sast.lang.java.parser.core.Node;
+import org.apache.commons.text.StringSubstitutor;
 
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CharUtils {
@@ -35,7 +38,7 @@ public class CharUtils {
         return Pattern.compile(regex, Pattern.MULTILINE).matcher(string).find();
     }
 
-    public static void FlagBug(Node node, String code) {
+    public static void ReportDangeroursNode(Node node) {
         System.out.println("[+] Found " + node.getKind() + " kind of " + node.getNodetype() + "!");
         if (node.getKind().contains("annotation")) {
             System.out.println("    " + String.join(CharUtils.dot, node.getNamespace(), node.getClasstype()));
@@ -43,7 +46,21 @@ public class CharUtils {
             System.out.println("    " +
                     String.join(CharUtils.dot, node.getNamespace(), node.getClasstype(), node.getMethod()));
         }
-        System.out.println("    " + node.getPosition());
-        System.out.println("    " + code);
+        System.out.println("    " + node.getFile() + "#" + node.getLine());
+        System.out.println("    " + node.getCode());
+    }
+
+    public static void ReportTaintedFlow(LinkedList<String> taintedFlow) {
+        System.out.println("[+] Found a potential exploitable tainted flow: ");
+        int index = 1;
+        for (String node : taintedFlow) {
+            System.out.println("    " + index + CharUtils.dot + CharUtils.space + node);
+            index++;
+        }
+    }
+
+    public static String StringSubsitute(Map<String, String> map, String template) {
+        StringSubstitutor stringSubstitutor = new StringSubstitutor(map);
+        return stringSubstitutor.replace(template);
     }
 }

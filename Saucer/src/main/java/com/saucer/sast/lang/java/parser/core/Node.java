@@ -6,7 +6,14 @@ public class Node {
     private String method;
     private String kind;
     private String nodetype;
-    private String position;
+    private String file;
+    private String line;
+    private String code;
+
+    public final static String SourceNodeType = "source";
+    public final static String SinkNodeType = "sink";
+    public final static String GadgetNodeType = "gadget";
+    public final static String CommonNodeType = "common";
 
     public String getNamespace() {
         return namespace;
@@ -48,11 +55,27 @@ public class Node {
         this.nodetype = nodetype;
     }
 
-    public String getPosition() {
-        return position;
+    public String getFile() {
+        return file;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setFile(String position) {
+        this.file = position;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public void setLine(String position) {
+        this.line = position;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

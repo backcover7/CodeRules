@@ -1,9 +1,12 @@
 package com.saucer.sast.utils;
 
+import org.springframework.security.core.parameters.P;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -12,6 +15,10 @@ public class FileUtils {
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();
     public static String sources = Paths.get(collections, "sources.csv").toString();
+    public static String resources = Paths.get("src/main/resources").toAbsolutePath().toString();
+    public static String tmp = Paths.get(resources, "tmp").toString();
+    public static String taint2invocation = Paths.get(resources, "taint2invocation.yaml").toString();
+    public static String taint4source = Paths.get(resources, "taint4source.yaml").toString();
 
     public static String Expanduser(String path) {
         String user=System.getProperty("user.home");
@@ -51,5 +58,15 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String ReadFile2String(String filePath) {
+        String content = null;
+        try {
+            content = Files.readString(Paths.get(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
     }
 }
