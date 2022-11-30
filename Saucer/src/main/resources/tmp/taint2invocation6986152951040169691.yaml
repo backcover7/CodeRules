@@ -5,14 +5,14 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-        - pattern-inside: ${methodDefinition}
+        - pattern-inside: rce($VAR0){...}
         - pattern-either:
-${parampattern}
+          - pattern: $VAR0
     pattern-sinks:
-      - pattern: ${succcode}
+      - pattern: java.lang.Runtime.getRuntime().exec(data)
     paths:
       include:
-        - ${filepath}
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/test.java
     message: Semgrep found a taint flow from specific argument to other arguments
     languages: [java]
     severity: WARNING

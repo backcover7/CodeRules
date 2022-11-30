@@ -19,10 +19,13 @@ public class run {
         spoonConfig.init(codebase, SpoonConfig.CommonLauncherFlag);
 
         Scanner scanner = new Scanner();
-        scanner.Scan();
+        scanner.Collect();
 
         TaintedFlow taintedFlow = new TaintedFlow();
-        taintedFlow.StartFromSource();
+        taintedFlow.Scan();
+
+        scanner.FlagNodes();
+
         DbUtils.conn.close();
     }
 }

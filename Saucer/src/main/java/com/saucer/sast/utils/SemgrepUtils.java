@@ -47,6 +47,7 @@ public class SemgrepUtils {
     public final static String DATAFLOWTRACE_FLAG = "--dataflow-traces";
 
     public final static String EllipsisBody = "{...}";
+    public final static String ParamPatternTemplate = "          - pattern: ";
 
     public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", JSON_FORMAT, "-f"};
 

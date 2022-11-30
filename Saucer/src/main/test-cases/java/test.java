@@ -13,11 +13,25 @@ public class test {
 }
 
 class target {
+    public void branch(String text) {assert 1=2;}
+
     public String intermediate(String data) {
         return data.toLowerCase();
     }
 
     public void rce(String payload) throws IOException {
-        Runtime.getRuntime().exec(intermediate(payload));
+        branch(payload);
+        String data = intermediate(payload);
+        Object anything = "A".toUpperCase(java.util.Locale.ROOT);
+        Runtime.getRuntime().exec(data);
+    }
+
+    public void gadget(String data) {
+        new ProcessBuilder(data).start();
+    }
+
+    public void node(String b) {
+        String a = "a";
+        new javax.naming.InitialContext().lookup(a);
     }
 }

@@ -3,17 +3,27 @@ package com.saucer.sast.lang.java.parser.dataflow;
 public class CallGraphNode {
     private String PreNamespace;
     private String PreClasstype;
-    private String PreMethod;
+    private String PreMethodName;
     private String PreLineNum;
     private int PreParamSize;
     private String SuccNamespace;
     private String SuccClasstype;
-    private String SuccMethod;
+    private String SuccMethodName;
     private String SuccCode;
     private String SuccLineNum;
     private String FilePath;
     private String EdgeType;
     private String SinkType;
+
+    public final static String SourceFlowType = "SourceFlow";
+    public final static String SinkNodeType = "SinkNodeFlow";
+    public final static String SinkGadgetFlowType = "SinkGadgetFlow";
+    public final static String SinkGadgetFlowSource = "SinkGadgetFlowSource";
+    public final static String SinkGadgetFlowSink = "SinkGadgetFlowSink";
+
+    public final static String SinkFlowType = "SinkFlow";
+    public final static String GadgetFlowType = "GadgetFlow";
+    public final static String CommonFlowType = "CommonFlow";
 
     public String getPreNamespace() {
         return PreNamespace;
@@ -31,12 +41,12 @@ public class CallGraphNode {
         PreClasstype = preClasstype;
     }
 
-    public String getPreMethod() {
-        return PreMethod;
+    public String getPreMethodName() {
+        return PreMethodName;
     }
 
-    public void setPreMethod(String preMethod) {
-        PreMethod = preMethod;
+    public void setPreMethodName(String preMethodName) {
+        PreMethodName = preMethodName;
     }
 
     public String getPreLineNum() {
@@ -71,12 +81,12 @@ public class CallGraphNode {
         SuccClasstype = succClasstype;
     }
 
-    public String getSuccMethod() {
-        return SuccMethod;
+    public String getSuccMethodName() {
+        return SuccMethodName;
     }
 
-    public void setSuccMethod(String succMethod) {
-        SuccMethod = succMethod;
+    public void setSuccMethodName(String succMethodName) {
+        SuccMethodName = succMethodName;
     }
 
     public String getSuccCode() {

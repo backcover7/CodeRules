@@ -35,7 +35,7 @@ public class AST {
 
                 ruleNode.setMethod("main");
                 ruleNode.setKind("main");
-                ruleNode.setNodetype(RuleNode.SourceNodeType);
+                ruleNode.setNodetype(RuleNode.SOURCENODE);
                 SourcePosition position = method.getPosition();
                 ruleNode.setFile(position.getFile().getAbsolutePath());
                 ruleNode.setLine(String.valueOf(position.getLine()));

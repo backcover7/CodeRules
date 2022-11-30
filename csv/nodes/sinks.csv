@@ -89,7 +89,6 @@ org.apache.commons.beanutils:BeanUtils:populate:beans
 org.apache.commons.beanutils:BeanUtilsBean:populate:beans
 org.springframework.beans:BeanUtils:copyProperties:beans
 java.awt:Desktop:browse:command
-java.lang:ProcessBuilder:<init>:command
 java.lang:ProcessBuilder:command:command
 java.lang:ProcessBuilder:start:command
 java.lang:Runtime:exec:command

@@ -4,15 +4,12 @@ rules:
       symbolic_propagation: true
     mode: taint
     pattern-sources:
-      - patterns:
-        - pattern-inside: ${methodDefinition}
-        - pattern-either:
-${parampattern}
+      - pattern: node(){...}
     pattern-sinks:
-      - pattern: ${succcode}
+      - pattern: new javax.naming.InitialContext().lookup(a)
     paths:
       include:
-        - ${filepath}
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/test.java
     message: Semgrep found a taint flow from specific argument to other arguments
     languages: [java]
     severity: WARNING

@@ -2,6 +2,7 @@ package com.saucer.sast.lang.java.parser.core;
 
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
+import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Scanner {
-    public void Scan() throws SQLException {
+    public void Collect() throws SQLException {
         Collection<CtType<?>> classtypes = SpoonConfig.model.getAllTypes();
 
         for(CtType<?> classtype : classtypes) {
@@ -40,7 +41,7 @@ public class Scanner {
             RuleNode ruleNode = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
             setPosition(annotation.getPosition(), ruleNode);
             ruleNode.setCode(annotation.toString());
-            FlagBug(ctExecutable, ruleNode);
+            GenerateCallGraphEdge(ctExecutable, ruleNode);
         }
     }
 
@@ -54,7 +55,7 @@ public class Scanner {
                 RuleNode ruleNode = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
                 setPosition(executableReference.getParent().getPosition(), ruleNode);
                 ruleNode.setCode(constructorCall.toString());
-                FlagBug(ctExecutable, ruleNode);
+                GenerateCallGraphEdge(ctExecutable, ruleNode);
             }
         }
     }
@@ -81,7 +82,7 @@ public class Scanner {
                         invocation.getExecutable().getSimpleName());
                 setPosition(invocation.getPosition(), ruleNode);
                 ruleNode.setCode(invocation.toString());
-                FlagBug(ctExecutable, ruleNode);
+                GenerateCallGraphEdge(ctExecutable, ruleNode);
             }
         }
     }
@@ -127,14 +128,7 @@ public class Scanner {
     }
 
     public boolean CheckBug(RuleNode ruleNode) {
-        return ruleNode.getKind() != null && !ruleNode.getKind().equals(RuleNode.GadgetNodeType);
-    }
-
-    public void FlagBug(CtExecutable<?> ctExecutable, RuleNode ruleNode) {
-        if (CheckBug(ruleNode)) {
-            CharUtils.ReportDangerousNode(ruleNode);
-        }
-        GenerateCallGraphEdge(ctExecutable, ruleNode);
+        return ruleNode.getKind() != null && !ruleNode.getKind().equals(RuleNode.GADGETNODE);
     }
 
     private void GenerateCallGraphEdge(CtExecutable<?> ctExecutable, RuleNode ruleNode) {
@@ -147,7 +141,7 @@ public class Scanner {
             // Set previous node in a call graph edge
             callGraphNode.setPreNamespace(ctExecutableReference.getDeclaringType().getPackage().getQualifiedName());
             callGraphNode.setPreClasstype(ctExecutableReference.getDeclaringType().getSimpleName());
-            callGraphNode.setPreMethod(ctExecutableReference.getSimpleName());
+            callGraphNode.setPreMethodName(ctExecutableReference.getSimpleName());
 
             setPosition(ctExecutableReference.getParent().getPosition(), ruleNode.getLine(), callGraphNode);
             callGraphNode.setPreParamSize(ctExecutableReference.getParameters().size());
@@ -155,13 +149,13 @@ public class Scanner {
             // Set successor node in a call graph edge
             callGraphNode.setSuccNamespace(ruleNode.getNamespace());
             callGraphNode.setSuccClasstype(ruleNode.getClasstype());
-            callGraphNode.setSuccMethod(ruleNode.getMethod());
+            callGraphNode.setSuccMethodName(ruleNode.getMethod());
             callGraphNode.setSuccCode(ruleNode.getCode());
 
             if (CheckBug(ruleNode)) {
                 setTaintedPreNodeType(callGraphNode, ruleNode);
             } else {
-                callGraphNode.setEdgeType(RuleNode.CommonNodeType);
+                callGraphNode.setEdgeType(CallGraphNode.CommonFlowType);
             }
 
             DbUtils.SaveCG2Db(callGraphNode);
@@ -170,11 +164,59 @@ public class Scanner {
 
     private void setTaintedPreNodeType(CallGraphNode callGraphNode, RuleNode ruleNode) {
         String executableType = ruleNode.getNodetype();
-        if (executableType.equals(RuleNode.SourceNodeType)) {
-            callGraphNode.setEdgeType(executableType);
-        } else if (executableType.equals(RuleNode.SinkNodeType)) {
-            callGraphNode.setEdgeType(executableType);
-            // TODO: gadget
+        if (executableType.equals(RuleNode.SOURCENODE)) {
+            callGraphNode.setEdgeType(CallGraphNode.SourceFlowType);
+        } else if (executableType.equals(RuleNode.SINKNODE)) {
+//            callGraphNode.setEdgeType(CallGraphNode.SinkNodeType);
+            HashMap<String, String> invocation = getInvocation(callGraphNode);
+            TaintedFlow taintedFlow = new TaintedFlow();
+            ArrayList<HashMap<String, Object>> SemgrepScanRes = taintedFlow.FlowFromArgs2Invocations(invocation);
+            if (SemgrepScanRes.size() != 0) {
+                callGraphNode.setEdgeType(CallGraphNode.SinkGadgetFlowType);
+            } else {
+                callGraphNode.setEdgeType(CallGraphNode.SinkNodeType);
+            }
+        }
+        // TODO: gadgetsource
+    }
+
+    private HashMap<String, String> getInvocation(CallGraphNode callGraphNode) {
+        HashMap<String, String> invocation = new HashMap<>();
+
+        invocation.put(DbUtils.PRENAMESPACE, callGraphNode.getPreNamespace());
+        invocation.put(DbUtils.PRECLASSTYPE, callGraphNode.getPreClasstype());
+        invocation.put(DbUtils.PREMETHODNAME, callGraphNode.getPreMethodName());
+        invocation.put(DbUtils.PRELINENUM, callGraphNode.getPreLineNum());
+        invocation.put(DbUtils.PREPARAMSIZE, String.valueOf(callGraphNode.getPreParamSize()));
+        invocation.put(DbUtils.SUCCNAMESPACE, callGraphNode.getSuccNamespace());
+        invocation.put(DbUtils.SUCCCLASSTYPE, callGraphNode.getSuccClasstype());
+        invocation.put(DbUtils.SUCCMETHODNAME, callGraphNode.getSuccMethodName());
+        invocation.put(DbUtils.SUCCCODE, callGraphNode.getSuccCode());
+        invocation.put(DbUtils.SUCCLINENUM, callGraphNode.getSuccLineNum());
+        invocation.put(DbUtils.FILEPATH, callGraphNode.getFilePath());
+        invocation.put(DbUtils.EDGETYPE, callGraphNode.getEdgeType());
+
+        return invocation;
+    }
+
+    public void FlagNodes() throws SQLException {
+        System.out.println("------------------------------------------------------------------------------------");
+        // Flag sink node bug
+        ArrayList<RuleNode> SinkNodes = DbUtils.QuerySinkNodeFlowRuleNode();
+        for (RuleNode node : SinkNodes) {
+            CharUtils.ReportDangerousNode(node);
+        }
+        System.out.println("------------------------------------------------------------------------------------");
+        // Flag sink gadget bug
+        ArrayList<HashMap<String, RuleNode>> SinkGadgetNodes = DbUtils.QuerySinkGadgetFlowRuleNode();
+        for (HashMap<String, RuleNode> sinkGadgetNode : SinkGadgetNodes) {
+            CharUtils.ReportGadgetNode(sinkGadgetNode);
+        }
+        System.out.println("------------------------------------------------------------------------------------");
+        // Flag all source nodes
+        ArrayList<RuleNode> SourceNodes = DbUtils.QuerySourceNodeFlowRuleNode();
+        for (RuleNode node : SourceNodes) {
+            CharUtils.ReportDangerousNode(node);
         }
     }
 }

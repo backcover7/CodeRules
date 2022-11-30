@@ -10,10 +10,9 @@ public class RuleNode {
     private String line;
     private String code;
 
-    public final static String SourceNodeType = "source";
-    public final static String SinkNodeType = "sink";
-    public final static String GadgetNodeType = "gadget";
-    public final static String CommonNodeType = "common";
+    public final static String SOURCENODE = "source";
+    public final static String SINKNODE = "sink";
+    public final static String GADGETNODE = "gadget";
 
     public String getNamespace() {
         return namespace;

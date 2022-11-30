@@ -1,6 +1,7 @@
 package com.saucer.sast.utils;
 
 import com.saucer.sast.lang.java.parser.core.RuleNode;
+import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
@@ -49,6 +50,29 @@ public class CharUtils {
         }
         System.out.println("    " + ruleNode.getFile() + "#" + ruleNode.getLine());
         System.out.println("    " + ruleNode.getCode());
+    }
+
+    public static void ReportGadgetNode(HashMap<String, RuleNode> sinkGadgetNode) {
+        RuleNode gadgetFlowSource = sinkGadgetNode.get(CallGraphNode.SinkGadgetFlowSource);
+        RuleNode gadgetFlowSink = sinkGadgetNode.get(CallGraphNode.SinkGadgetFlowSink);
+
+        System.out.println("[+] Found " + gadgetFlowSink.getKind() + " kind of gadget method!");
+        System.out.println("    " + "(Gadget method definition)");
+        System.out.println("    " +
+                String.join(CharUtils.dot, gadgetFlowSource.getNamespace(), gadgetFlowSource.getClasstype(), gadgetFlowSource.getMethod()));
+        System.out.println("    " + gadgetFlowSink.getFile() + "#" + gadgetFlowSource.getLine());
+
+        System.out.println("    --->");
+
+        System.out.println("    " + "(Sink trigger in the gadget method)");
+        if (gadgetFlowSink.getKind().contains("annotation")) {
+            System.out.println("    " + String.join(CharUtils.dot, gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype()));
+        } else {
+            System.out.println("    " +
+                    String.join(CharUtils.dot, gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype(), gadgetFlowSink.getMethod()));
+        }
+        System.out.println("    " + gadgetFlowSink.getFile() + "#" + gadgetFlowSink.getLine());
+        System.out.println("    " + gadgetFlowSink.getCode());
     }
 
     public static String FormatChainNode(HashMap<String, String> invocation) {
