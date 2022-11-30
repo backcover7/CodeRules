@@ -1,7 +1,7 @@
 package com.saucer.sast.lang.java.checks;
 
 import com.saucer.sast.lang.java.config.SpoonConfig;
-import com.saucer.sast.lang.java.parser.core.Node;
+import com.saucer.sast.lang.java.parser.core.RuleNode;
 import com.saucer.sast.lang.java.parser.core.Scanner;
 import com.saucer.sast.utils.CharUtils;
 import spoon.reflect.cu.SourcePosition;
@@ -13,15 +13,15 @@ import java.util.List;
 public class AST {
     private final CtType<?> classtype;
     private final SpoonConfig spoonConfig;
-    private final Node node = new Node();
+    private final RuleNode ruleNode = new RuleNode();
     private final Scanner scanner;
 
     public AST(CtType<?> classtype, SpoonConfig spoonConfig, Scanner scanner) {
         this.classtype = classtype;
         this.spoonConfig = spoonConfig;
         this.scanner = scanner;
-        node.setNamespace(classtype.getPackage().toString());
-        node.setClasstype(classtype.getSimpleName());
+        ruleNode.setNamespace(classtype.getPackage().toString());
+        ruleNode.setClasstype(classtype.getSimpleName());
     }
 
     public void checkMain() {
@@ -33,16 +33,16 @@ public class AST {
                     method.getParameters().size() == 1 &&
                     method.getParameters().get(0).toString().equals("java.lang.String[] args")) {
 
-                node.setMethod("main");
-                node.setKind("main");
-                node.setNodetype(Node.SourceNodeType);
+                ruleNode.setMethod("main");
+                ruleNode.setKind("main");
+                ruleNode.setNodetype(RuleNode.SourceNodeType);
                 SourcePosition position = method.getPosition();
-                node.setFile(position.getFile().getAbsolutePath());
-                node.setLine(String.valueOf(position.getLine()));
-                node.setCode(method.getSignature());
+                ruleNode.setFile(position.getFile().getAbsolutePath());
+                ruleNode.setLine(String.valueOf(position.getLine()));
+                ruleNode.setCode(method.getSignature());
 
                 // TODO: add to callgraph
-                CharUtils.ReportDangeroursNode(node);
+                CharUtils.ReportDangerousNode(ruleNode);
             }
         }
     }

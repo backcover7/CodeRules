@@ -4,13 +4,16 @@ public class CallGraphNode {
     private String PreNamespace;
     private String PreClasstype;
     private String PreMethod;
+    private String PreLineNum;
     private int PreParamSize;
     private String SuccNamespace;
     private String SuccClasstype;
     private String SuccMethod;
     private String SuccCode;
+    private String SuccLineNum;
     private String FilePath;
     private String EdgeType;
+    private String SinkType;
 
     public String getPreNamespace() {
         return PreNamespace;
@@ -34,6 +37,14 @@ public class CallGraphNode {
 
     public void setPreMethod(String preMethod) {
         PreMethod = preMethod;
+    }
+
+    public String getPreLineNum() {
+        return PreLineNum;
+    }
+
+    public void setPreLineNum(String preLineNum) {
+        PreLineNum = preLineNum;
     }
 
     public String getSuccNamespace() {
@@ -76,6 +87,14 @@ public class CallGraphNode {
         SuccCode = succCode;
     }
 
+    public String getSuccLineNum() {
+        return SuccLineNum;
+    }
+
+    public void setSuccLineNum(String succLineNum) {
+        SuccLineNum = succLineNum;
+    }
+
     public String getFilePath() {
         return FilePath;
     }
@@ -90,5 +109,13 @@ public class CallGraphNode {
 
     public void setEdgeType(String edgeType) {
         EdgeType = edgeType;
+    }
+
+    public String getSinkType() {
+        return SinkType;
+    }
+
+    public void setSinkType(String sinkType) {
+        SinkType = sinkType;
     }
 }

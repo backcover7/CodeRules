@@ -1,26 +1,23 @@
-import javax.naming.Context;
-import javax.naming.InitialContext;
+package com.saucer.sast.utils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class test {
-    public test(String a) {
-        System.out.println(a);
-    }
-
-    void y() {
-        System.out.println("aaa");
-    }
-
-    public static void main(String[] args) {
-
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String user = req.getParameter("hello");
+        target s = new target();
+        s.rce(user);
     }
 }
 
-class m extends test {
-    public m() {
-        super("mm");
+class target {
+    public String intermediate(String data) {
+        return data.toLowerCase();
     }
 
-    void u() {
-        super.y();
+    public void rce(String payload) throws IOException {
+        Runtime.getRuntime().exec(intermediate(payload));
     }
 }

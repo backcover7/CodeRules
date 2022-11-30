@@ -1,7 +1,7 @@
 package com.saucer.sast.lang.java.parser.dataflow;
 
 import com.saucer.sast.lang.java.config.SpoonConfig;
-import com.saucer.sast.lang.java.parser.core.Node;
+import com.saucer.sast.lang.java.parser.core.RuleNode;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
 import com.saucer.sast.utils.FileUtils;
@@ -30,7 +30,7 @@ public class TaintedFlow {
                     source.get(DbUtils.PRECLASSTYPE),
                     source.get(DbUtils.PREMETHODNAME));
             for (HashMap<String, String> invocation : invocations) {
-                if (invocation.get(DbUtils.EDGETYPE).equals(Node.SourceNodeType)) {
+                if (invocation.get(DbUtils.EDGETYPE).equals(RuleNode.SourceNodeType)) {
                     continue;
                 }
 
@@ -50,18 +50,19 @@ public class TaintedFlow {
                 }
 
                 if (SemgrepScanRes.size() != 0) {
-                    taintedFlow.add(FromatChainNode(source));
-                    taintedFlow.add(FromatChainNode(invocation));
+                    taintedFlow.add(CharUtils.FormatChainNode(source));
+                    taintedFlow.add(CharUtils.FormatChainNode(invocation));
                     FlowAnalysis(invocation, taintedFlow);
                 }
             }
         }
     }
 
-    private ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation)
+    public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations0(HashMap<String, String> invocation)
             throws IOException, InterruptedException {
         String taint2invocation = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
                 FileUtils.ReadFile2String(FileUtils.taint2invocation));
+
         Path taint4annotationsourcePath =
                 Files.createTempFile(Paths.get(FileUtils.tmp), "taint2invocation", ".yaml");
         FileUtils.WriteFile(taint4annotationsourcePath.toAbsolutePath().toString(), taint2invocation, false);
@@ -71,8 +72,20 @@ public class TaintedFlow {
         return res;
     }
 
+    public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation)
+            throws IOException, InterruptedException {
+        ArrayList<HashMap<String, Object>> res = FlowFromArgs2Invocations0(invocation);
+
+        if (invocation.get(DbUtils.SUCCCODE).contains("java.lang")) {
+            invocation.put(DbUtils.SUCCCODE,
+                    invocation.get(DbUtils.SUCCCODE).replaceAll("java\\.lang\\.", CharUtils.empty));
+            res.addAll(FlowFromArgs2Invocations0(invocation));
+        }
+        return res;
+    }
+
     private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<String> taintedFlow) throws SQLException, IOException, InterruptedException {
-        if (invocation.get(DbUtils.EDGETYPE).equals(Node.SinkNodeType)) {
+        if (invocation.get(DbUtils.EDGETYPE).equals(RuleNode.SinkNodeType)) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
             if (SemgrepScanRes.size() != 0 ) {
                 CharUtils.ReportTaintedFlow(taintedFlow);
@@ -86,8 +99,8 @@ public class TaintedFlow {
         ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccNode(namespace, classtype, methodname);
         for (HashMap<String, String> succinvocation : succinvocations) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
-            if (SemgrepScanRes.size() != 0 && succinvocation.get(DbUtils.EDGETYPE).equals(Node.SinkNodeType)) {
-                taintedFlow.add(FromatChainNode(succinvocation));
+            if (SemgrepScanRes.size() != 0 && succinvocation.get(DbUtils.EDGETYPE).equals(RuleNode.SinkNodeType)) {
+                taintedFlow.add(CharUtils.FormatChainNode(succinvocation));
                 FlowAnalysis(succinvocation, taintedFlow);
             }
         }
@@ -106,22 +119,5 @@ public class TaintedFlow {
         map.put(METHODDEFINITION, methodDefinition);
         map.put(INVOCATION, map.get(DbUtils.SUCCCODE));
         return map;
-    }
-
-    private String FromatChainNode(HashMap<String, String> invocation) {
-        if (invocation.get(DbUtils.SUCCMETHODNAME) != null) {
-            // Annotation
-            return invocation.get(DbUtils.SUCCNAMESPACE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCCLASSTYPE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCMETHODNAME) + CharUtils.sharp +
-                    invocation.get(DbUtils.FILEPATH) + CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.SUCCCODE);
-        } else {
-            // Invocation
-            return invocation.get(DbUtils.SUCCNAMESPACE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCCLASSTYPE) + CharUtils.sharp +
-                    invocation.get(DbUtils.FILEPATH) + CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.SUCCCODE);
-        }
     }
 }

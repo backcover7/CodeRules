@@ -5,14 +5,14 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-        - pattern-inside: doFilter($VAR0,$VAR1,$VAR2){...}
+        - pattern-inside: doGet($VAR0,$VAR1){...}
         - pattern-inside: $BODY
-        - pattern: response.setHeader("Access-Control-Allow-Origin", "*")
+        - pattern: s.rce(user)
     pattern-sinks:
-      - pattern: response.setHeader("Access-Control-Allow-Origin", "*")
+      - pattern: s.rce(user)
     paths:
       include:
-        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/sink1.java
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/test.java
     message: Semgrep found a tained data flow from source
     languages: [java]
     severity: WARNING

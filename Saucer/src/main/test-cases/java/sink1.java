@@ -5,9 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Path;
 
 @Component
-public class AccessControlAllowOriginFilter implements Filter {
-
-    @DeleteMapping
+public class sink1 implements Filter {
     public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) req;

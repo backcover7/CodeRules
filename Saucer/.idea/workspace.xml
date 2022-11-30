@@ -6,25 +6,32 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/checks/AST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/checks/AST.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/RuleNode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/CallGraphNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/CallGraphNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/spoon/fr.inria.spoon.dataflow-1.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/spoon/spoon-core-10.3.0-beta-2-jar-with-dependencies.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/spoon/spoon-dataflow.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation13930622116356399613.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation1426665863326253236.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation16666249102536839682.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation4106265537907198447.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation7200501315982941353.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4annotationsource12361844534664907582.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4annotationsource12389235100607351047.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4annotationsource5151129602234801488.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml1163985793436005882.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml13616737081893998674.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml14145934888940565449.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml2113710837996701520.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml2267860889697616445.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml4914630465747608556.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/interpolator_commons_text.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/sink1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/sink1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/template.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/template.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/sources.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sources.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sources/gadget_source.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/template.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,8 +88,8 @@
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/spoon" />
       <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
+      <recent name="$PROJECT_DIR$/src/main/spoon" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
@@ -143,7 +150,7 @@
       <workItem from="1669094077875" duration="4469000" />
       <workItem from="1669098563747" duration="32405000" />
       <workItem from="1669594569039" duration="36250000" />
-      <workItem from="1669689632716" duration="21165000" />
+      <workItem from="1669689632716" duration="28778000" />
     </task>
     <servers />
   </component>
@@ -176,11 +183,6 @@
           <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
           <option name="timeStamp" value="174" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="213" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

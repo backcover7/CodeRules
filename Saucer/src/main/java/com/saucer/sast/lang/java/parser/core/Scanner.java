@@ -37,10 +37,10 @@ public class Scanner {
     private void ProcessAnnotation(CtExecutable<?> ctExecutable) throws SQLException {
         List<CtAnnotation<?>> ctAnnotationList = ctExecutable.getElements(new TypeFilter<>(CtAnnotation.class));
         for (CtAnnotation<?> annotation : ctAnnotationList) {
-            Node node = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
-            setPosition(annotation.getPosition(), node);
-            node.setCode(annotation.toString());
-            FlagBug(ctExecutable, node);
+            RuleNode ruleNode = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
+            setPosition(annotation.getPosition(), ruleNode);
+            ruleNode.setCode(annotation.toString());
+            FlagBug(ctExecutable, ruleNode);
         }
     }
 
@@ -51,10 +51,10 @@ public class Scanner {
             if (constructorCall.getExecutable().getParameters().size() != 0) {
                 CtExecutableReference<?> executableReference = constructorCall.getExecutable();
 
-                Node node = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
-                setPosition(executableReference.getParent().getPosition(), node);
-                node.setCode(constructorCall.toString());
-                FlagBug(ctExecutable, node);
+                RuleNode ruleNode = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
+                setPosition(executableReference.getParent().getPosition(), ruleNode);
+                ruleNode.setCode(constructorCall.toString());
+                FlagBug(ctExecutable, ruleNode);
             }
         }
     }
@@ -77,16 +77,16 @@ public class Scanner {
 
             HashSet<String> methodSet = methodHierarchy.getMethodSet();
             for (String methodInHierarchy : methodSet) {
-                Node node = CheckMethod(methodInHierarchy,
+                RuleNode ruleNode = CheckMethod(methodInHierarchy,
                         invocation.getExecutable().getSimpleName());
-                setPosition(invocation.getPosition(), node);
-                node.setCode(invocation.toString());
-                FlagBug(ctExecutable, node);
+                setPosition(invocation.getPosition(), ruleNode);
+                ruleNode.setCode(invocation.toString());
+                FlagBug(ctExecutable, ruleNode);
             }
         }
     }
 
-    private void setPosition(SourcePosition position, Node node) {
+    private void setPosition(SourcePosition position, RuleNode node) {
         if (position instanceof NoSourcePosition) {
             node.setFile(position.toString());
             node.setLine(String.valueOf(-1));
@@ -96,36 +96,48 @@ public class Scanner {
         }
     }
 
-    private Node CheckAnnotation(String annotationType) throws SQLException {
+    private void setPosition(SourcePosition position, String succline, CallGraphNode node) {
+        if (position instanceof NoSourcePosition) {
+            node.setFilePath(position.toString());
+            node.setPreLineNum(String.valueOf(-1));
+            node.setSuccLineNum(String.valueOf(-1));
+        } else {
+            node.setFilePath(position.getFile().getAbsolutePath());
+            node.setPreLineNum(String.valueOf(position.getLine()));
+            node.setSuccLineNum(succline);
+        }
+    }
+
+    private RuleNode CheckAnnotation(String annotationType) throws SQLException {
         String namespace = FilenameUtils.getBaseName(annotationType);
         String classtype = FilenameUtils.getExtension(annotationType);
         return DbUtils.QueryAnnotationType(namespace, classtype);
     }
 
-    private Node CheckConstructor(String qualifiedName) throws SQLException {
+    private RuleNode CheckConstructor(String qualifiedName) throws SQLException {
         String namespace = FilenameUtils.getBaseName(qualifiedName);
         String classtype = FilenameUtils.getExtension(qualifiedName);
         return DbUtils.QueryConstructor(namespace, classtype);
     }
 
-    private Node CheckMethod(String qualifiedName, String methodName) throws SQLException {
+    private RuleNode CheckMethod(String qualifiedName, String methodName) throws SQLException {
         String namespace = FilenameUtils.getBaseName(qualifiedName);
         String classtype = FilenameUtils.getExtension(qualifiedName);
         return DbUtils.QueryMethod(namespace, classtype, methodName);
     }
 
-    public boolean CheckBug(Node node) {
-        return node.getKind() != null && !node.getKind().equals(Node.GadgetNodeType);
+    public boolean CheckBug(RuleNode ruleNode) {
+        return ruleNode.getKind() != null && !ruleNode.getKind().equals(RuleNode.GadgetNodeType);
     }
 
-    public void FlagBug(CtExecutable<?> ctExecutable, Node node) {
-        if (CheckBug(node)) {
-            CharUtils.ReportDangeroursNode(node);
+    public void FlagBug(CtExecutable<?> ctExecutable, RuleNode ruleNode) {
+        if (CheckBug(ruleNode)) {
+            CharUtils.ReportDangerousNode(ruleNode);
         }
-        GenerateCallGraphEdge(ctExecutable, node);
+        GenerateCallGraphEdge(ctExecutable, ruleNode);
     }
 
-    private void GenerateCallGraphEdge(CtExecutable<?> ctExecutable, Node node) {
+    private void GenerateCallGraphEdge(CtExecutable<?> ctExecutable, RuleNode ruleNode) {
         CallGraphNode callGraphNode = new CallGraphNode();
 
         CtExecutableReference<?> ctExecutableReference = ctExecutable.getReference();
@@ -134,38 +146,35 @@ public class Scanner {
         if (SpoonConfig.model.getAllTypes().contains(ctExecutableReference.getDeclaringType().getDeclaration())) {
             // Set previous node in a call graph edge
             callGraphNode.setPreNamespace(ctExecutableReference.getDeclaringType().getPackage().getQualifiedName());
-            callGraphNode.setPreClasstype(ctExecutableReference.getDeclaringType().getQualifiedName());
+            callGraphNode.setPreClasstype(ctExecutableReference.getDeclaringType().getSimpleName());
             callGraphNode.setPreMethod(ctExecutableReference.getSimpleName());
-            try {
-                callGraphNode.setFilePath(ctExecutableReference.getParent().getPosition().getFile().toString());
-            } catch (Exception e) {
-                callGraphNode.setFilePath("unknow file");
-            }
 
+            setPosition(ctExecutableReference.getParent().getPosition(), ruleNode.getLine(), callGraphNode);
             callGraphNode.setPreParamSize(ctExecutableReference.getParameters().size());
 
             // Set successor node in a call graph edge
-            callGraphNode.setSuccNamespace(node.getNamespace());
-            callGraphNode.setSuccClasstype(node.getClasstype());
-            callGraphNode.setSuccMethod(node.getMethod());
-            callGraphNode.setSuccCode(node.getCode());
+            callGraphNode.setSuccNamespace(ruleNode.getNamespace());
+            callGraphNode.setSuccClasstype(ruleNode.getClasstype());
+            callGraphNode.setSuccMethod(ruleNode.getMethod());
+            callGraphNode.setSuccCode(ruleNode.getCode());
 
-            if (CheckBug(node)) {
-                setTaintedPreNodeType(callGraphNode, node);
+            if (CheckBug(ruleNode)) {
+                setTaintedPreNodeType(callGraphNode, ruleNode);
             } else {
-                callGraphNode.setEdgeType(Node.CommonNodeType);
+                callGraphNode.setEdgeType(RuleNode.CommonNodeType);
             }
 
             DbUtils.SaveCG2Db(callGraphNode);
         }
     }
 
-    private void setTaintedPreNodeType(CallGraphNode callGraphNode, Node node) {
-        String executableType = node.getNodetype();
-        if (executableType.equals(Node.SourceNodeType)) {
+    private void setTaintedPreNodeType(CallGraphNode callGraphNode, RuleNode ruleNode) {
+        String executableType = ruleNode.getNodetype();
+        if (executableType.equals(RuleNode.SourceNodeType)) {
             callGraphNode.setEdgeType(executableType);
-        } else if (executableType.equals(Node.SinkNodeType)) {
+        } else if (executableType.equals(RuleNode.SinkNodeType)) {
             callGraphNode.setEdgeType(executableType);
+            // TODO: gadget
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.saucer.sast.lang.java.parser.core;
 
-public class Node {
+public class RuleNode {
     private String namespace;
     private String classtype;
     private String method;
