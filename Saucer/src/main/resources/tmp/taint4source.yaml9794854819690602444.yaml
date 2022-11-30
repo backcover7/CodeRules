@@ -5,14 +5,14 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-        - pattern-inside: ${methodDefinition}
+        - pattern-inside: doGet($VAR0,$VAR1){...}
         - pattern-inside: $BODY
-        - pattern: ${sourceinvocation}
+        - pattern: s.intermediate("m");
     pattern-sinks:
-      - pattern: ${succcode}
+      - pattern: s.intermediate("m");
     paths:
       include:
-        - ${filepath}
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/test.java
     message: Semgrep found a tained data flow from source
     languages: [java]
     severity: WARNING

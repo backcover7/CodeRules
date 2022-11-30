@@ -1,0 +1,18 @@
+rules:
+  - id: taint2invocation
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: gadget($VAR0){...}
+        - pattern-either:
+          - pattern: $VAR0
+    pattern-sinks:
+      - pattern: new java.lang.ProcessBuilder(data).start()
+    paths:
+      include:
+        - /Users/kang.hou/Documents/CodeRules/Saucer/src/main/test-cases/java/test.java
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING

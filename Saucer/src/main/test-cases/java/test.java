@@ -1,5 +1,6 @@
 package com.saucer.sast.utils;
 
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,10 +11,11 @@ public class test {
         target s = new target();
         s.rce(user);
     }
+    //        String inte = s.intermediate("m");
 }
 
 class target {
-    public void branch(String text) {assert 1=2;}
+    public void branch(String text) {System.out.println("x");}
 
     public String intermediate(String data) {
         return data.toLowerCase();
@@ -26,11 +28,11 @@ class target {
         Runtime.getRuntime().exec(data);
     }
 
-    public void gadget(String data) {
+    public void gadget(String data) throws IOException {
         new ProcessBuilder(data).start();
     }
 
-    public void node(String b) {
+    public void node(String b) throws NamingException {
         String a = "a";
         new javax.naming.InitialContext().lookup(a);
     }

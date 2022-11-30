@@ -9,6 +9,8 @@ import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.cu.position.NoSourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.visitor.chain.CtQuery;
+import spoon.reflect.visitor.chain.CtQueryImpl;
 import spoon.reflect.visitor.filter.TypeFilter;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
@@ -28,6 +30,11 @@ public class Scanner {
             ctExecutables.addAll(classtype.getMethods());
 
             for (CtExecutable<?> ctExecutable : ctExecutables) {
+//                List<CtComment> comments = ctExecutable.filterChildren(new TypeFilter<>(CtComment.class)).list();
+//                for (CtComment comment: comments) {
+//                    ctExecutable.removeComment(comment);
+//                }
+
                 ProcessAnnotation(ctExecutable);
                 ProcessConstructor(ctExecutable);
                 ProcessMethod(ctExecutable);
@@ -40,7 +47,7 @@ public class Scanner {
         for (CtAnnotation<?> annotation : ctAnnotationList) {
             RuleNode ruleNode = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
             setPosition(annotation.getPosition(), ruleNode);
-            ruleNode.setCode(annotation.toString());
+            ruleNode.setCode(annotation.getOriginalSourceFragment().getSourceCode());
             GenerateCallGraphEdge(ctExecutable, ruleNode);
         }
     }
@@ -54,7 +61,7 @@ public class Scanner {
 
                 RuleNode ruleNode = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
                 setPosition(executableReference.getParent().getPosition(), ruleNode);
-                ruleNode.setCode(constructorCall.toString());
+                ruleNode.setCode(constructorCall.getOriginalSourceFragment().getSourceCode());
                 GenerateCallGraphEdge(ctExecutable, ruleNode);
             }
         }
@@ -81,11 +88,20 @@ public class Scanner {
                 RuleNode ruleNode = CheckMethod(methodInHierarchy,
                         invocation.getExecutable().getSimpleName());
                 setPosition(invocation.getPosition(), ruleNode);
-                ruleNode.setCode(invocation.toString());
+                try {
+                    // TODO // String inte = s.intermediate("m");\ns.rce(user)
+                    ruleNode.setCode(invocation.getOriginalSourceFragment().getSourceCode());
+                } catch (Exception e) {
+                    ruleNode.setCode(ruleNode.toString());
+                }
                 GenerateCallGraphEdge(ctExecutable, ruleNode);
             }
         }
     }
+
+//    private Object removeComment() {
+//        CtType
+//    }
 
     private void setPosition(SourcePosition position, RuleNode node) {
         if (position instanceof NoSourcePosition) {

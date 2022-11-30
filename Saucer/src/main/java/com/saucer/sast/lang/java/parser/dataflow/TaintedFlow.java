@@ -17,7 +17,7 @@ import java.util.LinkedList;
 
 public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
-    private final static String INVOCATION = "invocation";
+    private final static String SOURCEINVOCATION = "sourceinvocation";
     private final static String PARAMPATTERN = "parampattern";
 
     public void Scan() throws SQLException, IOException, InterruptedException {
@@ -41,6 +41,7 @@ public class TaintedFlow {
                     SemgrepScanRes = FlowFromArgs2Invocations(invocation);
                 } else {
                     // Invocation source
+                    invocation.put(SOURCEINVOCATION, source.get(DbUtils.SUCCCODE));
                     String taint4source = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
                             FileUtils.ReadFile2String(FileUtils.taint4source));
                     Path taint4sourcePath =
@@ -57,6 +58,30 @@ public class TaintedFlow {
                 }
             }
         }
+    }
+
+    private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<String> taintedFlow) throws SQLException {
+        if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetFlowType)) {
+            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
+            if (SemgrepScanRes.size() != 0 ) {
+                CharUtils.ReportTaintedFlow(taintedFlow);
+                DbUtils.UpdateSinkFlowEdge(invocation);
+                taintedFlow.removeLast();
+                return;
+            }
+        }
+        String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
+        String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
+        String methodname = invocation.get(DbUtils.SUCCMETHODNAME);
+        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccNodeCallGraph(namespace, classtype, methodname);
+        for (HashMap<String, String> succinvocation : succinvocations) {
+            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+            if (SemgrepScanRes.size() != 0) {
+                taintedFlow.add(CharUtils.FormatChainNode(succinvocation));
+                FlowAnalysis(succinvocation, taintedFlow);
+            }
+        }
+        taintedFlow.removeLast();
     }
 
     private ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations0(HashMap<String, String> invocation) {
@@ -76,7 +101,6 @@ public class TaintedFlow {
         return res;
     }
 
-    // TODO: bug in taintedpath
     public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
         if (invocation.get(DbUtils.PREPARAMSIZE).equals(String.valueOf(0))) {
             return new ArrayList<>();
@@ -91,29 +115,6 @@ public class TaintedFlow {
             invocation.put(DbUtils.SUCCCODE, originalSuccCode);
         }
         return res;
-    }
-
-    private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<String> taintedFlow) throws SQLException {
-        if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetFlowType)) {
-            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
-            if (SemgrepScanRes.size() != 0 ) {
-                CharUtils.ReportTaintedFlow(taintedFlow);
-                DbUtils.UpdateSinkFlowEdge(invocation);
-                taintedFlow.clear();
-                return;
-            }
-        }
-        String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
-        String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
-        String methodname = invocation.get(DbUtils.SUCCMETHODNAME);
-        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccNodeCallGraph(namespace, classtype, methodname);
-        for (HashMap<String, String> succinvocation : succinvocations) {
-            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
-            if (SemgrepScanRes.size() != 0) {
-                taintedFlow.add(CharUtils.FormatChainNode(succinvocation));
-                FlowAnalysis(succinvocation, taintedFlow);
-            }
-        }
     }
 
     private HashMap<String, String> ProcessTemplateMap(HashMap<String, String> map) {
@@ -133,7 +134,6 @@ public class TaintedFlow {
         }
         methodDefinition += CharUtils.rightbracket + SemgrepUtils.EllipsisBody;
         map.put(METHODDEFINITION, methodDefinition);
-        map.put(INVOCATION, map.get(DbUtils.SUCCCODE));
         map.put(PARAMPATTERN, parampattern);
         return map;
     }
