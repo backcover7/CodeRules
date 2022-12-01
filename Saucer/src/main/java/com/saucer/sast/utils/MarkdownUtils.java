@@ -52,19 +52,19 @@ public class MarkdownUtils {
     }
 
     public static void ReportTaintedFlowHeader() {
-        stringBuilder.append("## Exploitable Tainted Flows").append(CharUtils.LF);
+        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows").append(CharUtils.LF);
     }
 
     public static void ReportGadgetSinkNode() {
-        stringBuilder.append("## Exploitable Gadget Methods").append(CharUtils.LF);
-    }
-
-    public static void ReportSourceNodeHeader() {
-        stringBuilder.append("## Usage of Source Functions").append(CharUtils.LF);
+        stringBuilder.append("## [P2] - Exploitable Gadget Methods").append(CharUtils.LF);
     }
 
     public static void ReportSinkNodeHeader() {
-        stringBuilder.append("## Usage of Sink Functions").append(CharUtils.LF);
+        stringBuilder.append("## [P3] - Usage of Sink Functions").append(CharUtils.LF);
+    }
+
+    public static void ReportSourceNodeHeader() {
+        stringBuilder.append("## [INFO] - Usage of Source Functions").append(CharUtils.LF);
     }
 
     public static void ReportTaintedFlow(LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {

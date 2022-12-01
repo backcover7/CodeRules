@@ -36,6 +36,7 @@ public class CharUtils {
     public final static String CsvExtension = ".csv";
     public final static String TxtExtension = ".txt";
     public final static String MarkdownExtension = ".md";
+    public final static String PdfExtension = ".pdf";
     public final static String JAVA = "java";
 
     public static boolean RegexMatch(String regex, String string) {
