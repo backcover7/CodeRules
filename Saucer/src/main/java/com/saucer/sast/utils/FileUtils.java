@@ -1,7 +1,5 @@
 package com.saucer.sast.utils;
 
-import org.springframework.security.core.parameters.P;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

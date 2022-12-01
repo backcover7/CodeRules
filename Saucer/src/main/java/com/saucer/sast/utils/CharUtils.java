@@ -2,8 +2,6 @@ package com.saucer.sast.utils;
 
 import org.apache.commons.text.StringSubstitutor;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

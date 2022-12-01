@@ -8,6 +8,8 @@ import net.steppschuh.markdowngenerator.text.emphasis.BoldText;
 
 import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -15,15 +17,20 @@ import java.util.LinkedList;
 public class MarkdownUtils {
     private static String report;
     private static StringBuilder stringBuilder;
-    private static String timestamp;
+    private static String formatedtimestamp;
 
     public final static String newline = CharUtils.LF + CharUtils.LF;
 
     public MarkdownUtils() {
-        timestamp = java.time.LocalDateTime.now().toString();
+        SimpleDateFormat FilenameDateFormat = new SimpleDateFormat("MM-dd-yyyy-HH:mm:ss:SSS");
+        SimpleDateFormat TitleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.SSS");
+        Date date = new Date();
+        String filenametimestamp = FilenameDateFormat.format(date);
+        formatedtimestamp = TitleDateFormat.format(date);
+
         report = Paths.get(FileUtils.report,
                 Paths.get(SpoonConfig.codebase).getFileName().toString() +
-                "_Saucer_SAST_Report_" + timestamp + CharUtils.MarkdownExtension).toAbsolutePath().toString();
+                "_Saucer_SAST_Report_" + filenametimestamp + CharUtils.MarkdownExtension).toAbsolutePath().toString();
         stringBuilder = new StringBuilder();
     }
 
@@ -34,7 +41,7 @@ public class MarkdownUtils {
                         Paths.get(SpoonConfig.codebase).getFileName().toString(),
                         Paths.get(SpoonConfig.codebase).toUri().toString()))
                 .append(" - Saucer SAST Scan Report").append(CharUtils.LF)
-                .append(timestamp).append(newline)
+                .append(formatedtimestamp).append(newline)
                 .append("*Report tool bugs to [kang.hou@salesforce.com](mailto:kang.hou@salesforce.com?subject=Saucer Bug Report&body=Please attach details and screenshot in the bug report.)*").append(newline);
 
         FileUtils.WriteFileLn(report, reportHeader.toString(), false);

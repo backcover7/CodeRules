@@ -5,57 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/spoon.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/spoon__2_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/checks/AST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/checks/AST.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/RuleNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/RuleNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/CallGraphNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/CallGraphNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation10388357587403112645.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation10529981929098003605.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation10610233797094847257.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation12343895039530870377.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation12479720541299311694.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation12904843654997006846.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation13161525084737295014.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation13494865168191913854.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation1398494280576878836.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation13991232026075815269.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation14148429316893017057.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation14700186504378927984.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation15227680681549223409.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation16059083962924898438.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation16162843329508968599.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation16642159488531835390.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation16933186177677786715.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation17706831245996743067.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation18013098797379082445.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation18275327009133195633.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation4468777414426631614.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation5406541126490691256.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation5485470769480564605.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation57449318086477457.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation6233244279742141336.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation6690816586514712248.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation6986152951040169691.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation7114000586744968664.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation8274894141073079597.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint2invocation9939796846772870473.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml13790707413419051747.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml1555746804428861385.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml3452084289007646903.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml6186065498178160839.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml7987694988353965902.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml9721848090184083891.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tmp/taint4source.yaml9794854819690602444.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/spoon/spoon-core-10.3.0-beta-4-jar-with-dependencies.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +129,7 @@
       <workItem from="1669594569039" duration="36250000" />
       <workItem from="1669689632716" duration="39937000" />
       <workItem from="1669829392836" duration="7823000" />
-      <workItem from="1669837248927" duration="19171000" />
+      <workItem from="1669837248927" duration="20056000" />
     </task>
     <servers />
   </component>
