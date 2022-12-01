@@ -3,16 +3,15 @@ package com.saucer.sast.lang.java.parser.core;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
+import com.saucer.sast.utils.CharUtils;
+import com.saucer.sast.utils.MarkdownUtils;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.cu.position.NoSourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtExecutableReference;
-import spoon.reflect.visitor.chain.CtQuery;
-import spoon.reflect.visitor.chain.CtQueryImpl;
 import spoon.reflect.visitor.filter.TypeFilter;
-import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
 import spoon.support.reflect.declaration.CtClassImpl;
 import spoon.support.reflect.declaration.CtExecutableImpl;
@@ -46,6 +45,7 @@ public class Scanner {
         List<CtAnnotation<?>> ctAnnotationList = ctExecutable.getElements(new TypeFilter<>(CtAnnotation.class));
         for (CtAnnotation<?> annotation : ctAnnotationList) {
             RuleNode ruleNode = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
+            ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
             setPosition(annotation.getPosition(), ruleNode);
             ruleNode.setCode(annotation.getOriginalSourceFragment().getSourceCode());
             GenerateCallGraphEdge(ctExecutable, ruleNode);
@@ -60,6 +60,7 @@ public class Scanner {
                 CtExecutableReference<?> executableReference = constructorCall.getExecutable();
 
                 RuleNode ruleNode = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
+                ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                 setPosition(executableReference.getParent().getPosition(), ruleNode);
                 ruleNode.setCode(constructorCall.getOriginalSourceFragment().getSourceCode());
                 GenerateCallGraphEdge(ctExecutable, ruleNode);
@@ -87,6 +88,7 @@ public class Scanner {
             for (String methodInHierarchy : methodSet) {
                 RuleNode ruleNode = CheckMethod(methodInHierarchy,
                         invocation.getExecutable().getSimpleName());
+                ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                 setPosition(invocation.getPosition(), ruleNode);
                 try {
                     // TODO // String inte = s.intermediate("m");\ns.rce(user)
@@ -125,6 +127,17 @@ public class Scanner {
         }
     }
 
+    // TODO simplify code
+    private String getParentMethodSourceCode(CtExecutable<?> ctExecutable) {
+        try {
+            String MethodSourceCode = ctExecutable.getReference().getDeclaration().getOriginalSourceFragment().getSourceCode();
+            String extraspaces = CharUtils.RegexMatchLastOccurence("^( )+?(?=})", MethodSourceCode);
+            return MethodSourceCode.replaceAll("(?<=\n)" + extraspaces, CharUtils.empty);
+        } catch (Exception e) {
+            return ctExecutable.getReference().getDeclaration().toString();
+        }
+    }
+
     private RuleNode CheckAnnotation(String annotationType) throws SQLException {
         String namespace = FilenameUtils.getBaseName(annotationType);
         String classtype = FilenameUtils.getExtension(annotationType);
@@ -158,7 +171,6 @@ public class Scanner {
             callGraphNode.setPreNamespace(ctExecutableReference.getDeclaringType().getPackage().getQualifiedName());
             callGraphNode.setPreClasstype(ctExecutableReference.getDeclaringType().getSimpleName());
             callGraphNode.setPreMethodName(ctExecutableReference.getSimpleName());
-
             setPosition(ctExecutableReference.getParent().getPosition(), ruleNode.getLine(), callGraphNode);
             callGraphNode.setPreParamSize(ctExecutableReference.getParameters().size());
 
@@ -174,6 +186,7 @@ public class Scanner {
                 callGraphNode.setEdgeType(CallGraphNode.CommonFlowType);
             }
 
+            callGraphNode.setParentCode(ruleNode.getMethodcode());
             DbUtils.SaveCG2Db(callGraphNode);
         }
     }
@@ -215,24 +228,31 @@ public class Scanner {
         return invocation;
     }
 
-    public void FlagNodes() throws SQLException {
-        System.out.println("------------------------------------------------------------------------------------");
-        // Flag sink node bug
-        ArrayList<RuleNode> SinkNodes = DbUtils.QuerySinkNodeFlowRuleNode();
-        for (RuleNode node : SinkNodes) {
-            CharUtils.ReportDangerousNode(node);
+    public void FlagThreats() throws SQLException {
+        MarkdownUtils.ReportTaintedFlowHeader();
+        for (LinkedList<HashMap<String, String>> taintedFlow : TaintedFlow.getTaintedPaths()) {
+            MarkdownUtils.ReportTaintedFlow(taintedFlow);
         }
-        System.out.println("------------------------------------------------------------------------------------");
+
+        MarkdownUtils.ReportGadgetSinkNode();
         // Flag sink gadget bug
         ArrayList<HashMap<String, RuleNode>> SinkGadgetNodes = DbUtils.QuerySinkGadgetFlowRuleNode();
         for (HashMap<String, RuleNode> sinkGadgetNode : SinkGadgetNodes) {
-            CharUtils.ReportGadgetNode(sinkGadgetNode);
+            MarkdownUtils.ReportGadgetSinkNode(sinkGadgetNode);
         }
-        System.out.println("------------------------------------------------------------------------------------");
+
+        MarkdownUtils.ReportSinkNodeHeader();
+        // Flag sink node bug
+        ArrayList<RuleNode> SinkNodes = DbUtils.QuerySinkNodeFlowRuleNode();
+        for (RuleNode node : SinkNodes) {
+            MarkdownUtils.ReportNode(node);
+        }
+
+        MarkdownUtils.ReportSourceNodeHeader();
         // Flag all source nodes
         ArrayList<RuleNode> SourceNodes = DbUtils.QuerySourceNodeFlowRuleNode();
         for (RuleNode node : SourceNodes) {
-            CharUtils.ReportDangerousNode(node);
+            MarkdownUtils.ReportNode(node);
         }
     }
 }

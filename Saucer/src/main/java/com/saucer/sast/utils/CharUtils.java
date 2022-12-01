@@ -1,12 +1,11 @@
 package com.saucer.sast.utils;
 
-import com.saucer.sast.lang.java.parser.core.RuleNode;
-import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CharUtils {
@@ -20,6 +19,7 @@ public class CharUtils {
     public final static String colon = ":";
     public final static String at = "@";
     public final static String semicolon = ";";
+    public final static String dash = "-";
     public final static String carrot = "^";
     public final static String singleQuote = "'";
     public final static String doubleQuote = "\"";
@@ -28,6 +28,8 @@ public class CharUtils {
     public final static String leftbracket = "(";
     public final static String leftbracketRegex = "\\(";
     public final static String rightbracket = ")";
+    public final static String leftsquarebracket = "[";
+    public final static String rightsquarebracket = "]";
     public final static String LF = "\n";
     public final static String empty = "";
     public final static String ClassExtension = ".class";
@@ -35,72 +37,20 @@ public class CharUtils {
     public final static String JavaExtension = ".java";
     public final static String CsvExtension = ".csv";
     public final static String TxtExtension = ".txt";
+    public final static String MarkdownExtension = ".md";
+    public final static String JAVA = "java";
 
     public static boolean RegexMatch(String regex, String string) {
-        return Pattern.compile(regex, Pattern.MULTILINE).matcher(string).find();
+        return RegexMatchLastOccurence(regex, string) != null;
     }
 
-    public static void ReportDangerousNode(RuleNode ruleNode) {
-        System.out.println("[+] Found " + ruleNode.getKind() + " kind of " + ruleNode.getNodetype() + "!");
-        if (ruleNode.getKind().contains("annotation")) {
-            System.out.println("    " + String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype()));
-        } else {
-            System.out.println("    " +
-                    String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype(), ruleNode.getMethod()));
+    public static String RegexMatchLastOccurence(String regex, String string) {
+        Matcher matcher = Pattern.compile(regex, Pattern.MULTILINE).matcher(string);
+        String lastOccurence = null;
+        while (matcher.find()) {
+            lastOccurence = matcher.group();
         }
-        System.out.println("    " + ruleNode.getFile() + "#" + ruleNode.getLine());
-        System.out.println("    " + ruleNode.getCode());
-    }
-
-    public static void ReportGadgetNode(HashMap<String, RuleNode> sinkGadgetNode) {
-        RuleNode gadgetFlowSource = sinkGadgetNode.get(CallGraphNode.SinkGadgetFlowSource);
-        RuleNode gadgetFlowSink = sinkGadgetNode.get(CallGraphNode.SinkGadgetFlowSink);
-
-        System.out.println("[+] Found " + gadgetFlowSink.getKind() + " kind of gadget method!");
-        System.out.println("    " + "(Gadget method definition)");
-        System.out.println("    " +
-                String.join(CharUtils.dot, gadgetFlowSource.getNamespace(), gadgetFlowSource.getClasstype(), gadgetFlowSource.getMethod()));
-        System.out.println("    " + gadgetFlowSink.getFile() + "#" + gadgetFlowSource.getLine());
-
-        System.out.println("    --->");
-
-        System.out.println("    " + "(Sink trigger in the gadget method)");
-        if (gadgetFlowSink.getKind().contains("annotation")) {
-            System.out.println("    " + String.join(CharUtils.dot, gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype()));
-        } else {
-            System.out.println("    " +
-                    String.join(CharUtils.dot, gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype(), gadgetFlowSink.getMethod()));
-        }
-        System.out.println("    " + gadgetFlowSink.getFile() + "#" + gadgetFlowSink.getLine());
-        System.out.println("    " + gadgetFlowSink.getCode());
-    }
-
-    public static String FormatChainNode(HashMap<String, String> invocation) {
-        if (invocation.get(DbUtils.SUCCMETHODNAME) == null) {
-            // Annotation
-            return invocation.get(DbUtils.SUCCNAMESPACE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCCLASSTYPE) + CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.FILEPATH) + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM) +
-                    CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.SUCCCODE);
-        } else {
-            // Invocation
-            return invocation.get(DbUtils.SUCCNAMESPACE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCCLASSTYPE) + CharUtils.dot +
-                    invocation.get(DbUtils.SUCCMETHODNAME) + CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.FILEPATH) + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM) +
-                    CharUtils.comma + CharUtils.space +
-                    invocation.get(DbUtils.SUCCCODE);
-        }
-    }
-
-    public static void ReportTaintedFlow(LinkedList<String> taintedFlow) {
-        System.out.println("[+] Found potential exploitable tainted flow: ");
-        int index = 1;
-        for (String node : taintedFlow) {
-            System.out.println("    " + index + CharUtils.dot + CharUtils.space + node);
-            index++;
-        }
+        return lastOccurence;
     }
 
     public static String StringSubsitute(Map<String, String> map, String template) {

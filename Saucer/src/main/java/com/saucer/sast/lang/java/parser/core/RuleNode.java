@@ -9,6 +9,7 @@ public class RuleNode {
     private String file;
     private String line;
     private String code;
+    private String methodcode;
 
     public final static String SOURCENODE = "source";
     public final static String SINKNODE = "sink";
@@ -76,5 +77,13 @@ public class RuleNode {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getMethodcode() {
+        return methodcode;
+    }
+
+    public void setMethodcode(String methodcode) {
+        this.methodcode = methodcode;
     }
 }

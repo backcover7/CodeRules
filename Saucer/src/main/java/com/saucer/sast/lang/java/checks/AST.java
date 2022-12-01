@@ -42,7 +42,7 @@ public class AST {
                 ruleNode.setCode(method.getSignature());
 
                 // TODO: add to callgraph
-                CharUtils.ReportDangerousNode(ruleNode);
+//                CharUtils.ReportDangerousNode(ruleNode);
             }
         }
     }

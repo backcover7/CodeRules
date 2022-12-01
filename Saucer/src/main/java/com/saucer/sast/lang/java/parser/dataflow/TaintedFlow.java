@@ -1,10 +1,7 @@
 package com.saucer.sast.lang.java.parser.dataflow;
 
 import com.saucer.sast.lang.java.config.SpoonConfig;
-import com.saucer.sast.utils.CharUtils;
-import com.saucer.sast.utils.DbUtils;
-import com.saucer.sast.utils.FileUtils;
-import com.saucer.sast.utils.SemgrepUtils;
+import com.saucer.sast.utils.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,10 +16,19 @@ public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
     private final static String SOURCEINVOCATION = "sourceinvocation";
     private final static String PARAMPATTERN = "parampattern";
+    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths;
+
+    public TaintedFlow() {
+        taintedPaths = new ArrayList<>();
+    }
+
+    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths() {
+        return taintedPaths;
+    }
 
     public void Scan() throws SQLException, IOException, InterruptedException {
         // Start from all sources
-        LinkedList<String> taintedFlow = new LinkedList<>();
+        LinkedList<HashMap<String, String>> taintedFlow = new LinkedList<>();
 
         ArrayList<HashMap<String, String>> sources = DbUtils.QuerySourceNodeCallGraph();
         for (HashMap<String, String> source : sources) {
@@ -52,19 +58,19 @@ public class TaintedFlow {
                 }
 
                 if (SemgrepScanRes.size() != 0) {
-                    taintedFlow.add(CharUtils.FormatChainNode(source));
-                    taintedFlow.add(CharUtils.FormatChainNode(invocation));
+                    taintedFlow.add(source);
+                    taintedFlow.add(invocation);
                     FlowAnalysis(invocation, taintedFlow);
                 }
             }
         }
     }
 
-    private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<String> taintedFlow) throws SQLException {
+    private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
         if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetFlowType)) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
             if (SemgrepScanRes.size() != 0 ) {
-                CharUtils.ReportTaintedFlow(taintedFlow);
+                taintedPaths.add((LinkedList<HashMap<String, String>>) taintedFlow.clone());
                 DbUtils.UpdateSinkFlowEdge(invocation);
                 taintedFlow.removeLast();
                 return;
@@ -77,7 +83,7 @@ public class TaintedFlow {
         for (HashMap<String, String> succinvocation : succinvocations) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
             if (SemgrepScanRes.size() != 0) {
-                taintedFlow.add(CharUtils.FormatChainNode(succinvocation));
+                taintedFlow.add(succinvocation);
                 FlowAnalysis(succinvocation, taintedFlow);
             }
         }

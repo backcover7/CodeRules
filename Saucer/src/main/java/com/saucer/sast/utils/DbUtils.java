@@ -33,6 +33,7 @@ public class DbUtils {
     public final static String SUCCMETHODNAME = "succmethodname";
     public final static String SUCCCODE = "succcode";
     public final static String SUCCLINENUM = "succlinenum";
+    public final static String PARENTCODE = "parentcode";
     public final static String FILEPATH = "filepath";
     public final static String EDGETYPE = "edgetype";
 
@@ -122,6 +123,7 @@ public class DbUtils {
                 + "	succmethodname varchar,\n"
                 + "	succcode varchar,\n"
                 + "	succlinenum varchar,\n"
+                + "	parentcode varchar,\n"
                 + "	filepath varchar,\n"
                 + "	edgetype varchar"
                 + ");";
@@ -149,8 +151,9 @@ public class DbUtils {
                 "succmethodname, " +
                 "succcode, " +
                 "succlinenum, " +
+                "parentcode, " +
                 "filepath, " +
-                "edgetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "edgetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement;
         try {
@@ -166,8 +169,9 @@ public class DbUtils {
             statement.setString(8, callGraphNode.getSuccMethodName());
             statement.setString(9, callGraphNode.getSuccCode());
             statement.setString(10, callGraphNode.getSuccLineNum());
-            statement.setString(11, callGraphNode.getFilePath());
-            statement.setString(12, callGraphNode.getEdgeType());
+            statement.setString(11, callGraphNode.getParentCode());
+            statement.setString(12, callGraphNode.getFilePath());
+            statement.setString(13, callGraphNode.getEdgeType());
 
             statement.executeUpdate();
             statement.close();
@@ -274,6 +278,7 @@ public class DbUtils {
             source.put(SUCCMETHODNAME, resultSet.getString(SUCCMETHODNAME));
             source.put(SUCCCODE, resultSet.getString(SUCCCODE));
             source.put(SUCCLINENUM, resultSet.getString(SUCCLINENUM));
+            source.put(PARENTCODE, resultSet.getString(PARENTCODE));
             source.put(FILEPATH, resultSet.getString(FILEPATH));
             source.put(EDGETYPE, resultSet.getString(EDGETYPE));
 
@@ -286,7 +291,7 @@ public class DbUtils {
         String sql = "UPDATE callgraph SET edgetype = " + "\"" + CallGraphNode.SinkFlowType + "\" " +
                 "WHERE prenamespace = ? AND preclasstype = ? AND premethodname = ? AND prelinenum = ? " +
                 "AND preparamsize = ? AND succnamespace = ? AND succclasstype = ? AND succmethodname = ? " +
-                "AND succcode = ? AND succlinenum =? AND filepath = ? AND edgetype = ?";
+                "AND succcode = ? AND succlinenum =? AND parentcode = ? AND filepath = ? AND edgetype = ?";
 
         PreparedStatement statement = conn.prepareStatement(sql);
 
@@ -300,8 +305,9 @@ public class DbUtils {
         statement.setString(8, invocation.get(DbUtils.SUCCMETHODNAME));
         statement.setString(9, invocation.get(DbUtils.SUCCCODE));
         statement.setString(10, invocation.get(DbUtils.SUCCLINENUM));
-        statement.setString(11, invocation.get(DbUtils.FILEPATH));
-        statement.setString(12, invocation.get(DbUtils.EDGETYPE));
+        statement.setString(11, invocation.get(DbUtils.PARENTCODE));
+        statement.setString(12, invocation.get(DbUtils.FILEPATH));
+        statement.setString(13, invocation.get(DbUtils.EDGETYPE));
 
         statement.executeUpdate();
         statement.close();
@@ -332,6 +338,7 @@ public class DbUtils {
             node.setFile(resultSet.getString(FILEPATH));
             node.setLine(resultSet.getString(SUCCLINENUM));
             node.setCode(resultSet.getString(SUCCCODE));
+            node.setMethodcode(resultSet.getString(PARENTCODE));
 
             SinkNodes.add(node);
         }
@@ -362,6 +369,8 @@ public class DbUtils {
             gadgetFlowSink.setFile(resultSet.getString(FILEPATH));
             gadgetFlowSink.setLine(resultSet.getString(SUCCLINENUM));
             gadgetFlowSink.setCode(resultSet.getString(SUCCCODE));
+
+            gadgetFlowSink.setMethodcode(resultSet.getString(PARENTCODE));
 
             sinkGadgetNode.put(CallGraphNode.SinkGadgetFlowSource, gadgetFlowSource);
             sinkGadgetNode.put(CallGraphNode.SinkGadgetFlowSink, gadgetFlowSink);

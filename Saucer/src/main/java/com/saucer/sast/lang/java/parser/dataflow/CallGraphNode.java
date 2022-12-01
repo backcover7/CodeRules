@@ -11,9 +11,9 @@ public class CallGraphNode {
     private String SuccMethodName;
     private String SuccCode;
     private String SuccLineNum;
+    private String ParentCode;
     private String FilePath;
     private String EdgeType;
-    private String SinkType;
 
     public final static String SourceFlowType = "SourceFlow";
     public final static String SinkNodeType = "SinkNodeFlow";
@@ -113,19 +113,19 @@ public class CallGraphNode {
         FilePath = filePath;
     }
 
+    public String getParentCode() {
+        return ParentCode;
+    }
+
+    public void setParentCode(String parentCode) {
+        ParentCode = parentCode;
+    }
+
     public String getEdgeType() {
         return EdgeType;
     }
 
     public void setEdgeType(String edgeType) {
         EdgeType = edgeType;
-    }
-
-    public String getSinkType() {
-        return SinkType;
-    }
-
-    public void setSinkType(String sinkType) {
-        SinkType = sinkType;
     }
 }
