@@ -10,6 +10,7 @@ import spoon.reflect.declaration.CtType;
 
 import java.util.List;
 
+@Deprecated
 public class AST {
     private final CtType<?> classtype;
     private final SpoonConfig spoonConfig;

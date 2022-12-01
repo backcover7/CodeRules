@@ -2,6 +2,7 @@ package com.saucer.sast.lang.java.config;
 
 import spoon.Launcher;
 import spoon.MavenLauncher;
+import spoon.compiler.Environment;
 import spoon.reflect.CtModel;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.FileUtils;
@@ -30,6 +31,7 @@ public class SpoonConfig {
                 break;
         }
         if (launcher != null) {
+            setEnv(launcher.getEnvironment());
             launcher.buildModel();
             model = launcher.getModel();
         } else {
@@ -51,5 +53,9 @@ public class SpoonConfig {
         MavenLauncher launcher = new MavenLauncher(codebase, MavenLauncher.SOURCE_TYPE.APP_SOURCE);
         launcher.addInputResource(codebase);
         return launcher;
+    }
+
+    private void setEnv(Environment env) {
+        env.setCommentEnabled(false);
     }
 }

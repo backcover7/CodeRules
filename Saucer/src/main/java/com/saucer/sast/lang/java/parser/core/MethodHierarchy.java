@@ -1,5 +1,6 @@
 package com.saucer.sast.lang.java.parser.core;
 
+import com.saucer.sast.lang.java.config.SpoonConfig;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.declaration.CtParameterImpl;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MethodHierarchy {
-    private HashSet<String> methodSet = new HashSet<>();
+    private final HashSet<String> methodSet = new HashSet<>();
 
     public HashSet<String> getMethodSet() {
         return methodSet;
@@ -23,6 +24,13 @@ public class MethodHierarchy {
             }
         }
         ImplementsFromInterface(clazz, methodName, parameters);
+
+        // When superclass is null and the clazz has no superinterface
+        // It still has a superclass which is java.lang.Object
+        // Do not need to implement any logic, coz there's only one node in csv: java.lang:Object:finalize:gadget
+        if (methodName.equals("finalize")) {
+            methodSet.add("java.lang.Object");
+        }
     }
 
     private CtType<?> ExtendsFromSuperclass(CtType<?> clazz, String methodName, List<CtTypeReference<?>> parameters) {

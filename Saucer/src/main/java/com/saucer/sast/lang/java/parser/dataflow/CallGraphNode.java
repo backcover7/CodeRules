@@ -6,6 +6,7 @@ public class CallGraphNode {
     private String PreMethodName;
     private String PreLineNum;
     private int PreParamSize;
+    private boolean PreGadgetSource;
     private String SuccNamespace;
     private String SuccClasstype;
     private String SuccMethodName;
@@ -16,10 +17,12 @@ public class CallGraphNode {
     private String EdgeType;
 
     public final static String SourceFlowType = "SourceFlow";
+    public final static String SourceGadgetFlowType = "SourceGadgetFlow";
+    public final static String ParamizedSetterGetterConsrtrcuorFlowType = "ParamizedSetterGetterConsrtrcuorFlowType";
     public final static String SinkNodeType = "SinkNodeFlow";
-    public final static String SinkGadgetFlowType = "SinkGadgetFlow";
-    public final static String SinkGadgetFlowSource = "SinkGadgetFlowSource";
-    public final static String SinkGadgetFlowSink = "SinkGadgetFlowSink";
+    public final static String SinkGadgetNodeFlowType = "SinkGadgetNodeFlow";
+    public final static String SinkGadgetNodeFlowSource = "SinkGadgetNodeFlowSource";
+    public final static String SinkGadgetNodeFlowSink = "SinkGadgetNodeFlowSink";
 
     public final static String SinkFlowType = "SinkFlow";
     public final static String GadgetFlowType = "GadgetFlow";
@@ -67,6 +70,14 @@ public class CallGraphNode {
 
     public void setPreParamSize(int preParamSize) {
         PreParamSize = preParamSize;
+    }
+
+    public boolean isPreGadgetSource() {
+        return PreGadgetSource;
+    }
+
+    public void setPreGadgetSource(boolean preGadgetSource) {
+        PreGadgetSource = preGadgetSource;
     }
 
     public void setSuccNamespace(String succNamespace) {

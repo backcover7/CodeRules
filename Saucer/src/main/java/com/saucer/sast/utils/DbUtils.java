@@ -28,6 +28,7 @@ public class DbUtils {
     public final static String PREMETHODNAME = "premethodname";
     public final static String PRELINENUM = "prelinenum";
     public final static String PREPARAMSIZE = "preparamsize";
+    public final static String PREGADGETSOURCE = "pregadgetsource";
     public final static String SUCCNAMESPACE = "succnamespace";
     public final static String SUCCCLASSTYPE = "succclasstype";
     public final static String SUCCMETHODNAME = "succmethodname";
@@ -83,7 +84,7 @@ public class DbUtils {
     private static void ImportNodes() throws Exception {
         ImportNodes(Paths.get(CSVDirectory, "sources.csv").toString(), RuleNode.SOURCENODE);
         ImportNodes(Paths.get(CSVDirectory, "sinks.csv").toString(), RuleNode.SINKNODE);
-        ImportNodes(Paths.get(CSVDirectory, "gadget.csv").toString(), RuleNode.GADGETNODE);
+        ImportNodes(Paths.get(CSVDirectory, "gadget.csv").toString(), RuleNode.GADGETSOURCENODE);
     }
 
     private static void ImportNodes(String nodePath, String nodeType) throws Exception {
@@ -118,6 +119,7 @@ public class DbUtils {
                 + "	premethodname varchar,\n"
                 + "	prelinenum varchar,\n"
                 + "	preparamsize integer,\n"
+                + "	pregadgetsource varchar,\n"
                 + "	succnamespace varchar,\n"
                 + "	succclasstype varchar,\n"
                 + "	succmethodname varchar,\n"
@@ -146,6 +148,7 @@ public class DbUtils {
                 "premethodname, " +
                 "prelinenum, " +
                 "preparamsize, " +
+                "pregadgetsource, " +
                 "succnamespace, " +
                 "succclasstype, " +
                 "succmethodname, " +
@@ -153,7 +156,7 @@ public class DbUtils {
                 "succlinenum, " +
                 "parentcode, " +
                 "filepath, " +
-                "edgetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "edgetype) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement;
         try {
@@ -164,14 +167,15 @@ public class DbUtils {
             statement.setString(3, callGraphNode.getPreMethodName());
             statement.setString(4, callGraphNode.getPreLineNum());
             statement.setInt(5, callGraphNode.getPreParamSize());
-            statement.setString(6, callGraphNode.getSuccNamespace());
-            statement.setString(7, callGraphNode.getSuccClasstype());
-            statement.setString(8, callGraphNode.getSuccMethodName());
-            statement.setString(9, callGraphNode.getSuccCode());
-            statement.setString(10, callGraphNode.getSuccLineNum());
-            statement.setString(11, callGraphNode.getParentCode());
-            statement.setString(12, callGraphNode.getFilePath());
-            statement.setString(13, callGraphNode.getEdgeType());
+            statement.setString(6, String.valueOf(callGraphNode.isPreGadgetSource()));
+            statement.setString(7, callGraphNode.getSuccNamespace());
+            statement.setString(8, callGraphNode.getSuccClasstype());
+            statement.setString(9, callGraphNode.getSuccMethodName());
+            statement.setString(10, callGraphNode.getSuccCode());
+            statement.setString(11, callGraphNode.getSuccLineNum());
+            statement.setString(12, callGraphNode.getParentCode());
+            statement.setString(13, callGraphNode.getFilePath());
+            statement.setString(14, callGraphNode.getEdgeType());
 
             statement.executeUpdate();
             statement.close();
@@ -180,12 +184,12 @@ public class DbUtils {
         }
     }
 
-    public static RuleNode QueryAnnotationType(String namespace, String classtype) throws SQLException {
+    public static RuleNode QueryAnnotationTypeNode(String namespace, String classtype) throws SQLException {
         String sql = "SELECT kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND kind LIKE 'annotation%'";
         return QueryDeclaringType(sql, namespace, classtype);
     }
 
-    public static RuleNode QueryConstructor(String namespace, String classtype) throws SQLException {
+    public static RuleNode QueryConstructorNode(String namespace, String classtype) throws SQLException {
         String sql = "SELECT kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND methodname = '<init>'";
         RuleNode ruleNode = QueryDeclaringType(sql, namespace, classtype);
         ruleNode.setMethod("<init>");
@@ -211,11 +215,21 @@ public class DbUtils {
         return ruleNode;
     }
 
-    public static RuleNode QueryMethod(String namespace, String classtype, String methodname) throws SQLException {
+    public static RuleNode QueryInvocationMethodNode(String namespace, String classtype, String methodname) throws SQLException {
         // TODO: methodname like ... But this needs to store the all executablereference and then query on them.
         //  This will also convert some nodes to simplied version even with namespace & classtype
-        String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ?";
+        String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype != "
+                + "\"" + RuleNode.GADGETSOURCENODE + "\"";
+        return QueryMethodNode(sql, namespace, classtype, methodname);
+    }
 
+    public static RuleNode QueryCtExecutableMethodNode(String namespace, String classtype, String methodname) throws SQLException {
+        String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype = "
+                + "\"" + RuleNode.GADGETSOURCENODE + "\"";
+        return QueryMethodNode(sql, namespace, classtype, methodname);
+    }
+
+    private static RuleNode QueryMethodNode(String sql, String namespace, String classtype, String methodname) throws SQLException {
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setString(1, namespace);
         statement.setString(2, classtype);
@@ -232,24 +246,23 @@ public class DbUtils {
             String kind = resultSet.getString(KIND);
             String nodeType = resultSet.getString(NODETYPE);
 
+            ruleNode.setKind(kind);
             if (method.startsWith(CharUtils.leftbracket) && CharUtils.RegexMatch(method, methodname)) {
-                ruleNode.setKind(kind);
                 ruleNode.setNodetype(nodeType);
             } else if (method.equals(methodname)) {
-                ruleNode.setKind(kind);
                 ruleNode.setNodetype(nodeType);
             }
         }
         return ruleNode;
     }
 
-    public static ArrayList<HashMap<String, String>> QuerySourceNodeCallGraph() throws SQLException {
+    public static ArrayList<HashMap<String, String>> QuerySourceCallGraph() throws SQLException {
         String sql = "SELECT * FROM callgraph WHERE edgetype = \"" + CallGraphNode.SourceFlowType + "\"";
         PreparedStatement statement = conn.prepareStatement(sql);
         return QueryCallGraph(statement);
     }
 
-    public static ArrayList<HashMap<String, String>> QuerySuccNodeCallGraph
+    public static ArrayList<HashMap<String, String>> QuerySuccCallGraph
             (String namespace, String classtype, String methodname) throws SQLException {
         String sql = "SELECT * FROM callgraph WHERE prenamespace = ? AND preclasstype = ? AND premethodname = ?";
         PreparedStatement statement = conn.prepareStatement(sql);
@@ -258,6 +271,19 @@ public class DbUtils {
         statement.setString(2, classtype);
         statement.setString(3, methodname);
 
+        return QueryCallGraph(statement);
+    }
+
+    public static ArrayList<HashMap<String, String>> QueryGadgetSourceNodeCallGraph() throws SQLException {
+        String sql = "SELECT * FROM callgraph WHERE pregadgetsource = \"true\"";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        return QueryCallGraph(statement);
+    }
+
+    public static ArrayList<HashMap<String, String>> QuerySetterGetterConstructorCallGraph() throws SQLException {
+        String sql = "SELECT * FROM callgraph WHERE premethodname LIKE \"set%\" OR premethodname LIKE \"get%\" OR " +
+                "premethodname = \"<init>\"";
+        PreparedStatement statement = conn.prepareStatement(sql);
         return QueryCallGraph(statement);
     }
 
@@ -273,6 +299,7 @@ public class DbUtils {
             source.put(PREMETHODNAME, resultSet.getString(PREMETHODNAME));
             source.put(PRELINENUM, resultSet.getString(PRELINENUM));
             source.put(PREPARAMSIZE, String.valueOf(resultSet.getInt(PREPARAMSIZE)));
+            source.put(PREGADGETSOURCE, String.valueOf(resultSet.getInt(PREGADGETSOURCE)));
             source.put(SUCCNAMESPACE, resultSet.getString(SUCCNAMESPACE));
             source.put(SUCCCLASSTYPE, resultSet.getString(SUCCCLASSTYPE));
             source.put(SUCCMETHODNAME, resultSet.getString(SUCCMETHODNAME));
@@ -290,8 +317,8 @@ public class DbUtils {
     public static void UpdateSinkFlowEdge(HashMap<String, String> invocation) throws SQLException {
         String sql = "UPDATE callgraph SET edgetype = " + "\"" + CallGraphNode.SinkFlowType + "\" " +
                 "WHERE prenamespace = ? AND preclasstype = ? AND premethodname = ? AND prelinenum = ? " +
-                "AND preparamsize = ? AND succnamespace = ? AND succclasstype = ? AND succmethodname = ? " +
-                "AND succcode = ? AND succlinenum =? AND parentcode = ? AND filepath = ? AND edgetype = ?";
+                "AND preparamsize = ? AND pregadgetsource = ? AND succnamespace = ? AND succclasstype = ? " +
+                "AND succmethodname = ? AND succcode = ? AND succlinenum =? AND parentcode = ? AND filepath = ? AND edgetype = ?";
 
         PreparedStatement statement = conn.prepareStatement(sql);
 
@@ -300,14 +327,15 @@ public class DbUtils {
         statement.setString(3, invocation.get(DbUtils.PREMETHODNAME));
         statement.setString(4, invocation.get(DbUtils.PRELINENUM));
         statement.setInt(5, Integer.parseInt(invocation.get(DbUtils.PREPARAMSIZE)));
-        statement.setString(6, invocation.get(DbUtils.SUCCNAMESPACE));
-        statement.setString(7, invocation.get(DbUtils.SUCCCLASSTYPE));
-        statement.setString(8, invocation.get(DbUtils.SUCCMETHODNAME));
-        statement.setString(9, invocation.get(DbUtils.SUCCCODE));
-        statement.setString(10, invocation.get(DbUtils.SUCCLINENUM));
-        statement.setString(11, invocation.get(DbUtils.PARENTCODE));
-        statement.setString(12, invocation.get(DbUtils.FILEPATH));
-        statement.setString(13, invocation.get(DbUtils.EDGETYPE));
+        statement.setString(6, invocation.get(DbUtils.PREGADGETSOURCE));
+        statement.setString(7, invocation.get(DbUtils.SUCCNAMESPACE));
+        statement.setString(8, invocation.get(DbUtils.SUCCCLASSTYPE));
+        statement.setString(9, invocation.get(DbUtils.SUCCMETHODNAME));
+        statement.setString(10, invocation.get(DbUtils.SUCCCODE));
+        statement.setString(11, invocation.get(DbUtils.SUCCLINENUM));
+        statement.setString(12, invocation.get(DbUtils.PARENTCODE));
+        statement.setString(13, invocation.get(DbUtils.FILEPATH));
+        statement.setString(14, invocation.get(DbUtils.EDGETYPE));
 
         statement.executeUpdate();
         statement.close();
@@ -334,7 +362,7 @@ public class DbUtils {
             String classtype = resultSet.getString(SUCCCLASSTYPE);
             String methodname = resultSet.getString(SUCCMETHODNAME);
 
-            RuleNode node = QueryMethod(namespace, classtype, methodname);
+            RuleNode node = QueryInvocationMethodNode(namespace, classtype, methodname);
             node.setFile(resultSet.getString(FILEPATH));
             node.setLine(resultSet.getString(SUCCLINENUM));
             node.setCode(resultSet.getString(SUCCCODE));
@@ -345,8 +373,8 @@ public class DbUtils {
         return SinkNodes;
     }
 
-    public static ArrayList<HashMap<String, RuleNode>> QuerySinkGadgetFlowRuleNode() throws SQLException {
-        String sql = "SELECT * FROM callgraph WHERE edgetype = " + "\"" + CallGraphNode.SinkGadgetFlowType + "\"";
+    public static ArrayList<HashMap<String, RuleNode>> QuerySinkGadgetNodeFlowRuleNode() throws SQLException {
+        String sql = "SELECT * FROM callgraph WHERE edgetype = " + "\"" + CallGraphNode.SinkGadgetNodeFlowType + "\"";
 
         PreparedStatement statement = conn.prepareStatement(sql);
         ResultSet resultSet = statement.executeQuery();
@@ -359,21 +387,21 @@ public class DbUtils {
             String prenamespace = resultSet.getString(PRENAMESPACE);
             String preclasstype = resultSet.getString(PRECLASSTYPE);
             String premethodname = resultSet.getString(PREMETHODNAME);
-            RuleNode gadgetFlowSource = QueryMethod(prenamespace, preclasstype, premethodname);
+            RuleNode gadgetFlowSource = QueryInvocationMethodNode(prenamespace, preclasstype, premethodname);
             gadgetFlowSource.setLine(resultSet.getString(PRELINENUM));
 
             String succnamespace = resultSet.getString(SUCCNAMESPACE);
             String succclasstype = resultSet.getString(SUCCCLASSTYPE);
             String succmethodname = resultSet.getString(SUCCMETHODNAME);
-            RuleNode gadgetFlowSink = QueryMethod(succnamespace, succclasstype, succmethodname);
+            RuleNode gadgetFlowSink = QueryInvocationMethodNode(succnamespace, succclasstype, succmethodname);
             gadgetFlowSink.setFile(resultSet.getString(FILEPATH));
             gadgetFlowSink.setLine(resultSet.getString(SUCCLINENUM));
             gadgetFlowSink.setCode(resultSet.getString(SUCCCODE));
 
             gadgetFlowSink.setMethodcode(resultSet.getString(PARENTCODE));
 
-            sinkGadgetNode.put(CallGraphNode.SinkGadgetFlowSource, gadgetFlowSource);
-            sinkGadgetNode.put(CallGraphNode.SinkGadgetFlowSink, gadgetFlowSink);
+            sinkGadgetNode.put(CallGraphNode.SinkGadgetNodeFlowSource, gadgetFlowSource);
+            sinkGadgetNode.put(CallGraphNode.SinkGadgetNodeFlowSink, gadgetFlowSink);
 
             SinkGadgetNodes.add(sinkGadgetNode);
         }

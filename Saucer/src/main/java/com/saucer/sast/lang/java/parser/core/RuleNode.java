@@ -13,7 +13,7 @@ public class RuleNode {
 
     public final static String SOURCENODE = "source";
     public final static String SINKNODE = "sink";
-    public final static String GADGETNODE = "gadget";
+    public final static String GADGETSOURCENODE = "gadgetsource";
 
     public String getNamespace() {
         return namespace;

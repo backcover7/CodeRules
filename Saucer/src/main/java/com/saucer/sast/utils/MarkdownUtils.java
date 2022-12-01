@@ -96,7 +96,7 @@ public class MarkdownUtils {
             tableBuilder.addRow(index, codeblock, path, node);
 
             if (index == taintedFlow.size()) {
-                String kind = DbUtils.QueryMethod(invocation.get(
+                String kind = DbUtils.QueryInvocationMethodNode(invocation.get(
                         DbUtils.SUCCNAMESPACE),
                         invocation.get(DbUtils.SUCCCLASSTYPE),
                         invocation.get(DbUtils.SUCCMETHODNAME)).getKind();
@@ -112,8 +112,8 @@ public class MarkdownUtils {
     }
 
     public static void ReportGadgetSinkNode(HashMap<String, RuleNode> node) {
-        RuleNode gadgetFlowSource = node.get(CallGraphNode.SinkGadgetFlowSource);
-        RuleNode gadgetFlowSink = node.get(CallGraphNode.SinkGadgetFlowSink);
+        RuleNode gadgetFlowSource = node.get(CallGraphNode.SinkGadgetNodeFlowSource);
+        RuleNode gadgetFlowSink = node.get(CallGraphNode.SinkGadgetNodeFlowSink);
 
         stringBuilder.append("### ")
                 .append(new BoldText(gadgetFlowSink.getKind()))

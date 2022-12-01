@@ -16,6 +16,11 @@ public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
     private final static String SOURCEINVOCATION = "sourceinvocation";
     private final static String PARAMPATTERN = "parampattern";
+
+    private final static String NORMALSOURCE = "normalsource";
+    private final static String GADGETSOURCE = "gadgetsource";
+    private final static String SETTERGETTERCONSTRUCTORSOURCE = "settergetterconstructorsource";
+
     private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths;
 
     public TaintedFlow() {
@@ -26,19 +31,36 @@ public class TaintedFlow {
         return taintedPaths;
     }
 
-    public void Scan() throws SQLException, IOException, InterruptedException {
+    public void AnalyzeFromSource() throws SQLException, IOException, InterruptedException {
+        ArrayList<HashMap<String, String>> sources = DbUtils.QuerySourceCallGraph();
+        Analyze(sources, NORMALSOURCE);
+    }
+
+    public void AnalyzeFromGadgetSource() throws SQLException, IOException, InterruptedException {
+        ArrayList<HashMap<String, String>> sources = DbUtils.QueryGadgetSourceNodeCallGraph();
+        Analyze(sources, GADGETSOURCE);
+    }
+
+    public void AnalyzeFromSetterGetterConsrtructor() throws SQLException, IOException, InterruptedException {
+        ArrayList<HashMap<String, String>> sources = DbUtils.QuerySetterGetterConstructorCallGraph();
+        Analyze(sources, SETTERGETTERCONSTRUCTORSOURCE);
+    }
+
+    private void Analyze(ArrayList<HashMap<String, String>> sources, String SourceType) throws SQLException, IOException, InterruptedException {
         // Start from all sources
         LinkedList<HashMap<String, String>> taintedFlow = new LinkedList<>();
-
-        ArrayList<HashMap<String, String>> sources = DbUtils.QuerySourceNodeCallGraph();
         for (HashMap<String, String> source : sources) {
-            ArrayList<HashMap<String, String>> invocations = DbUtils.QuerySuccNodeCallGraph(
+            ArrayList<HashMap<String, String>> invocations = DbUtils.QuerySuccCallGraph(
                     source.get(DbUtils.PRENAMESPACE),
                     source.get(DbUtils.PRECLASSTYPE),
                     source.get(DbUtils.PREMETHODNAME));
             for (HashMap<String, String> invocation : invocations) {
-                if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SourceFlowType)) {
-                    continue;
+                if (SourceType.equals(NORMALSOURCE)) {
+                    // GADGETSOURCE and SETTERGETTERCONSTRUCTORSOURCE will always be process
+                    // because they will taint from method definition
+                    if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SourceFlowType)) {
+                        continue;
+                    }
                 }
 
                 ArrayList<HashMap<String, Object>> SemgrepScanRes;
@@ -67,7 +89,7 @@ public class TaintedFlow {
     }
 
     private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
-        if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetFlowType)) {
+        if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetNodeFlowType)) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
             if (SemgrepScanRes.size() != 0 ) {
                 taintedPaths.add((LinkedList<HashMap<String, String>>) taintedFlow.clone());
@@ -79,7 +101,7 @@ public class TaintedFlow {
         String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
         String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
         String methodname = invocation.get(DbUtils.SUCCMETHODNAME);
-        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccNodeCallGraph(namespace, classtype, methodname);
+        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccCallGraph(namespace, classtype, methodname);
         for (HashMap<String, String> succinvocation : succinvocations) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
             if (SemgrepScanRes.size() != 0) {

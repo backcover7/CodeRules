@@ -80,10 +80,6 @@ public class Findsecbugs {
                 csvArray[CSVDefinition.KINDINDEX]
         );
 
-        if (csvArray[CSVDefinition.NAMESPACEINDEX].contains("(")) {
-            System.out.println("a");
-        }
-
         MethodSet.add(unique);
     }
 
