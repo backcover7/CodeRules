@@ -29,6 +29,19 @@ public class TaintedFlow {
 
     public TaintedFlow() {}
 
+    private String ProgressBarHint(String SourceFlag) {
+        switch (SourceFlag) {
+            case WEBSOURCEFLAG:
+                return "[+] Web Sources Flow";
+            case GADGETSOURCEFLAGE:
+                return "[+] Gadget Flow     ";
+            case SETTERGETTERCONSTRUCTORFLAG:
+                return "[+] Marshalsec Flow ";
+            default:
+                return CharUtils.empty;
+        }
+    }
+
     public void Analyze(String SourceFlag) throws SQLException, IOException, InterruptedException {
         AnanlyzeFlag = SourceFlag;
         switch (SourceFlag) {
@@ -79,7 +92,7 @@ public class TaintedFlow {
     private void Analyze(ArrayList<HashMap<String, String>> sources, String flag) throws SQLException, IOException, InterruptedException {
         // Start from all sources
         LinkedList<HashMap<String, String>> taintedFlow = new LinkedList<>();
-        for (HashMap<String, String> source : ProgressBar.wrap(sources, "[+] Tainted Data Flow Analysis")) {
+        for (HashMap<String, String> source : ProgressBar.wrap(sources, ProgressBarHint(AnanlyzeFlag))) {
             ArrayList<HashMap<String, String>> invocations = DbUtils.QuerySuccCallGraph(
                     source.get(DbUtils.PRENAMESPACE),
                     source.get(DbUtils.PRECLASSTYPE),

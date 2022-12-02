@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +146,7 @@
       <workItem from="1669689632716" duration="39937000" />
       <workItem from="1669829392836" duration="7823000" />
       <workItem from="1669837248927" duration="66123000" />
-      <workItem from="1670007052393" duration="10669000" />
+      <workItem from="1670007052393" duration="11586000" />
     </task>
     <servers />
   </component>
@@ -176,7 +173,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java</url>
-          <line>127</line>
+          <line>140</line>
           <option name="timeStamp" value="433" />
         </line-breakpoint>
       </breakpoints>
