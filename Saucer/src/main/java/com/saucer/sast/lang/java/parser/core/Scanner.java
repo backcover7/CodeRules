@@ -25,7 +25,10 @@ public class Scanner {
         init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
-        TaintedFlow taintedFlow = new TaintedFlow(TaintedFlow.WEBSOURCEFLAG);
+        TaintedFlow taintedFlow = new TaintedFlow();
+        taintedFlow.Analyze(TaintedFlow.WEBSOURCEFLAG);
+        taintedFlow.Analyze(TaintedFlow.GADGETSOURCEFLAGE);
+        taintedFlow.Analyze(TaintedFlow.SETTERGETTERCONSTRUCTORFLAG);
 
         System.out.println("[*] Creating final scan reports ...");
         MarkdownUtils markdownUtils = new MarkdownUtils();
@@ -247,7 +250,7 @@ public class Scanner {
             callGraphNode.setPreGadgetSource(isCtExecutableGadgetSource);
             callGraphNode.setParentCode(ruleNode.getMethodcode());
 
-            DbUtils.SaveCG2Db(callGraphNode);
+            DbUtils.SaveCallGaraph2Db(callGraphNode);
         }
     }
 
@@ -289,33 +292,62 @@ public class Scanner {
     }
 
     public void FlagThreats() throws SQLException {
-        MarkdownUtils.ReportTaintedFlowHeader();
-        for (LinkedList<HashMap<String, String>> taintedFlow : TaintedFlow.getTaintedPaths()) {
-            MarkdownUtils.ReportTaintedFlow(taintedFlow);
+        // Flag flow of web vulnerability bug
+        ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4WebSource = TaintedFlow.getTaintedPaths4WebSource();
+        if (taintedPaths4WebSource.size() != 0) {
+            MarkdownUtils.ReportTaintedFlow4WebSourceHeader();
+            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4WebSource) {
+                MarkdownUtils.ReportTaintedFlow(taintedFlow);
+            }
         }
 
-        MarkdownUtils.ReportGadgetSinkNode();
+        // Flag flow of native deserialization gadget bug
+        ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource = TaintedFlow.getTaintedPaths4GadgetSource();
+        if (taintedPaths4GadgetSource.size() != 0) {
+            MarkdownUtils.ReportTaintedFlow4GadgetSourceHeader();
+            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4GadgetSource) {
+                MarkdownUtils.ReportTaintedFlow(taintedFlow);
+            }
+        }
+
+        // Flag flow of marshalsec deserialization gadget bug
+        ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4SetterGetterConstructorSource =
+                TaintedFlow.getTaintedPaths4SetterGetterConstructorSource();
+        if (taintedPaths4SetterGetterConstructorSource.size() != 0) {
+            MarkdownUtils.ReportTaintedFlow4SetterGetterConstructorSourceHeader();
+            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4SetterGetterConstructorSource) {
+                MarkdownUtils.ReportTaintedFlow(taintedFlow);
+            }
+        }
+
         // Flag sink gadget bug
         ArrayList<HashMap<String, RuleNode>> SinkGadgetNodes = DbUtils.QuerySinkGadgetNodeFlowRuleNode();
-        for (HashMap<String, RuleNode> sinkGadgetNode : SinkGadgetNodes) {
-            // TODO simplify code to data trace
-            MarkdownUtils.ReportGadgetSinkNode(sinkGadgetNode);
+        if (SinkGadgetNodes.size() != 0) {
+            MarkdownUtils.ReportGadgetSinkNode();
+            for (HashMap<String, RuleNode> sinkGadgetNode : SinkGadgetNodes) {
+                // TODO simplify code to data trace
+                MarkdownUtils.ReportGadgetSinkNode(sinkGadgetNode);
+            }
         }
 
-        MarkdownUtils.ReportSinkNodeHeader();
         // Flag sink node bug
         ArrayList<RuleNode> SinkNodes = DbUtils.QuerySinkNodeFlowRuleNode();
-        for (RuleNode node : SinkNodes) {
-            // TODO simplify code to less lines
-            MarkdownUtils.ReportNode(node);
+        if (SinkNodes.size() != 0) {
+            MarkdownUtils.ReportSinkNodeHeader();
+            for (RuleNode node : SinkNodes) {
+                // TODO simplify code to less lines
+                MarkdownUtils.ReportNode(node);
+            }
         }
 
-        MarkdownUtils.ReportSourceNodeHeader();
         // Flag all source nodes
         ArrayList<RuleNode> SourceNodes = DbUtils.QuerySourceNodeFlowRuleNode();
-        for (RuleNode node : SourceNodes) {
-            // TODO simplify code to less lines
-            MarkdownUtils.ReportNode(node);
+        if (SourceNodes.size() != 0) {
+            MarkdownUtils.ReportSourceNodeHeader();
+            for (RuleNode node : SourceNodes) {
+                // TODO simplify code to less lines
+                MarkdownUtils.ReportNode(node);
+            }
         }
     }
 }

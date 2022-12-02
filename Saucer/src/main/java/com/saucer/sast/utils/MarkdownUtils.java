@@ -51,8 +51,16 @@ public class MarkdownUtils {
         FileUtils.WriteFile(report, stringBuilder.toString(), true);
     }
 
-    public static void ReportTaintedFlowHeader() {
-        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows").append(CharUtils.LF);
+    public static void ReportTaintedFlow4WebSourceHeader() {
+        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Web Sources").append(CharUtils.LF);
+    }
+
+    public static void ReportTaintedFlow4GadgetSourceHeader() {
+        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Gadget Sources").append(CharUtils.LF);
+    }
+
+    public static void ReportTaintedFlow4SetterGetterConstructorSourceHeader() {
+        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Marshalsec Sources").append(CharUtils.LF);
     }
 
     public static void ReportGadgetSinkNode() {

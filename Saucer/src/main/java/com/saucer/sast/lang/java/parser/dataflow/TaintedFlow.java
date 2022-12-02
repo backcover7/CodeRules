@@ -23,21 +23,25 @@ public class TaintedFlow {
     public final static String SETTERGETTERCONSTRUCTORFLAG = "settergetterconstructorflag";
 
     private static String AnanlyzeFlag;
-    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths;
+    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4WebSource;
+    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource;
+    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4SetterGetterConstructorSource;
 
     public TaintedFlow() {}
 
-    public TaintedFlow(String SourceFlag) throws SQLException, IOException, InterruptedException {
+    public void Analyze(String SourceFlag) throws SQLException, IOException, InterruptedException {
         AnanlyzeFlag = SourceFlag;
-        taintedPaths = new ArrayList<>();
         switch (SourceFlag) {
             case WEBSOURCEFLAG:
+                taintedPaths4WebSource = new ArrayList<>();
                 AnalyzeFromSource();
                 break;
             case GADGETSOURCEFLAGE:
+                taintedPaths4GadgetSource = new ArrayList<>();
                 AnalyzeFromGadgetSource();
                 break;
             case SETTERGETTERCONSTRUCTORFLAG:
+                taintedPaths4SetterGetterConstructorSource = new ArrayList<>();
                 AnalyzeFromSetterGetterConsrtructor();
                 break;
             default:
@@ -45,8 +49,16 @@ public class TaintedFlow {
         }
     }
 
-    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths() {
-        return taintedPaths;
+    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4WebSource() {
+        return taintedPaths4WebSource;
+    }
+
+    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4GadgetSource() {
+        return taintedPaths4GadgetSource;
+    }
+
+    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4SetterGetterConstructorSource() {
+        return taintedPaths4SetterGetterConstructorSource;
     }
 
     public void AnalyzeFromSource() throws SQLException, IOException, InterruptedException {
@@ -109,7 +121,21 @@ public class TaintedFlow {
         if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetNodeFlowType)) {
             ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
             if (SemgrepScanRes.size() != 0 ) {
-                taintedPaths.add((LinkedList<HashMap<String, String>>) taintedFlow.clone());
+                LinkedList<HashMap<String, String>> taintedFlowClone =
+                        (LinkedList<HashMap<String, String>>) taintedFlow.clone();
+                switch (AnanlyzeFlag) {
+                    case WEBSOURCEFLAG:
+                        taintedPaths4WebSource.add(taintedFlowClone);
+                        break;
+                    case GADGETSOURCEFLAGE:
+                        taintedPaths4GadgetSource.add(taintedFlowClone);
+                        break;
+                    case SETTERGETTERCONSTRUCTORFLAG:
+                        taintedPaths4SetterGetterConstructorSource.add(taintedFlowClone);
+                        break;
+                    default:
+                        break;
+                }
                 DbUtils.UpdateSinkFlowEdge(invocation);
                 taintedFlow.removeLast();
                 return;
@@ -181,7 +207,7 @@ public class TaintedFlow {
         spoonConfig.init(codebase, "");
 
         DbUtils.connect();
-        new TaintedFlow(GADGETSOURCEFLAGE).AnalyzeFromGadgetSource();
-        System.out.println(taintedPaths);
+        new TaintedFlow().Analyze(WEBSOURCEFLAG);
+        System.out.println(taintedPaths4WebSource);
     }
 }

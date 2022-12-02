@@ -138,11 +138,7 @@ public class DbUtils {
         }
     }
 
-    public static void SaveCG2Db(CallGraphNode callGraphNode) {
-        ImportCallGraph(callGraphNode);
-    }
-
-    private static void ImportCallGraph(CallGraphNode callGraphNode) {
+    public static void SaveCallGaraph2Db(CallGraphNode callGraphNode) {
         String sql = "INSERT or IGNORE INTO callgraph (" +
                 "prenamespace, " +
                 "preclasstype, " +
