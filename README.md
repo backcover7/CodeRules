@@ -14,3 +14,4 @@ My Code Review Rules
 3. https://twitter.com/search?q=(from%3ASonarSource%2C%20OR%20from%3Aintigriti)&src=typed_query
 4. gradle in CSVResolver
 5. https://github.com/elttam/semgrep-rules
+6. thread vulnerability
