@@ -20,10 +20,10 @@ public class run {
 //        CtModel model = spoonConfig.getSpoonMavenLauncher(codebase);
 
 //        String codebase = "/Users/kang.hou/Documents/CodeRules/Saucer";
-        String codebase = "src/main/test-cases/java/JdbcRowSetImpl.java";
-//        String codebase = "src/main/test-cases/java/test.java";
+        String codebase = "src/main/test-cases/java/test.java";
+//        String codebase = "/Users/kang.hou/Desktop/click-nodeps-2.3.0/";
         SpoonConfig spoonConfig = new SpoonConfig();
-        spoonConfig.init(codebase, SpoonConfig.CommonLauncherFlag);
+        spoonConfig.init(codebase, "");
 
         Scanner scanner = new Scanner();
         scanner.Scan();

@@ -21,7 +21,7 @@ public class AST {
         this.classtype = classtype;
         this.spoonConfig = spoonConfig;
         this.scanner = scanner;
-        ruleNode.setNamespace(classtype.getPackage().toString());
+        ruleNode.setNamespace(classtype.getTopLevelType().getPackage().toString());
         ruleNode.setClasstype(classtype.getSimpleName());
     }
 

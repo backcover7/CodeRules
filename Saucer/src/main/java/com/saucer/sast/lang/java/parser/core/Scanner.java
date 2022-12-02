@@ -3,31 +3,29 @@ package com.saucer.sast.lang.java.parser.core;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
-import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.MarkdownUtils;
+import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
 import spoon.reflect.cu.SourcePosition;
 import spoon.reflect.cu.position.NoSourcePosition;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtExecutableReference;
+import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
 import com.saucer.sast.utils.DbUtils;
 import spoon.support.reflect.declaration.CtClassImpl;
-import spoon.support.reflect.declaration.CtExecutableImpl;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 public class Scanner {
-    public void Scan() throws SQLException, IOException, InterruptedException {
+    public void Scan() throws Exception {
         System.out.println("[*] Analyzing the target source code ...");
         init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
-        TaintedFlow taintedFlow = new TaintedFlow();
-        taintedFlow.AnalyzeFromSetterGetterConsrtructor();
+        TaintedFlow taintedFlow = new TaintedFlow(TaintedFlow.WEBSOURCEFLAG);
 
         System.out.println("[*] Creating final scan reports ...");
         MarkdownUtils markdownUtils = new MarkdownUtils();
@@ -38,17 +36,10 @@ public class Scanner {
         System.out.println("[!] Done!");
     }
 
-    public void init() throws SQLException {
-        Collection<CtType<?>> classtypes = SpoonConfig.model.getAllTypes();
+    public void init() throws Exception {
+        Collection<CtType<?>> classtypes = SpoonConfig.model.getElements(new TypeFilter<>(CtType.class));
 
-        int currentCount = 0;
-        int classtypeCounts = classtypes.size();
-        for(CtType<?> classtype : classtypes) {
-            currentCount ++;
-            String progress = currentCount + CharUtils.space + CharUtils.slash + CharUtils.space + classtypeCounts;
-            String prompt = "[%] Classes Analysis Progress: " + progress;
-            System.out.print(prompt);
-
+        for(CtType<?> classtype : ProgressBar.wrap(classtypes, "[+] Classes Analysis")) {
             Set<CtExecutable<?>> ctExecutables = new HashSet<>();
             if (classtype instanceof CtClassImpl) {
                 ctExecutables.addAll(((CtClassImpl<?>) classtype).getConstructors());
@@ -77,10 +68,6 @@ public class Scanner {
                 ProcessAnnotation(ctExecutable, isCtExecutableGadgetSource);
                 ProcessConstructor(ctExecutable, isCtExecutableGadgetSource);
                 ProcessMethod(ctExecutable, isCtExecutableGadgetSource);
-            }
-
-            for (int j = 0; j <= prompt.length(); j++) {
-                System.out.print("\b");
             }
         }
     }
@@ -112,11 +99,17 @@ public class Scanner {
         }
     }
 
-    private void ProcessMethod(CtExecutable<?> ctExecutable, boolean isCtExecutableGadgetSource) throws SQLException {
+    private void ProcessMethod(CtExecutable<?> ctExecutable, boolean isCtExecutableGadgetSource) throws Exception {
         List<CtInvocation<?>> ctInvocationList = ctExecutable.getElements(new TypeFilter<>(CtInvocation.class));
         for (CtInvocation<?> invocation : ctInvocationList) {
             CtExecutableReference<?> executableReference = invocation.getExecutable();
-            CtExecutableImpl<?> executableInvocation = (CtExecutableImpl<?>) executableReference.getExecutableDeclaration();
+            CtTypeReference<?> executableInvocation = executableReference.getDeclaringType();
+
+            if (executableInvocation == null) {
+                // missing classpath
+                continue;
+//                throw new Exception("[!] Missing classpath!");
+            }
 
             if (executableReference.isConstructor()) {
                 ProcessConstructor(executableReference.getExecutableDeclaration(), isCtExecutableGadgetSource);
@@ -124,15 +117,17 @@ public class Scanner {
 
             MethodHierarchy methodHierarchy = new MethodHierarchy();
             methodHierarchy.FindMethodDefinition(
-                    executableInvocation.getDeclaringType(),
+                    executableInvocation.getTypeDeclaration(),
                     executableReference.getSimpleName(),
                     executableReference.getParameters());
 
             HashSet<String> methodSet = methodHierarchy.getMethodSet();
 
+            RuleNode ruleNode = new RuleNode();
             for (String qualifiedName : methodSet) {
-                RuleNode ruleNode = CheckMethod(qualifiedName,
+                ruleNode = CheckMethod(qualifiedName,
                         invocation.getExecutable().getSimpleName());
+
                 ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                 setPosition(invocation.getPosition(), ruleNode);
                 try {
@@ -140,8 +135,12 @@ public class Scanner {
                 } catch (Exception e) {
                     ruleNode.setCode(ruleNode.toString());
                 }
-                GenerateCallGraphEdge(ctExecutable, ruleNode, isCtExecutableGadgetSource);
+
+                if (methodSet.size() > 1 && ruleNode.getNodetype() != null) {
+                    break;
+                }
             }
+            GenerateCallGraphEdge(ctExecutable, ruleNode, isCtExecutableGadgetSource);
         }
     }
 
@@ -167,9 +166,11 @@ public class Scanner {
         }
     }
 
-    // TODO simplify code
     private String getParentMethodSourceCode(CtExecutable<?> ctExecutable) {
         try {
+//            String MethodSourceCode = ctExecutable.getReference().getDeclaration().getOriginalSourceFragment().getSourceCode();
+//            String extraspaces = CharUtils.RegexMatchLastOccurence("^( )+?(?=})", MethodSourceCode);
+//            return MethodSourceCode.replaceAll("(?<=\n)" + extraspaces, CharUtils.empty);
             return SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(ctExecutable);
         } catch (Exception e) {
             return ctExecutable.getReference().getDeclaration().toString();
@@ -204,24 +205,37 @@ public class Scanner {
         return ruleNode.getNodetype() != null && !ruleNode.getNodetype().equals(RuleNode.GADGETSOURCENODE);
     }
 
-    private void GenerateCallGraphEdge(CtExecutable<?> ctExecutable, RuleNode ruleNode, boolean isCtExecutableGadgetSource) {
+    private void GenerateCallGraphEdge(CtExecutable<?> ctExecutable, RuleNode ruleNode, boolean isCtExecutableGadgetSource) throws SQLException {
         CallGraphNode callGraphNode = new CallGraphNode();
-
         CtExecutableReference<?> ctExecutableReference = ctExecutable.getReference();
 
         // If successor is from classpath then stop generating cg for it.
-        if (SpoonConfig.model.getAllTypes().contains(ctExecutableReference.getDeclaringType().getDeclaration())) {
+        if (SpoonConfig.model.getElements(new TypeFilter<>(CtType.class))
+                .contains(ctExecutableReference.getDeclaringType().getDeclaration())) {
+            String preNamespace = ctExecutableReference.getDeclaringType().getTopLevelType().getPackage().getQualifiedName();
+            String preClasstype = ctExecutableReference.getDeclaringType().getSimpleName();
+            String preMethodname = ctExecutableReference.getSimpleName();
+
+            String succNamespace = ruleNode.getNamespace();
+            String succClasstype = ruleNode.getClasstype();
+            String succMethodname = ruleNode.getMethod();
+
+            RuleNode negativeNode = DbUtils.QueryNegativeNode(succNamespace, succClasstype, succMethodname);
+            if (negativeNode.getNodetype() != null) {
+                return;
+            }
+
             // Set previous node in a call graph edge
-            callGraphNode.setPreNamespace(ctExecutableReference.getDeclaringType().getPackage().getQualifiedName());
-            callGraphNode.setPreClasstype(ctExecutableReference.getDeclaringType().getSimpleName());
-            callGraphNode.setPreMethodName(ctExecutableReference.getSimpleName());
+            callGraphNode.setPreNamespace(preNamespace);
+            callGraphNode.setPreClasstype(preClasstype);
+            callGraphNode.setPreMethodName(preMethodname);
             setPosition(ctExecutableReference.getParent().getPosition(), ruleNode.getLine(), callGraphNode);
             callGraphNode.setPreParamSize(ctExecutableReference.getParameters().size());
 
             // Set successor node in a call graph edge
-            callGraphNode.setSuccNamespace(ruleNode.getNamespace());
-            callGraphNode.setSuccClasstype(ruleNode.getClasstype());
-            callGraphNode.setSuccMethodName(ruleNode.getMethod());
+            callGraphNode.setSuccNamespace(succNamespace);
+            callGraphNode.setSuccClasstype(succClasstype);
+            callGraphNode.setSuccMethodName(succMethodname);
             callGraphNode.setSuccCode(ruleNode.getCode());
 
             if (CheckBug(ruleNode)) {
@@ -232,6 +246,7 @@ public class Scanner {
 
             callGraphNode.setPreGadgetSource(isCtExecutableGadgetSource);
             callGraphNode.setParentCode(ruleNode.getMethodcode());
+
             DbUtils.SaveCG2Db(callGraphNode);
         }
     }
@@ -283,6 +298,7 @@ public class Scanner {
         // Flag sink gadget bug
         ArrayList<HashMap<String, RuleNode>> SinkGadgetNodes = DbUtils.QuerySinkGadgetNodeFlowRuleNode();
         for (HashMap<String, RuleNode> sinkGadgetNode : SinkGadgetNodes) {
+            // TODO simplify code to data trace
             MarkdownUtils.ReportGadgetSinkNode(sinkGadgetNode);
         }
 
@@ -290,6 +306,7 @@ public class Scanner {
         // Flag sink node bug
         ArrayList<RuleNode> SinkNodes = DbUtils.QuerySinkNodeFlowRuleNode();
         for (RuleNode node : SinkNodes) {
+            // TODO simplify code to less lines
             MarkdownUtils.ReportNode(node);
         }
 
@@ -297,6 +314,7 @@ public class Scanner {
         // Flag all source nodes
         ArrayList<RuleNode> SourceNodes = DbUtils.QuerySourceNodeFlowRuleNode();
         for (RuleNode node : SourceNodes) {
+            // TODO simplify code to less lines
             MarkdownUtils.ReportNode(node);
         }
     }

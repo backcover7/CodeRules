@@ -1,5 +1,7 @@
 package com.saucer.sast.utils;
 
+import com.saucer.sast.lang.java.parser.core.RuleNode;
+import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.Map;
@@ -55,5 +57,12 @@ public class CharUtils {
     public static String StringSubsitute(Map<String, String> map, String template) {
         StringSubstitutor stringSubstitutor = new StringSubstitutor(map);
         return stringSubstitutor.replace(template);
+    }
+
+    public static String SimplifySourceCode(String code, String edgeType) {
+        if (edgeType.equals(CallGraphNode.SourceFlowType) || edgeType.equals(CallGraphNode.SinkNodeType)){
+
+        }
+        return code;
     }
 }

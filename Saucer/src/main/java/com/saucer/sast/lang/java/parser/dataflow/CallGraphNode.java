@@ -16,17 +16,16 @@ public class CallGraphNode {
     private String FilePath;
     private String EdgeType;
 
+    // EdgeType
     public final static String SourceFlowType = "SourceFlow";
-    public final static String SourceGadgetFlowType = "SourceGadgetFlow";
-    public final static String ParamizedSetterGetterConsrtrcuorFlowType = "ParamizedSetterGetterConsrtrcuorFlowType";
+    public final static String SinkFlowType = "SinkFlow";   // For last report
+    public final static String CommonFlowType = "CommonFlow";
     public final static String SinkNodeType = "SinkNodeFlow";
     public final static String SinkGadgetNodeFlowType = "SinkGadgetNodeFlow";
+
+    // For last report
     public final static String SinkGadgetNodeFlowSource = "SinkGadgetNodeFlowSource";
     public final static String SinkGadgetNodeFlowSink = "SinkGadgetNodeFlowSink";
-
-    public final static String SinkFlowType = "SinkFlow";
-    public final static String GadgetFlowType = "GadgetFlow";
-    public final static String CommonFlowType = "CommonFlow";
 
     public String getPreNamespace() {
         return PreNamespace;

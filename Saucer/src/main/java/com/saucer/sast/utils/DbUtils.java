@@ -54,7 +54,7 @@ public class DbUtils {
         CreateCallGraphTable();
     }
 
-    private static void connect() throws ClassNotFoundException {
+    public static void connect() throws ClassNotFoundException {
         try {
             Class.forName("org.sqlite.JDBC");
             String url = "jdbc:sqlite:" + dbname;
@@ -85,6 +85,7 @@ public class DbUtils {
         ImportNodes(Paths.get(CSVDirectory, "sources.csv").toString(), RuleNode.SOURCENODE);
         ImportNodes(Paths.get(CSVDirectory, "sinks.csv").toString(), RuleNode.SINKNODE);
         ImportNodes(Paths.get(CSVDirectory, "gadget.csv").toString(), RuleNode.GADGETSOURCENODE);
+        ImportNodes(Paths.get(CSVDirectory, "negative.csv").toString(), RuleNode.NEGATIVENODE);
     }
 
     private static void ImportNodes(String nodePath, String nodeType) throws Exception {
@@ -216,8 +217,6 @@ public class DbUtils {
     }
 
     public static RuleNode QueryInvocationMethodNode(String namespace, String classtype, String methodname) throws SQLException {
-        // TODO: methodname like ... But this needs to store the all executablereference and then query on them.
-        //  This will also convert some nodes to simplied version even with namespace & classtype
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype != "
                 + "\"" + RuleNode.GADGETSOURCENODE + "\"";
         return QueryMethodNode(sql, namespace, classtype, methodname);
@@ -226,6 +225,12 @@ public class DbUtils {
     public static RuleNode QueryCtExecutableMethodNode(String namespace, String classtype, String methodname) throws SQLException {
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype = "
                 + "\"" + RuleNode.GADGETSOURCENODE + "\"";
+        return QueryMethodNode(sql, namespace, classtype, methodname);
+    }
+
+    public static RuleNode QueryNegativeNode(String namespace, String classtype, String methodname) throws SQLException {
+        String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype = "
+                + "\"" + RuleNode.NEGATIVENODE + "\"";
         return QueryMethodNode(sql, namespace, classtype, methodname);
     }
 
@@ -281,7 +286,7 @@ public class DbUtils {
     }
 
     public static ArrayList<HashMap<String, String>> QuerySetterGetterConstructorCallGraph() throws SQLException {
-        String sql = "SELECT * FROM callgraph WHERE premethodname LIKE \"set%\" OR premethodname LIKE \"get%\" OR " +
+        String sql = "SELECT * FROM callgraph WHERE preparamsize != 0 AND premethodname LIKE \"set%\" OR premethodname LIKE \"get%\" OR " +
                 "premethodname = \"<init>\"";
         PreparedStatement statement = conn.prepareStatement(sql);
         return QueryCallGraph(statement);

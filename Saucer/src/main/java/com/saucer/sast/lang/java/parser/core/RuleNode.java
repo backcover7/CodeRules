@@ -14,6 +14,7 @@ public class RuleNode {
     public final static String SOURCENODE = "source";
     public final static String SINKNODE = "sink";
     public final static String GADGETSOURCENODE = "gadgetsource";
+    public final static String NEGATIVENODE = "negative";
 
     public String getNamespace() {
         return namespace;

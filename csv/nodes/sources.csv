@@ -138,10 +138,6 @@ javax.servlet.http:HttpServletRequest:getHeader:remote
 javax.servlet.http:HttpServletRequest:getHeaderNames:remote
 javax.servlet.http:HttpServletRequest:getHeaders:remote
 javax.servlet.http:HttpServletRequest:getMethod:remote
-javax.servlet.http:HttpServletRequest:getParameter:remote
-javax.servlet.http:HttpServletRequest:getParameterMap:remote
-javax.servlet.http:HttpServletRequest:getParameterNames:remote
-javax.servlet.http:HttpServletRequest:getParameterValues:remote
 javax.servlet.http:HttpServletRequest:getPathInfo:remote
 javax.servlet.http:HttpServletRequest:getQueryString:remote
 javax.servlet.http:HttpServletRequest:getRemoteUser:remote

@@ -28,7 +28,7 @@ java.io:Serializable:readResolve:gadget
 java.io:ObjectInputValidation:validateObject:gadget
 java.lang:Object:finalize:gadget
 java.lang.reflect:InvocationHandler:invoke:gadget
-java.util:Comparators:compare:gadget
+java.util:Comparator:compare:gadget
 java.util:Map:entrySet:gadget
 java.util:Map:get:gadget
 java.util:Map:put:gadget
