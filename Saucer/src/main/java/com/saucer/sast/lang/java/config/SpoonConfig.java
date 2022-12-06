@@ -23,8 +23,8 @@ public class SpoonConfig {
         model = launcher.getModel();
     }
 
-    public void init(String codebase, String jarLibsPath) throws Exception {
-        SpoonConfig.codebase = Paths.get(codebase).toAbsolutePath().toString();
+    public void init(String codebase, String jarLibsPath) {
+        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().toString();
         launcher = getSpoonLauncher(jarLibsPath);
         setEnv(launcher.getEnvironment());
         launcher.buildModel();
@@ -50,6 +50,7 @@ public class SpoonConfig {
     }
 
     private void setEnv(Environment env) {
+        env.disableConsistencyChecks();
         env.setCommentEnabled(false);
     }
 }

@@ -1,6 +1,7 @@
 package com.saucer.sast.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.shiro.crypto.hash.Hash;
 
 import java.io.IOException;
 import java.util.*;
@@ -27,6 +28,11 @@ public class SemgrepUtils {
     public final static String Line = "line";
     public final static String Extra = "extra";
     public final static String Lines = "lines";
+    public final static String Dataflow_Traces = "dataflow_trace";
+    public final static String Taint_Source = "taint_source";
+    public final static String Intermediate_Vars = "intermediate_vars";
+    public final static String Content = "content";
+    public final static String Location = "location";
     public final static String Metavars = "metavars";
     public final static String Abstract_Content = "abstract_content";
 
@@ -49,9 +55,9 @@ public class SemgrepUtils {
     public final static String EllipsisBody = "{...}";
     public final static String ParamPatternTemplate = "          - pattern: ";
 
-    public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", JSON_FORMAT, "-f"};
+    public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", DATAFLOWTRACE_FLAG, JSON_FORMAT, "-f"};
 
-    public static ArrayList<HashMap<String, Object>> RunSemgrepRule(String yaml, String codebase) throws IOException, InterruptedException {
+    public static ArrayList<HashMap<String, Object>> RunSemgrepRule(String yaml, String codebase) throws IOException {
         ArrayList<String> cmd = new ArrayList<>(Arrays.asList(SemgrepCLI));
         cmd.add(yaml);
         cmd.add(codebase);
@@ -82,12 +88,29 @@ public class SemgrepUtils {
             String lines = (String) extraMap.get(Lines);
             HashMap<String, String> metavars = (HashMap<String, String>) extraMap.get(Metavars);
 
+            String dataflow_trace = CharUtils.empty;
+            if (extraMap.containsKey(Dataflow_Traces)) {
+                HashMap<String, Object> dataflowtraceMap = (HashMap<String, Object>) extraMap.get(Dataflow_Traces);
+                HashMap<String, Object> taintsourceMap = (HashMap<String, Object>) dataflowtraceMap.get(Taint_Source);
+                dataflow_trace += ConcatFlowLine(taintsourceMap) + CharUtils.LF;
+                if (dataflowtraceMap.containsKey(Intermediate_Vars)) {
+                    ArrayList<HashMap<String, Object>> intermediatevarsMap =
+                            (ArrayList<HashMap<String, Object>>) dataflowtraceMap.get(Intermediate_Vars);
+                    for (HashMap<String, Object> var : intermediatevarsMap) {
+                        dataflow_trace += ConcatFlowLine(var) + CharUtils.LF;
+                    }
+                }
+                dataflow_trace += line + CharUtils.space + lines.trim();
+            }
+
             HashMap<String, Object> resultMap = new HashMap<>();
             resultMap.put(Path, path);
             resultMap.put(Col, col);
             resultMap.put(Line, line);
             resultMap.put(Lines, lines);
             resultMap.put(Metavars, metavars);
+            resultMap.put(Dataflow_Traces, dataflow_trace);
+
             resultList.add(resultMap);
         }
 
@@ -125,5 +148,13 @@ public class SemgrepUtils {
         return resultMap.get(Path) + CharUtils.sharp +
                 resultMap.get(Line) + CharUtils.colon +
                 resultMap.get(Col);
+    }
+
+    private static String ConcatFlowLine(HashMap<String, Object> flowNode) {
+        String sourceContent = (String) flowNode.get(Content);
+
+        String sourceLine = String.valueOf(((HashMap<String, Object>) ((HashMap<String, Object>)
+                flowNode.get(Location)).get(Start)).get(Line));
+        return sourceLine + CharUtils.space + sourceContent.trim();
     }
 }

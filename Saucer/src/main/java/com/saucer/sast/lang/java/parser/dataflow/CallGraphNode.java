@@ -5,16 +5,18 @@ public class CallGraphNode {
     private String PreClasstype;
     private String PreMethodName;
     private String PreLineNum;
-    private int PreParamSize;
+    private String PreSignature;
     private boolean PreGadgetSource;
     private String SuccNamespace;
     private String SuccClasstype;
     private String SuccMethodName;
     private String SuccCode;
     private String SuccLineNum;
+    private String SuccSignature;
     private String ParentCode;
     private String FilePath;
     private String EdgeType;
+    private String datatrace;
 
     // EdgeType
     public final static String SourceFlowType = "SourceFlow";
@@ -63,12 +65,12 @@ public class CallGraphNode {
         return SuccNamespace;
     }
 
-    public int getPreParamSize() {
-        return PreParamSize;
+    public String getPreSignature() {
+        return PreSignature;
     }
 
-    public void setPreParamSize(int preParamSize) {
-        PreParamSize = preParamSize;
+    public void setPreSignature(String preSignature) {
+        PreSignature = preSignature;
     }
 
     public boolean isPreGadgetSource() {
@@ -111,6 +113,14 @@ public class CallGraphNode {
         return SuccLineNum;
     }
 
+    public String getSuccSignature() {
+        return SuccSignature;
+    }
+
+    public void setSuccSignature(String succSignature) {
+        SuccSignature = succSignature;
+    }
+
     public void setSuccLineNum(String succLineNum) {
         SuccLineNum = succLineNum;
     }
@@ -137,5 +147,13 @@ public class CallGraphNode {
 
     public void setEdgeType(String edgeType) {
         EdgeType = edgeType;
+    }
+
+    public String getDatatrace() {
+        return datatrace;
+    }
+
+    public void setDatatrace(String datatrace) {
+        this.datatrace = datatrace;
     }
 }

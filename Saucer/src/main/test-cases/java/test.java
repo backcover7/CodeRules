@@ -9,7 +9,6 @@ public class test {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String user = req.getParameter("hello");
         target s = new target();
-//        String inte = s.intermediate("m");
         s.rce(user);
         System.out.println(user);
     }

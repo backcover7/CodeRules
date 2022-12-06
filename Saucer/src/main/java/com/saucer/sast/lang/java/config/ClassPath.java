@@ -18,7 +18,7 @@ public class ClassPath {
     public void DownloadPomDepdencies(String POM, String directory) {
         String[] MvnCmd = new String[] {"mvn", "-f", POM, "dependency:copy-dependencies", "-DoutputDirectory=" + directory, "-DexcludeTransitive=true"};
 
-        System.out.println("[+] Downloading dependencies from pom.xml ...");
+        System.out.println("[.] Downloading dependencies from pom.xml ...");
         try {
             Process process = Runtime.getRuntime().exec(MvnCmd);
             process.waitFor();

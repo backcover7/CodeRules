@@ -3,9 +3,14 @@ package com.saucer.sast.utils;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.RuleNode;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
+import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
 import net.steppschuh.markdowngenerator.table.Table;
 import net.steppschuh.markdowngenerator.text.emphasis.BoldText;
+import org.apache.commons.io.FilenameUtils;
+import org.markdown4j.Markdown4jProcessor;
+import org.apache.commons.text.StringEscapeUtils;
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -36,76 +41,76 @@ public class MarkdownUtils {
 
     public void init() {
         StringBuilder reportHeader = new StringBuilder();
-        reportHeader.append("# ")
-                .append(Link(
+        reportHeader.append(header(Link(
                         Paths.get(SpoonConfig.codebase).getFileName().toString(),
-                        Paths.get(SpoonConfig.codebase).toUri().toString()))
-                .append(" - Saucer SAST Scan Report").append(CharUtils.LF)
+                        Paths.get(SpoonConfig.codebase).toUri().toString()) + " - Saucer SAST Scan Report", 1));
+        reportHeader.append(CharUtils.LF)
                 .append(formatedtimestamp).append(newline)
                 .append("*Report tool bugs to [kang.hou@salesforce.com](mailto:kang.hou@salesforce.com?subject=Saucer Bug Report&body=Please attach details and screenshot in the bug report.)*").append(newline);
 
         FileUtils.WriteFileLn(report, reportHeader.toString(), false);
     }
 
-    public void finish() {
+    public void finish() throws IOException {
         FileUtils.WriteFile(report, stringBuilder.toString(), true);
+        Convert2Html();
+    }
+
+    public void Convert2Html() throws IOException {
+        Markdown4jProcessor processor = new Markdown4jProcessor();
+        String markdown = FileUtils.ReadFile2String(report);
+        String htmlFile = FilenameUtils.removeExtension(report) + CharUtils.HtmlExtension;
+        FileUtils.WriteFile(htmlFile, processor.process(markdown), true);
     }
 
     public static void ReportTaintedFlow4WebSourceHeader() {
-        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Web Sources").append(CharUtils.LF);
+        stringBuilder.append(header("[P0/1/2] - Exploitable Tainted Flows from Web Sources", 2)).append(CharUtils.LF);
     }
 
     public static void ReportTaintedFlow4GadgetSourceHeader() {
-        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Gadget Sources").append(CharUtils.LF);
+        stringBuilder.append(header("[P0/1/2] - Exploitable Tainted Flows from Gadget Sources", 2)).append(CharUtils.LF);
     }
 
     public static void ReportTaintedFlow4SetterGetterConstructorSourceHeader() {
-        stringBuilder.append("## [P0/1] - Exploitable Tainted Flows from Marshalsec Sources").append(CharUtils.LF);
+        stringBuilder.append(header("[P0/1/2] - Exploitable Tainted Flows from Marshalsec Sources", 2)).append(CharUtils.LF);
     }
 
     public static void ReportGadgetSinkNode() {
-        stringBuilder.append("## [P2] - Exploitable Gadget Methods").append(CharUtils.LF);
+        stringBuilder.append(header("[P2] - Exploitable Gadget Methods", 2)).append(CharUtils.LF);
     }
 
     public static void ReportSinkNodeHeader() {
-        stringBuilder.append("## [P3] - Usage of Sink Functions").append(CharUtils.LF);
+        stringBuilder.append(header("[FYI] - Usage of Sink Functions", 2)).append(CharUtils.LF);
     }
 
     public static void ReportSourceNodeHeader() {
-        stringBuilder.append("## [INFO] - Usage of Source Functions").append(CharUtils.LF);
+        stringBuilder.append(header("[FYI] - Usage of Source Functions", 2)).append(CharUtils.LF);
     }
 
-    public static void ReportTaintedFlow(LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
+    public static void ReportTaintedFlow(LinkedList<HashMap<String, String>> taintedFlow, String SourceFlag) throws SQLException {
         Table.Builder tableBuilder = new Table.Builder()
                 .withAlignments(Table.ALIGN_CENTER, Table.ALIGN_LEFT)
                 .addRow("Step", "Code", "Path", "Node");
 
         int index = 1;
         for (HashMap<String, String> invocation : taintedFlow) {
-            String code = invocation.get(DbUtils.SUCCCODE);
-            String codeblock = CodeBlock(code);
-            String path = invocation.get(DbUtils.FILEPATH) + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM);
+            String code;
             String node;
-            if (invocation.get(DbUtils.SUCCMETHODNAME) == null) {
-                node = String.join(
-                        CharUtils.dot,
-                        invocation.get(DbUtils.SUCCNAMESPACE),
-                        invocation.get(DbUtils.SUCCCLASSTYPE)
-                        );
+            String path = invocation.get(DbUtils.FILEPATH) + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM);
+            if (!SourceFlag.equals(TaintedFlow.WEBSOURCEFLAG) && index == 1) {
+                code = invocation.get(DbUtils.PRESIGNATURE);
+                node = createNodeInTaintedflow(invocation, DbUtils.PRENAMESPACE, DbUtils.PRECLASSTYPE, DbUtils.PREMETHODNAME);
             } else {
-                node = String.join(
-                        CharUtils.dot,
-                        invocation.get(DbUtils.SUCCNAMESPACE),
-                        invocation.get(DbUtils.SUCCCLASSTYPE),
-                        invocation.get(DbUtils.SUCCMETHODNAME)
-                );
+                code = invocation.get(DbUtils.SUCCCODE);
+                node = createNodeInTaintedflow(invocation, DbUtils.SUCCNAMESPACE, DbUtils.SUCCCLASSTYPE, DbUtils.SUCCMETHODNAME);
             }
 
+            String codeblock = CodeSnippet(code);
             tableBuilder.addRow(index, codeblock, path, node);
 
             if (index == taintedFlow.size()) {
-                String kind = DbUtils.QueryInvocationMethodNode(invocation.get(
-                        DbUtils.SUCCNAMESPACE),
+                String kind = DbUtils.QueryInvocationMethodNode(
+                        invocation.get(DbUtils.SUCCNAMESPACE),
                         invocation.get(DbUtils.SUCCCLASSTYPE),
                         invocation.get(DbUtils.SUCCMETHODNAME)).getKind();
                 stringBuilder.append("### ")
@@ -119,9 +124,9 @@ public class MarkdownUtils {
         stringBuilder.append(tableBuilder.build()).append(newline);
     }
 
-    public static void ReportGadgetSinkNode(HashMap<String, RuleNode> node) {
-        RuleNode gadgetFlowSource = node.get(CallGraphNode.SinkGadgetNodeFlowSource);
-        RuleNode gadgetFlowSink = node.get(CallGraphNode.SinkGadgetNodeFlowSink);
+    public static void ReportGadgetSinkNode(HashMap<String, Object> node) {
+        RuleNode gadgetFlowSource = (RuleNode) node.get(CallGraphNode.SinkGadgetNodeFlowSource);
+        RuleNode gadgetFlowSink = (RuleNode) node.get(CallGraphNode.SinkGadgetNodeFlowSink);
 
         stringBuilder.append("### ")
                 .append(new BoldText(gadgetFlowSink.getKind()))
@@ -139,7 +144,10 @@ public class MarkdownUtils {
 //                    gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype(), gadgetFlowSink.getMethod());
 //        }
 //        stringBuilder.append(Link(text, gadgetFlowSink.getFile() + CharUtils.sharp + gadgetFlowSink.getLine())).append(newline);
-        stringBuilder.append(CodeBlock(gadgetFlowSink.getMethodcode(), gadgetFlowSink.getCode()));
+
+//        stringBuilder.append(CodeBlock(gadgetFlowSink.getMethodcode()));
+//        stringBuilder.append(CodeBlock(gadgetFlowSink.getMethodcode(), gadgetFlowSink.getCode()));
+        stringBuilder.append(CodeBlock((String) node.get(DbUtils.DATATRACE)));
         stringBuilder.append(newline);
     }
 
@@ -157,7 +165,8 @@ public class MarkdownUtils {
                     Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype(), ruleNode.getMethod()), position));
         }
         stringBuilder.append(CharUtils.LF);
-        stringBuilder.append(CodeBlock(ruleNode.getMethodcode(), ruleNode.getCode()));
+//        stringBuilder.append(CodeBlock(ruleNode.getMethodcode(), ruleNode.getCode()));
+        stringBuilder.append(CodeSnippet(ruleNode.getCode()));
         stringBuilder.append(newline);
     }
 
@@ -168,19 +177,55 @@ public class MarkdownUtils {
         return stringBuilder.toString();
     }
 
-    private static String CodeBlock(String code) {
+    private static String CodeSnippet(String code) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("`").append(code).append("`");
         return stringBuilder.toString();
     }
 
+    private static String CodeBlock(String code) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("```java").append(CharUtils.LF).append(code).append(CharUtils.LF).append("```");
+        return sb.toString();
+    }
+
     private static String CodeBlock(String code, String marktext) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<pre><code>").append(hightlight(marktext, code)).append("</pre></code>");
-        return stringBuilder.toString();
+        String escapedCode = StringEscapeUtils.escapeHtml4(code);
+        String escapedMarktext = StringEscapeUtils.escapeHtml4(marktext);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<pre><code>").append(hightlight(escapedMarktext, escapedCode)).append("</pre></code>");
+        return sb.toString();
     }
 
     private static String hightlight(String marktext, String code) {
         return code.replace(marktext, "<mark>" + marktext + "</mark>");
+    }
+
+    private static String createNodeInTaintedflow(HashMap<String, String> invocation, String namespace, String classtype, String methodname) {
+        String node;
+        if (invocation.get(methodname) == null) {
+            node = String.join(
+                    CharUtils.dot,
+                    invocation.get(namespace),
+                    invocation.get(classtype)
+            );
+        } else {
+            node = String.join(
+                    CharUtils.dot,
+                    invocation.get(namespace),
+                    invocation.get(classtype),
+                    invocation.get(methodname)
+            );
+        }
+        return node;
+    }
+
+    private static String header(String title, int level) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < level; i++) {
+            sb.append(CharUtils.sharp);
+        }
+        return sb.append(CharUtils.space).append(title).toString();
     }
 }

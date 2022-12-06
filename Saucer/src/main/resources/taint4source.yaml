@@ -6,7 +6,6 @@ rules:
     pattern-sources:
       - patterns:
         - pattern-inside: ${methodDefinition}
-        - pattern-inside: $BODY
         - pattern: ${sourceinvocation}
     pattern-sinks:
       - pattern: ${succcode}

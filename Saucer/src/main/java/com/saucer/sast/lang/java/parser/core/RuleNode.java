@@ -4,6 +4,8 @@ public class RuleNode {
     private String namespace;
     private String classtype;
     private String method;
+    private String signature;
+    private int paramsize;
     private String kind;
     private String nodetype;
     private String file;
@@ -38,6 +40,22 @@ public class RuleNode {
 
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public int getParamsize() {
+        return paramsize;
+    }
+
+    public void setParamsize(int paramsize) {
+        this.paramsize = paramsize;
     }
 
     public String getKind() {

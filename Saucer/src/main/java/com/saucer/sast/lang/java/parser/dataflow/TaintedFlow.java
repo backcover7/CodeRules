@@ -4,14 +4,11 @@ import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.utils.*;
 import me.tongfei.progressbar.ProgressBar;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
@@ -21,113 +18,162 @@ public class TaintedFlow {
     public final static String WEBSOURCEFLAG = "websourceflag";
     public final static String GADGETSOURCEFLAGE = "gadgetsourceflag";
     public final static String SETTERGETTERCONSTRUCTORFLAG = "settergetterconstructorflag";
+    List<String> TaintFlows = Arrays.asList(WEBSOURCEFLAG, GADGETSOURCEFLAGE
+            // TODO
+//            , SETTERGETTERCONSTRUCTORFLAG
+    );
 
     private static String AnanlyzeFlag;
-    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4WebSource;
-    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource;
-    private static ArrayList<LinkedList<HashMap<String, String>>> taintedPaths4SetterGetterConstructorSource;
+    private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4WebSource;
+    private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource;
+    private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4SetterGetterConstructorSource;
 
-    public TaintedFlow() {}
+    public TaintedFlow() {
+        taintedPaths4WebSource = new HashSet<>();
+        taintedPaths4GadgetSource = new HashSet<>();
+        taintedPaths4SetterGetterConstructorSource = new HashSet<>();
+    }
 
     private String ProgressBarHint(String SourceFlag) {
         switch (SourceFlag) {
             case WEBSOURCEFLAG:
-                return "[+] Web Sources Flow";
+                return "[.] Web Sources Flow";
             case GADGETSOURCEFLAGE:
-                return "[+] Gadget Flow     ";
+                return "[.] Gadget Flow     ";
             case SETTERGETTERCONSTRUCTORFLAG:
-                return "[+] Marshalsec Flow ";
+                return "[.] JSON Flow       ";
             default:
                 return CharUtils.empty;
         }
     }
 
-    public void Analyze(String SourceFlag) throws SQLException, IOException, InterruptedException {
+    public void Analyze() {
+        TaintFlows.forEach(flow -> {
+            try {
+                Analyze(flow);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void Analyze(String SourceFlag) throws SQLException {
         AnanlyzeFlag = SourceFlag;
         switch (SourceFlag) {
             case WEBSOURCEFLAG:
-                taintedPaths4WebSource = new ArrayList<>();
                 AnalyzeFromSource();
+                if (taintedPaths4WebSource.size() != 0) {
+                    System.out.println("[+] Found " + taintedPaths4WebSource.size() + " paths from web source to sinks!");
+                } else {
+                    System.out.println("[-] Found nothing from web sources to sinks.");
+                }
                 break;
             case GADGETSOURCEFLAGE:
-                taintedPaths4GadgetSource = new ArrayList<>();
                 AnalyzeFromGadgetSource();
+                if (taintedPaths4GadgetSource.size() != 0) {
+                    System.out.println("[+] Found " + taintedPaths4GadgetSource.size() + " paths from gadget source to sinks!");
+                } else {
+                    System.out.println("[-] Found nothing from gadget sources to sinks.");
+                }
                 break;
             case SETTERGETTERCONSTRUCTORFLAG:
-                taintedPaths4SetterGetterConstructorSource = new ArrayList<>();
                 AnalyzeFromSetterGetterConsrtructor();
+                if (taintedPaths4SetterGetterConstructorSource.size() != 0) {
+                    System.out.println("[+] Found " + taintedPaths4SetterGetterConstructorSource.size() +
+                            " paths from JSON marshalsec source to sinks!");
+                } else {
+                    System.out.println("[-] Found nothing from JSON marshalsec sources to sinks.");
+                }
                 break;
             default:
                 break;
         }
     }
 
-    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4WebSource() {
+    public static HashSet<LinkedList<HashMap<String, String>>> getTaintedPaths4WebSource() {
         return taintedPaths4WebSource;
     }
 
-    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4GadgetSource() {
+    public static HashSet<LinkedList<HashMap<String, String>>> getTaintedPaths4GadgetSource() {
         return taintedPaths4GadgetSource;
     }
 
-    public static ArrayList<LinkedList<HashMap<String, String>>> getTaintedPaths4SetterGetterConstructorSource() {
+    public static HashSet<LinkedList<HashMap<String, String>>> getTaintedPaths4SetterGetterConstructorSource() {
         return taintedPaths4SetterGetterConstructorSource;
     }
 
-    public void AnalyzeFromSource() throws SQLException, IOException, InterruptedException {
+    public void AnalyzeFromSource() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QuerySourceCallGraph();
         Analyze(sources, WEBSOURCEFLAG);
     }
 
-    public void AnalyzeFromGadgetSource() throws SQLException, IOException, InterruptedException {
+    public void AnalyzeFromGadgetSource() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QueryGadgetSourceNodeCallGraph();
         Analyze(sources, GADGETSOURCEFLAGE);
     }
 
-    public void AnalyzeFromSetterGetterConsrtructor() throws SQLException, IOException, InterruptedException {
+    public void AnalyzeFromSetterGetterConsrtructor() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QuerySetterGetterConstructorCallGraph();
         Analyze(sources, SETTERGETTERCONSTRUCTORFLAG);
     }
 
-    private void Analyze(ArrayList<HashMap<String, String>> sources, String flag) throws SQLException, IOException, InterruptedException {
+    private void Analyze(ArrayList<HashMap<String, String>> sources, String flag) {
         // Start from all sources
-        LinkedList<HashMap<String, String>> taintedFlow = new LinkedList<>();
-        for (HashMap<String, String> source : ProgressBar.wrap(sources, ProgressBarHint(AnanlyzeFlag))) {
-            ArrayList<HashMap<String, String>> invocations = DbUtils.QuerySuccCallGraph(
-                    source.get(DbUtils.PRENAMESPACE),
-                    source.get(DbUtils.PRECLASSTYPE),
-                    source.get(DbUtils.PREMETHODNAME));
-            for (HashMap<String, String> invocation : invocations) {
-                if (invocation.equals(source)) {
-                    continue;
-                }
+        ProgressBar.wrap(sources.parallelStream(), ProgressBarHint(AnanlyzeFlag)).forEach(source -> {
+            try {
+                ArrayList<HashMap<String, String>> invocations = DbUtils.QuerySuccCallGraph(
+                        source.get(DbUtils.PRENAMESPACE),
+                        source.get(DbUtils.PRECLASSTYPE),
+                        source.get(DbUtils.PREMETHODNAME),
+                        source.get(DbUtils.PRESIGNATURE));
 
-                ArrayList<HashMap<String, Object>> SemgrepScanRes;
-                if (source.get(DbUtils.SUCCMETHODNAME) == null ||
-                        flag.equals(GADGETSOURCEFLAGE) ||
-                        flag.equals(SETTERGETTERCONSTRUCTORFLAG)) {
-                    // Annotation web source, Gadget source, setter/getter/constructor source
-                    SemgrepScanRes = FlowFromArgs2Invocations(invocation);
-                } else {
-                    // Invocation source
-                    invocation.put(SOURCEINVOCATION, source.get(DbUtils.SUCCCODE));
-                    String taint4source = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
-                            FileUtils.ReadFile2String(FileUtils.taint4source));
-                    Path taint4sourcePath =
-                            Files.createTempFile(Paths.get(FileUtils.tmp), "taint4source.yaml", ".yaml");
-                    FileUtils.WriteFile(taint4sourcePath.toAbsolutePath().toString(), taint4source, false);
-                    SemgrepScanRes = SemgrepUtils.RunSemgrepRule(taint4sourcePath.toAbsolutePath().toString(), SpoonConfig.codebase);
-                    Files.deleteIfExists(taint4sourcePath);
-                }
+                invocations.parallelStream().forEach(invocation -> {
+                    if (invocation.equals(source)) {
+                        return;
+                    }
 
-                if (SemgrepScanRes.size() != 0) {
-                    taintedFlow.add(source);
-                    taintedFlow.add(invocation);
-                    FlowAnalysis(invocation, taintedFlow);
-                    taintedFlow.removeLast();
-                }
+                    ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+                    if (source.get(DbUtils.SUCCMETHODNAME) == null ||
+                            flag.equals(GADGETSOURCEFLAGE) ||
+                            flag.equals(SETTERGETTERCONSTRUCTORFLAG)) {
+                        // Annotation web source, Gadget source, setter/getter/constructor source
+                        SemgrepScanRes = FlowFromArgs2Invocations(invocation);
+                    } else {
+                        // Invocation source
+                        invocation.put(SOURCEINVOCATION, source.get(DbUtils.SUCCCODE));
+                        String taint4source = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
+                                FileUtils.ReadFile2String(FileUtils.taint4source));
+
+                        try {
+                            Path taint4sourcePath =
+                                    Files.createTempFile(Paths.get(FileUtils.tmp), "taint4source.yaml", ".yaml");
+                            FileUtils.WriteFile(taint4sourcePath.toAbsolutePath().toString(), taint4source, false);
+                            SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
+                                    taint4sourcePath.toAbsolutePath().toString(), SpoonConfig.codebase);
+                            Files.deleteIfExists(taint4sourcePath);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    if (SemgrepScanRes.size() != 0) {
+                        LinkedList<HashMap<String, String>> taintedFlow = new LinkedList<>();
+                        taintedFlow.add(source);
+                        taintedFlow.add(invocation);
+                        try {
+                            FlowAnalysis(invocation, taintedFlow);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        taintedFlow.removeLast();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
+        });
+
     }
 
     private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
@@ -149,7 +195,11 @@ public class TaintedFlow {
                     default:
                         break;
                 }
-                DbUtils.UpdateSinkFlowEdge(invocation);
+                try {
+                    DbUtils.UpdateSinkFlowEdge(invocation);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 taintedFlow.removeLast();
                 return;
             }
@@ -157,24 +207,30 @@ public class TaintedFlow {
         String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
         String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
         String methodname = invocation.get(DbUtils.SUCCMETHODNAME);
-        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccCallGraph(namespace, classtype, methodname);
-        for (HashMap<String, String> succinvocation : succinvocations) {
-            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+        String signature = invocation.get(DbUtils.SUCCSIGNATURE);
+        ArrayList<HashMap<String, String>> succinvocations = DbUtils.QuerySuccCallGraph(namespace, classtype, methodname, signature);
 
-            if (taintedFlow.contains(succinvocation)) {
-                continue;
+        succinvocations.parallelStream().forEach(succinvocation -> {
+            LinkedList<HashMap<String, String>> taintedFlowCopy = (LinkedList<HashMap<String, String>>) taintedFlow.clone();
+            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+            if (taintedFlowCopy.contains(succinvocation)) {
+                return;
             }
 
             if (SemgrepScanRes.size() != 0) {
-                taintedFlow.add(succinvocation);
-                FlowAnalysis(succinvocation, taintedFlow);
+                taintedFlowCopy.add(succinvocation);
+                try {
+                    FlowAnalysis(succinvocation, taintedFlowCopy);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+        });
         taintedFlow.removeLast();
     }
 
     public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
-        if (invocation.get(DbUtils.PREPARAMSIZE).equals(String.valueOf(0))) {
+        if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0) {
             return new ArrayList<>();
         }
         String taint2invocation = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
@@ -187,14 +243,14 @@ public class TaintedFlow {
             res = SemgrepUtils.RunSemgrepRule(
                     taint2invocationPath.toAbsolutePath().toString(), SpoonConfig.codebase);
             Files.deleteIfExists(taint2invocationPath);
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return res;
     }
 
     private HashMap<String, String> ProcessTemplateMap(HashMap<String, String> map) {
-        int paramSize = Integer.parseInt(map.get(DbUtils.PREPARAMSIZE));
+        int paramSize = ParseParamSize(map.get(DbUtils.PRESIGNATURE));
         String methodDefinition = map.get(DbUtils.PREMETHODNAME) + CharUtils.leftbracket;
         String parampattern = CharUtils.empty;
         for (int i = 0; i < paramSize; i++) {
@@ -214,13 +270,8 @@ public class TaintedFlow {
         return map;
     }
 
-    public static void main(String[] args) throws Exception {
-        String codebase = "/Users/kang.hou/Desktop/click-nodeps-2.3.0";
-        SpoonConfig spoonConfig = new SpoonConfig();
-        spoonConfig.init(codebase, "");
-
-        DbUtils.connect();
-        new TaintedFlow().Analyze(WEBSOURCEFLAG);
-        System.out.println(taintedPaths4WebSource);
+    private int ParseParamSize(String methodSignature) {
+        String parameters = CharUtils.RegexMatchLastOccurence("\\(.*\\)", methodSignature);
+        return parameters.split(CharUtils.comma).length;
     }
 }

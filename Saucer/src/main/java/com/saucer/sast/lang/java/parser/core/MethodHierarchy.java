@@ -5,6 +5,7 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.declaration.CtParameterImpl;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -63,7 +64,7 @@ public class MethodHierarchy {
         Set<CtTypeReference<?>> interfaces = clazz.getSuperInterfaces();
         for (CtTypeReference<?> interfaceType : interfaces) {
             Set<CtMethod<?>> interfaceTypeMethods = interfaceType.getTypeDeclaration().getAllMethods();
-            for (CtMethod<?> interfaceTypeMethod : interfaceTypeMethods) {
+            interfaceTypeMethods.parallelStream().forEach(interfaceTypeMethod -> {
                 if (interfaceTypeMethod.getSimpleName().equals(methodName)) {
                     List<CtParameter<?>> InterfaceDeclarationMethodParameters = interfaceTypeMethod.getParameters();
                     if (InterfaceDeclarationMethodParameters.size() == parameters.size()) {
@@ -78,8 +79,20 @@ public class MethodHierarchy {
                     }
                     methodSet.add(interfaceType.getQualifiedName());
                 }
-            }
+            });
         }
+    }
+
+    public static boolean isSerializable(CtType<?> clazz) {
+        CtTypeReference<Object> Serializable = SpoonConfig.launcher.getFactory()
+                .createCtTypeReference(java.io.Serializable.class);
+        return clazz.isSubtypeOf(Serializable);
+    }
+
+    public static boolean isExternalizable(CtType<?> clazz) {
+        CtTypeReference<Object> Externalizable = SpoonConfig.launcher.getFactory()
+                .createCtTypeReference(java.io.Externalizable.class);
+        return clazz.isSubtypeOf(Externalizable);
     }
 }
 

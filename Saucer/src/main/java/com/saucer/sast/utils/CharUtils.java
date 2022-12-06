@@ -12,6 +12,7 @@ public class CharUtils {
     public final static String dotRegex = "\\.";
     public final static String dot = ".";
     public final static String slash = "/";
+    public final static String backslash = "\\";
     public final static String comma = ",";
     public final static String star = "*";
     public final static String dollarRegex = "\\$";
@@ -30,6 +31,7 @@ public class CharUtils {
     public final static String rightbracket = ")";
     public final static String leftsquarebracket = "[";
     public final static String rightsquarebracket = "]";
+    public final static String CR = "\r";
     public final static String LF = "\n";
     public final static String empty = "";
     public final static String ClassExtension = ".class";
@@ -39,6 +41,7 @@ public class CharUtils {
     public final static String TxtExtension = ".txt";
     public final static String MarkdownExtension = ".md";
     public final static String PdfExtension = ".pdf";
+    public final static String HtmlExtension = ".html";
     public final static String JAVA = "java";
 
     public static boolean RegexMatch(String regex, String string) {
