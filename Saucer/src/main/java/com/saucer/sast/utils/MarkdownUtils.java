@@ -82,7 +82,7 @@ public class MarkdownUtils {
             String code;
             String node = createNodeInTaintedflow(invocation, DbUtils.PRENAMESPACE, DbUtils.PRECLASSTYPE, DbUtils.PREMETHODNAME);
             String path = Paths.get(invocation.get(DbUtils.FILEPATH)).toUri() + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM);
-            if (!SourceFlag.equals(TaintedFlow.WEBSOURCEFLAG) && index == 1) {
+            if (!SourceFlag.equals(TaintedFlow.WEBSOURCEFLAG) && index == 0) {
                 code = invocation.get(DbUtils.PRESIGNATURE);
             } else {
                 code = invocation.get(DbUtils.SUCCCODE);
