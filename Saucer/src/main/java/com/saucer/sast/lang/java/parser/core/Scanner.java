@@ -3,7 +3,6 @@ package com.saucer.sast.lang.java.parser.core;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
-import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.MarkdownUtils;
 import com.saucer.sast.utils.SemgrepUtils;
 import me.tongfei.progressbar.ProgressBar;
@@ -106,9 +105,9 @@ public class Scanner {
                 RuleNode ruleNode = CheckAnnotation(annotation.getAnnotationType().getQualifiedName());
                 ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                 setPosition(annotation.getPosition(), ruleNode);
-//                ruleNode.setCode(annotation.getOriginalSourceFragment().getSourceCode());
-                ruleNode.setCode(
-                        SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(annotation));
+                ruleNode.setCode(annotation.getOriginalSourceFragment().getSourceCode());
+//                ruleNode.setCode(
+//                        SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(annotation));
                 GenerateCallGraphEdge(ctExecutable, ruleNode, isCtExecutableGadgetSource);
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -127,9 +126,9 @@ public class Scanner {
                     RuleNode ruleNode = CheckConstructor(executableReference.getDeclaringType().getQualifiedName());
                     ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                     setPosition(executableReference.getParent().getPosition(), ruleNode);
-//                    ruleNode.setCode(constructorCall.getOriginalSourceFragment().getSourceCode());
-                    ruleNode.setCode(
-                            SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(constructorCall));
+                    ruleNode.setCode(constructorCall.getOriginalSourceFragment().getSourceCode());
+//                    ruleNode.setCode(
+//                            SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(constructorCall));
                     ruleNode.setSignature(executableReference.getSignature());
                     ruleNode.setParamsize(executableReference.getParameters().size());
                     GenerateCallGraphEdge(ctExecutable, ruleNode, isCtExecutableGadgetSource);
@@ -172,9 +171,9 @@ public class Scanner {
                 ruleNode.setMethodcode(getParentMethodSourceCode(ctExecutable));
                 setPosition(invocation.getPosition(), ruleNode);
                 try {
-//                    ruleNode.setCode(invocation.getOriginalSourceFragment().getSourceCode());
-                    ruleNode.setCode(
-                            SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(invocation));
+                    ruleNode.setCode(invocation.getOriginalSourceFragment().getSourceCode());
+//                    ruleNode.setCode(
+//                            SpoonConfig.launcher.getEnvironment().createPrettyPrinter().prettyprint(invocation));
                 } catch (Exception e) {
                     ruleNode.setCode(ruleNode.toString());
                 }

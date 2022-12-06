@@ -10,7 +10,8 @@ import java.io.File;
 
 public class run {
     public static void main(String[] args) throws Exception {
-        // TODO
+        FileUtils.cleanDirectory(new File(com.saucer.sast.utils.FileUtils.tmp));
+
         System.out.println();
         String banner = " ________  ________  ___  ___  ________  _______   ________          ___       \n" +
                 "|\\   ____\\|\\   __  \\|\\  \\|\\  \\|\\   ____\\|\\  ___ \\ |\\   __  \\        |\\  \\      \n" +
@@ -29,8 +30,6 @@ public class run {
             System.out.println("[!] Please install Semgrep CLI! (https://semgrep.dev/docs/getting-started/)");
             System.exit(0);
         }
-
-        FileUtils.cleanDirectory(new File(com.saucer.sast.utils.FileUtils.tmp));
 
         DbUtils dbUtils = new DbUtils();
         System.out.println("[*] Initialize rules ...");

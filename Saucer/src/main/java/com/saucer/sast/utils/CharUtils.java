@@ -14,6 +14,7 @@ public class CharUtils {
     public final static String slash = "/";
     public final static String backslash = "\\";
     public final static String comma = ",";
+    public final static String backtick = "`";
     public final static String star = "*";
     public final static String dollarRegex = "\\$";
     public final static String dollar = "$";

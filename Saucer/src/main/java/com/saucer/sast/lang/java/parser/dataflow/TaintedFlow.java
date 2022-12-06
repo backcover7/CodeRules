@@ -104,17 +104,23 @@ public class TaintedFlow {
 
     public void AnalyzeFromSource() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QuerySourceCallGraph();
-        Analyze(sources, WEBSOURCEFLAG);
+        if (sources.size() != 0) {
+            Analyze(sources, WEBSOURCEFLAG);
+        }
     }
 
     public void AnalyzeFromGadgetSource() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QueryGadgetSourceNodeCallGraph();
-        Analyze(sources, GADGETSOURCEFLAGE);
+        if (sources.size() != 0) {
+            Analyze(sources, GADGETSOURCEFLAGE);
+        }
     }
 
     public void AnalyzeFromSetterGetterConsrtructor() throws SQLException {
         ArrayList<HashMap<String, String>> sources = DbUtils.QuerySetterGetterConstructorCallGraph();
-        Analyze(sources, SETTERGETTERCONSTRUCTORFLAG);
+        if (sources.size() != 0) {
+            Analyze(sources, SETTERGETTERCONSTRUCTORFLAG);
+        }
     }
 
     private void Analyze(ArrayList<HashMap<String, String>> sources, String flag) {

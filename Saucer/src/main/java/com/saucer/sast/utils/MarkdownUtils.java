@@ -4,13 +4,9 @@ import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.RuleNode;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
-import net.steppschuh.markdowngenerator.table.Table;
 import net.steppschuh.markdowngenerator.text.emphasis.BoldText;
-import org.apache.commons.io.FilenameUtils;
-import org.markdown4j.Markdown4jProcessor;
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -51,16 +47,8 @@ public class MarkdownUtils {
         FileUtils.WriteFileLn(report, reportHeader.toString(), false);
     }
 
-    public void finish() throws IOException {
+    public void finish() {
         FileUtils.WriteFile(report, stringBuilder.toString(), true);
-        Convert2Html();
-    }
-
-    public void Convert2Html() throws IOException {
-        Markdown4jProcessor processor = new Markdown4jProcessor();
-        String markdown = FileUtils.ReadFile2String(report);
-        String htmlFile = FilenameUtils.removeExtension(report) + CharUtils.HtmlExtension;
-        FileUtils.WriteFile(htmlFile, processor.process(markdown), true);
     }
 
     public static void ReportTaintedFlow4WebSourceHeader() {
@@ -88,40 +76,39 @@ public class MarkdownUtils {
     }
 
     public static void ReportTaintedFlow(LinkedList<HashMap<String, String>> taintedFlow, String SourceFlag) throws SQLException {
-        Table.Builder tableBuilder = new Table.Builder()
-                .withAlignments(Table.ALIGN_CENTER, Table.ALIGN_LEFT)
-                .addRow("Step", "Code", "Path", "Node");
-
-        int index = 1;
+        int index = 0;
+        StringBuilder sb = new StringBuilder();
         for (HashMap<String, String> invocation : taintedFlow) {
             String code;
-            String node;
-            String path = invocation.get(DbUtils.FILEPATH) + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM);
+            String node = createNodeInTaintedflow(invocation, DbUtils.PRENAMESPACE, DbUtils.PRECLASSTYPE, DbUtils.PREMETHODNAME);
+            String path = Paths.get(invocation.get(DbUtils.FILEPATH)).toUri() + CharUtils.sharp + invocation.get(DbUtils.SUCCLINENUM);
             if (!SourceFlag.equals(TaintedFlow.WEBSOURCEFLAG) && index == 1) {
                 code = invocation.get(DbUtils.PRESIGNATURE);
-                node = createNodeInTaintedflow(invocation, DbUtils.PRENAMESPACE, DbUtils.PRECLASSTYPE, DbUtils.PREMETHODNAME);
             } else {
                 code = invocation.get(DbUtils.SUCCCODE);
-                node = createNodeInTaintedflow(invocation, DbUtils.SUCCNAMESPACE, DbUtils.SUCCCLASSTYPE, DbUtils.SUCCMETHODNAME);
             }
+            String codeblock = CodeSnippet(code, false);
+            sb.append(CharUtils.space).append(index + 1).append(CharUtils.dot).append(CharUtils.space).append(
+                    String.join(
+                            CharUtils.comma + CharUtils.space,
+                            Link(node, path),
+                            codeblock))
+                    .append(newline);
 
-            String codeblock = CodeSnippet(code);
-            tableBuilder.addRow(index, codeblock, path, node);
-
-            if (index == taintedFlow.size()) {
+            if (index == taintedFlow.size() - 1) {
                 String kind = DbUtils.QueryInvocationMethodNode(
                         invocation.get(DbUtils.SUCCNAMESPACE),
                         invocation.get(DbUtils.SUCCCLASSTYPE),
                         invocation.get(DbUtils.SUCCMETHODNAME)).getKind();
-                stringBuilder.append("### ")
-                        .append(kind).append(CharUtils.space).append(CharUtils.dash).append(CharUtils.space)
-                        .append(Link(node, Paths.get(path).toUri().toString()))
-                        .append(CharUtils.LF);
+                stringBuilder.append("### ").append(kind).append(CharUtils.space).append(CharUtils.dash).append(CharUtils.space)
+                        .append(Link(node, path))
+                        .append(newline);
             }
 
             index++;
         }
-        stringBuilder.append(tableBuilder.build()).append(newline);
+        stringBuilder.append("<details>").append("<summary>").append("Tainted Flow Path Details").append("</summary>").append(newline);
+        stringBuilder.append(sb).append("</details>").append(newline);
     }
 
     public static void ReportGadgetSinkNode(HashMap<String, Object> node) {
@@ -155,7 +142,7 @@ public class MarkdownUtils {
         stringBuilder.append("### ")
                 .append(new BoldText(ruleNode.getKind())).append(CharUtils.space).append(CharUtils.dash).append(CharUtils.space);
 
-        String position = Paths.get(ruleNode.getFile() + CharUtils.sharp + ruleNode.getLine()).toUri().toString();
+        String position = Paths.get(ruleNode.getFile()).toUri() + CharUtils.sharp + ruleNode.getLine();
         if (ruleNode.getKind().contains("annotation")) {
             stringBuilder.append(
                     Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype()), position)
@@ -166,7 +153,7 @@ public class MarkdownUtils {
         }
         stringBuilder.append(CharUtils.LF);
 //        stringBuilder.append(CodeBlock(ruleNode.getMethodcode(), ruleNode.getCode()));
-        stringBuilder.append(CodeSnippet(ruleNode.getCode()));
+        stringBuilder.append(CodeSnippet(ruleNode.getCode(), true));
         stringBuilder.append(newline);
     }
 
@@ -177,9 +164,14 @@ public class MarkdownUtils {
         return stringBuilder.toString();
     }
 
-    private static String CodeSnippet(String code) {
+    private static String CodeSnippet(String code, boolean md) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("`").append(code).append("`");
+        if (md) {
+            stringBuilder.append(CharUtils.backtick).append(code).append(CharUtils.backtick);
+        } else {
+            stringBuilder.append("<code>").append(code).append("</code>");
+        }
+
         return stringBuilder.toString();
     }
 
@@ -214,9 +206,8 @@ public class MarkdownUtils {
             node = String.join(
                     CharUtils.dot,
                     invocation.get(namespace),
-                    invocation.get(classtype),
-                    invocation.get(methodname)
-            );
+                    invocation.get(classtype)
+            ) + CharUtils.sharp + invocation.get(methodname);
         }
         return node;
     }
