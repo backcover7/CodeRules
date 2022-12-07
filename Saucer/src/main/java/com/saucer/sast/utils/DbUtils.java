@@ -192,78 +192,86 @@ public class DbUtils {
         }
     }
 
-    public static RuleNode QueryAnnotationTypeNode(String namespace, String classtype) throws SQLException {
+    public static RuleNode QueryAnnotationTypeNode(String namespace, String classtype) {
         String sql = "SELECT kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND kind LIKE 'annotation%'";
         return QueryDeclaringType(sql, namespace, classtype);
     }
 
-    public static RuleNode QueryConstructorNode(String namespace, String classtype) throws SQLException {
+    public static RuleNode QueryConstructorNode(String namespace, String classtype) {
         String sql = "SELECT kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND methodname = '<init>'";
         RuleNode ruleNode = QueryDeclaringType(sql, namespace, classtype);
         ruleNode.setMethod("<init>");
         return ruleNode;
     }
 
-    private static RuleNode QueryDeclaringType(String sql, String namespace, String classtype) throws SQLException {
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, namespace);
-        statement.setString(2, classtype);
-
-        ResultSet resultSet = statement.executeQuery();
-
+    private static RuleNode QueryDeclaringType(String sql, String namespace, String classtype) {
         RuleNode ruleNode = new RuleNode();
-        ruleNode.setNamespace(namespace);
-        ruleNode.setClasstype(classtype);
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, namespace);
+            statement.setString(2, classtype);
 
-        while(resultSet.next()) {
-            ruleNode.setKind(resultSet.getString(KIND));
-            ruleNode.setNodetype(resultSet.getString(NODETYPE));
-            statement.close();
+            ResultSet resultSet = statement.executeQuery();
+
+            ruleNode.setNamespace(namespace);
+            ruleNode.setClasstype(classtype);
+
+            while(resultSet.next()) {
+                ruleNode.setKind(resultSet.getString(KIND));
+                ruleNode.setNodetype(resultSet.getString(NODETYPE));
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ruleNode;
     }
 
-    public static RuleNode QueryInvocationMethodNode(String namespace, String classtype, String methodname) throws SQLException {
+    public static RuleNode QueryInvocationMethodNode(String namespace, String classtype, String methodname) {
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype != "
                 + "\"" + RuleNode.GADGETSOURCENODE + "\"";
         return QueryMethodNode(sql, namespace, classtype, methodname);
     }
 
-    public static RuleNode QueryCtExecutableMethodNode(String namespace, String classtype, String methodname) throws SQLException {
+    public static RuleNode QueryCtExecutableMethodNode(String namespace, String classtype, String methodname) {
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype = "
                 + "\"" + RuleNode.GADGETSOURCENODE + "\"";
         return QueryMethodNode(sql, namespace, classtype, methodname);
     }
 
-    public static RuleNode QueryNegativeNode(String namespace, String classtype, String methodname) throws SQLException {
+    public static RuleNode QueryNegativeNode(String namespace, String classtype, String methodname) {
         String sql = "SELECT methodname, kind, nodetype FROM node WHERE namespace = ? AND classtype = ? AND nodetype = "
                 + "\"" + RuleNode.NEGATIVENODE + "\"";
         return QueryMethodNode(sql, namespace, classtype, methodname);
     }
 
-    private static RuleNode QueryMethodNode(String sql, String namespace, String classtype, String methodname) throws SQLException {
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, namespace);
-        statement.setString(2, classtype);
-
-        ResultSet resultSet = statement.executeQuery();
-
+    private static RuleNode QueryMethodNode(String sql, String namespace, String classtype, String methodname) {
         RuleNode ruleNode = new RuleNode();
-        ruleNode.setNamespace(namespace);
-        ruleNode.setClasstype(classtype);
-        ruleNode.setMethod(methodname);
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setString(1, namespace);
+            statement.setString(2, classtype);
 
-        while(resultSet.next()) {
-            String method = resultSet.getString(METHOD);
-            String kind = resultSet.getString(KIND);
-            String nodeType = resultSet.getString(NODETYPE);
+            ResultSet resultSet = statement.executeQuery();
 
-            ruleNode.setKind(kind);
-            if (method.startsWith(CharUtils.leftbracket) && CharUtils.RegexMatch(method, methodname)) {
-                ruleNode.setNodetype(nodeType);
-            } else if (method.equals(methodname)) {
-                ruleNode.setNodetype(nodeType);
+            ruleNode.setNamespace(namespace);
+            ruleNode.setClasstype(classtype);
+            ruleNode.setMethod(methodname);
+
+            while(resultSet.next()) {
+                String method = resultSet.getString(METHOD);
+                String kind = resultSet.getString(KIND);
+                String nodeType = resultSet.getString(NODETYPE);
+
+                ruleNode.setKind(kind);
+                if (method.startsWith(CharUtils.leftbracket) && CharUtils.RegexMatch(method, methodname)) {
+                    ruleNode.setNodetype(nodeType);
+                } else if (method.equals(methodname)) {
+                    ruleNode.setNodetype(nodeType);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return ruleNode;
     }
@@ -278,7 +286,6 @@ public class DbUtils {
             (String namespace, String classtype, String methodname, String signature) throws SQLException {
         String sql = "SELECT * FROM callgraph WHERE prenamespace = ? AND preclasstype = ? AND premethodname = ? AND presignature = ?";
         PreparedStatement statement = conn.prepareStatement(sql);
-
         statement.setString(1, namespace);
         statement.setString(2, classtype);
         statement.setString(3, methodname);

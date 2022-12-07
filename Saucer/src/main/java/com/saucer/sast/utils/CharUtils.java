@@ -22,6 +22,7 @@ public class CharUtils {
     public final static String at = "@";
     public final static String semicolon = ";";
     public final static String dash = "-";
+    public final static String vertical = "|";
     public final static String carrot = "^";
     public final static String singleQuote = "'";
     public final static String doubleQuote = "\"";
@@ -44,6 +45,16 @@ public class CharUtils {
     public final static String PdfExtension = ".pdf";
     public final static String HtmlExtension = ".html";
     public final static String JAVA = "java";
+    public final static String banner = " ________  ________  ___  ___  ________  _______   ________          ___       \n" +
+            "|\\   ____\\|\\   __  \\|\\  \\|\\  \\|\\   ____\\|\\  ___ \\ |\\   __  \\        |\\  \\      \n" +
+            "\\ \\  \\___|\\ \\  \\|\\  \\ \\  \\\\\\  \\ \\  \\___|\\ \\   __/|\\ \\  \\|\\  \\       \\ \\  \\     \n" +
+            " \\ \\_____  \\ \\   __  \\ \\  \\\\\\  \\ \\  \\    \\ \\  \\_|/_\\ \\   _  _\\       \\ \\  \\    \n" +
+            "  \\|____|\\  \\ \\  \\ \\  \\ \\  \\\\\\  \\ \\  \\____\\ \\  \\_|\\ \\ \\  \\\\  \\|       \\ \\__\\   \n" +
+            "    ____\\_\\  \\ \\__\\ \\__\\ \\_______\\ \\_______\\ \\_______\\ \\__\\\\ _\\        \\|__|   \n" +
+            "   |\\_________\\|__|\\|__|\\|_______|\\|_______|\\|_______|\\|__|\\|__|           ___ \n" +
+            "   \\|_________|                                                           |\\__\\\n" +
+            "                                                                          \\|__|\n" +
+            "                                                                               ";
 
     public static boolean RegexMatch(String regex, String string) {
         return RegexMatchLastOccurence(regex, string) != null;
@@ -61,12 +72,5 @@ public class CharUtils {
     public static String StringSubsitute(Map<String, String> map, String template) {
         StringSubstitutor stringSubstitutor = new StringSubstitutor(map);
         return stringSubstitutor.replace(template);
-    }
-
-    public static String SimplifySourceCode(String code, String edgeType) {
-        if (edgeType.equals(CallGraphNode.SourceFlowType) || edgeType.equals(CallGraphNode.SinkNodeType)){
-
-        }
-        return code;
     }
 }

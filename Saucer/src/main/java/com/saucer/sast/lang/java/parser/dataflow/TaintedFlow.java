@@ -18,10 +18,7 @@ public class TaintedFlow {
     public final static String WEBSOURCEFLAG = "websourceflag";
     public final static String GADGETSOURCEFLAGE = "gadgetsourceflag";
     public final static String SETTERGETTERCONSTRUCTORFLAG = "settergetterconstructorflag";
-    List<String> TaintFlows = Arrays.asList(WEBSOURCEFLAG, GADGETSOURCEFLAGE
-            // TODO
-//            , SETTERGETTERCONSTRUCTORFLAG
-    );
+    List<String> TaintFlows = Arrays.asList(WEBSOURCEFLAG, GADGETSOURCEFLAGE, SETTERGETTERCONSTRUCTORFLAG);
 
     private static String AnanlyzeFlag;
     private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4WebSource;
@@ -37,11 +34,11 @@ public class TaintedFlow {
     private String ProgressBarHint(String SourceFlag) {
         switch (SourceFlag) {
             case WEBSOURCEFLAG:
-                return "[.] Web Sources Flow";
+                return "[.] Web Sources Flow     ";
             case GADGETSOURCEFLAGE:
-                return "[.] Gadget Flow     ";
+                return "[.] Native Gadget Flow   ";
             case SETTERGETTERCONSTRUCTORFLAG:
-                return "[.] JSON Flow       ";
+                return "[.] JSON Marshalsec Flow ";
             default:
                 return CharUtils.empty;
         }
@@ -147,19 +144,7 @@ public class TaintedFlow {
                     } else {
                         // Invocation source
                         invocation.put(SOURCEINVOCATION, source.get(DbUtils.SUCCCODE));
-                        String taint4source = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
-                                FileUtils.ReadFile2String(FileUtils.taint4source));
-
-                        try {
-                            Path taint4sourcePath =
-                                    Files.createTempFile(Paths.get(FileUtils.tmp), "taint4source.yaml", ".yaml");
-                            FileUtils.WriteFile(taint4sourcePath.toAbsolutePath().toString(), taint4source, false);
-                            SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
-                                    taint4sourcePath.toAbsolutePath().toString(), SpoonConfig.codebase);
-                            Files.deleteIfExists(taint4sourcePath);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint4source);
                     }
 
                     if (SemgrepScanRes.size() != 0) {
@@ -184,31 +169,28 @@ public class TaintedFlow {
 
     private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
         if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetNodeFlowType)) {
-            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(invocation);
-            if (SemgrepScanRes.size() != 0 ) {
-                LinkedList<HashMap<String, String>> taintedFlowClone =
-                        (LinkedList<HashMap<String, String>>) taintedFlow.clone();
-                switch (AnanlyzeFlag) {
-                    case WEBSOURCEFLAG:
-                        taintedPaths4WebSource.add(taintedFlowClone);
-                        break;
-                    case GADGETSOURCEFLAGE:
-                        taintedPaths4GadgetSource.add(taintedFlowClone);
-                        break;
-                    case SETTERGETTERCONSTRUCTORFLAG:
-                        taintedPaths4SetterGetterConstructorSource.add(taintedFlowClone);
-                        break;
-                    default:
-                        break;
-                }
-                try {
-                    DbUtils.UpdateSinkFlowEdge(invocation);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                taintedFlow.removeLast();
-                return;
+            LinkedList<HashMap<String, String>> taintedFlowClone =
+                    (LinkedList<HashMap<String, String>>) taintedFlow.clone();
+            switch (AnanlyzeFlag) {
+                case WEBSOURCEFLAG:
+                    taintedPaths4WebSource.add(taintedFlowClone);
+                    break;
+                case GADGETSOURCEFLAGE:
+                    taintedPaths4GadgetSource.add(taintedFlowClone);
+                    break;
+                case SETTERGETTERCONSTRUCTORFLAG:
+                    taintedPaths4SetterGetterConstructorSource.add(taintedFlowClone);
+                    break;
+                default:
+                    break;
             }
+            try {
+                DbUtils.UpdateSinkFlowEdge(invocation);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            taintedFlow.removeLast();
+            return;
         }
         String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
         String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
@@ -236,23 +218,33 @@ public class TaintedFlow {
     }
 
     public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
-        if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0) {
-            return new ArrayList<>();
+        ArrayList<HashMap<String, Object>> SemgrepScanRes;
+        if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0 ||
+                ParseParamSize(invocation.get(DbUtils.SUCCSIGNATURE)) == 0) {
+            // taint flow from non-param method to non-param invocation
+            // taint flow from has-param method to non-param invocation
+            SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2nonparaminvocation);
+        } else {
+            // taint flow from has-param method to has-param invocation
+            SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2invocation);
         }
-        String taint2invocation = CharUtils.StringSubsitute(ProcessTemplateMap(invocation),
-                FileUtils.ReadFile2String(FileUtils.taint2invocation));
+        return SemgrepScanRes;
+    }
 
-        ArrayList<HashMap<String, Object>> res = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String templatePath) {
+        ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+        String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), FileUtils.ReadFile2String(templatePath));
         try {
-            Path taint2invocationPath = Files.createTempFile(Paths.get(FileUtils.tmp), "taint2invocation", ".yaml");
-            FileUtils.WriteFile(taint2invocationPath.toAbsolutePath().toString(), taint2invocation, false);
-            res = SemgrepUtils.RunSemgrepRule(
-                    taint2invocationPath.toAbsolutePath().toString(), SpoonConfig.codebase);
-            Files.deleteIfExists(taint2invocationPath);
+            Path tmpRule = Files.createTempFile(Paths.get(FileUtils.tmp), Paths.get(templatePath).getFileName().toString(), ".yaml");
+            FileUtils.WriteFile(tmpRule.toAbsolutePath().toString(), yamlRule, false);
+            SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
+                    tmpRule.toAbsolutePath().toString(), SpoonConfig.codebase);
+            Files.deleteIfExists(tmpRule);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return res;
+
+        return SemgrepScanRes;
     }
 
     private HashMap<String, String> ProcessTemplateMap(HashMap<String, String> map) {
@@ -276,8 +268,11 @@ public class TaintedFlow {
         return map;
     }
 
-    private int ParseParamSize(String methodSignature) {
+    public int ParseParamSize(String methodSignature) {
         String parameters = CharUtils.RegexMatchLastOccurence("\\(.*\\)", methodSignature);
+        if (parameters.contains(CharUtils.leftbracket + CharUtils.rightbracket)) {
+            return 0;
+        }
         return parameters.split(CharUtils.comma).length;
     }
 }

@@ -6,7 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-cases/java/test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +57,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/test-cases/java" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
@@ -60,8 +69,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
+      <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/lib" />
@@ -131,7 +140,7 @@
       <workItem from="1669689632716" duration="39937000" />
       <workItem from="1669829392836" duration="7823000" />
       <workItem from="1669837248927" duration="66123000" />
-      <workItem from="1670007052393" duration="88376000" />
+      <workItem from="1670007052393" duration="102529000" />
     </task>
     <servers />
   </component>
@@ -152,15 +161,10 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <breakpoint type="java-exception">
-          <properties class="java.lang.ClassCastException" package="java.lang" />
-          <option name="timeStamp" value="262" />
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.NullPointerException" package="java.lang" />
+          <option name="timeStamp" value="649" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java</url>
-          <line>160</line>
-          <option name="timeStamp" value="599" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -60,7 +60,7 @@ public class MarkdownUtils {
     }
 
     public static void ReportTaintedFlow4SetterGetterConstructorSourceHeader() {
-        stringBuilder.append(header("[P0/1/2] - Exploitable Tainted Flows from Marshalsec Sources", 2)).append(CharUtils.LF);
+        stringBuilder.append(header("[P0/1/2] - Exploitable Tainted Flows from JSON Marshalsec Sources", 2)).append(CharUtils.LF);
     }
 
     public static void ReportGadgetSinkNode() {
@@ -118,24 +118,23 @@ public class MarkdownUtils {
         stringBuilder.append("### ")
                 .append(new BoldText(gadgetFlowSink.getKind()))
                 .append(CharUtils.space).append(CharUtils.dash).append(CharUtils.space)
-                .append(Link(String.join(CharUtils.dot, gadgetFlowSource.getNamespace(), gadgetFlowSource.getClasstype(), gadgetFlowSource.getMethod()),
+                .append(Link(
+                        String.join(CharUtils.dot, gadgetFlowSource.getNamespace(), gadgetFlowSource.getClasstype())
+                                + CharUtils.sharp + ReplaceInitMethod(gadgetFlowSource),
                 Paths.get(gadgetFlowSink.getFile()).toUri() + CharUtils.sharp + gadgetFlowSource.getLine()
                 ))
                 .append(CharUtils.LF);
-//        String text;
-//        if (gadgetFlowSink.getKind().contains("annotation")) {
-//            text = String.join(CharUtils.dot,
-//                    gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype());
-//        } else {
-//            text = String.join(CharUtils.dot,
-//                    gadgetFlowSink.getNamespace(), gadgetFlowSink.getClasstype(), gadgetFlowSink.getMethod());
-//        }
-//        stringBuilder.append(Link(text, gadgetFlowSink.getFile() + CharUtils.sharp + gadgetFlowSink.getLine())).append(newline);
 
-//        stringBuilder.append(CodeBlock(gadgetFlowSink.getMethodcode()));
-//        stringBuilder.append(CodeBlock(gadgetFlowSink.getMethodcode(), gadgetFlowSink.getCode()));
         stringBuilder.append(CodeBlock((String) node.get(DbUtils.DATATRACE)));
         stringBuilder.append(newline);
+    }
+
+    private static String ReplaceInitMethod(RuleNode gadgetFlowSource) {
+        if (gadgetFlowSource.getMethod().equals("<init>")) {
+            return gadgetFlowSource.getClasstype();
+        } else {
+            return gadgetFlowSource.getMethod();
+        }
     }
 
     public static void ReportNode(RuleNode ruleNode) {
@@ -149,7 +148,7 @@ public class MarkdownUtils {
             );
         } else {
             stringBuilder.append(
-                    Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype(), ruleNode.getMethod()), position));
+                    Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype()) + CharUtils.sharp + ruleNode.getMethod(), position));
         }
         stringBuilder.append(CharUtils.LF);
 //        stringBuilder.append(CodeBlock(ruleNode.getMethodcode(), ruleNode.getCode()));

@@ -29,7 +29,6 @@ public class CodeQL {
             } else if (Paths.get(csvFile).getFileName().toString().contains("sink")) {
                 WriteTarget = FileUtils.sinks;
             } else {
-                // TODO: else summary or negative-summary?
                 continue;
             }
 

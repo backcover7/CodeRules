@@ -100,7 +100,7 @@ public class SemgrepUtils {
                         dataflow_trace += ConcatFlowLine(var) + CharUtils.LF;
                     }
                 }
-                dataflow_trace += line + CharUtils.space + lines.trim();
+                dataflow_trace += line + CharUtils.vertical + CharUtils.space + lines.trim();
             }
 
             HashMap<String, Object> resultMap = new HashMap<>();
@@ -155,6 +155,6 @@ public class SemgrepUtils {
 
         String sourceLine = String.valueOf(((HashMap<String, Object>) ((HashMap<String, Object>)
                 flowNode.get(Location)).get(Start)).get(Line));
-        return sourceLine + CharUtils.space + sourceContent.trim();
+        return sourceLine + CharUtils.vertical + CharUtils.space + sourceContent.trim();
     }
 }

@@ -19,14 +19,17 @@ public class test {
 }
 
 class target {
-    public void branch(String text) {System.out.println("x");}
+    public void branch() {
+        new test().finalize();
+        System.out.println("x");
+    }
 
     public String intermediate(String data) {
         return data.toLowerCase();
     }
 
     public void rce(String payload) throws IOException {
-        branch(payload);
+        branch();
         String data = intermediate(payload);
         Object anything = "A".toUpperCase(java.util.Locale.ROOT);
         Runtime.getRuntime().exec(data);
