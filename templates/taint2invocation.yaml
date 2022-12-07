@@ -1,0 +1,18 @@
+rules:
+  - id: taint2invocation
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: ${methodDefinition}
+        - pattern-either:
+${parampattern}
+    pattern-sinks:
+      - pattern: ${succcode}
+    paths:
+      include:
+        - ${filepath}
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING

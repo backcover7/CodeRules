@@ -22,14 +22,13 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class Scanner {
-    public void Scan() throws Exception {
+    public void Scan(String flow) throws Exception {
         System.out.println("[*] Analyzing the target source code ...");
         init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
         TaintedFlow taintedFlow = new TaintedFlow();
-        taintedFlow.Analyze();
-//        taintedFlow.Analyze(TaintedFlow.SETTERGETTERCONSTRUCTORFLAG);
+        taintedFlow.Analyze(flow);
 
         System.out.println("[*] Creating final scan reports ...");
         MarkdownUtils markdownUtils = new MarkdownUtils();

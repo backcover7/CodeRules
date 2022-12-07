@@ -1,7 +1,6 @@
 package com.saucer.sast.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.shiro.crypto.hash.Hash;
 
 import java.io.IOException;
 import java.util.*;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class FileUtils {
     public static String csv = Paths.get("../csv").toAbsolutePath().toString();
+    public final static String NodesDirectory = Paths.get(FileUtils.csv, "nodes").toString();
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();
     public static String sources = Paths.get(collections, "sources.csv").toString();

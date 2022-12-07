@@ -15,11 +15,12 @@ public class TaintedFlow {
     private final static String SOURCEINVOCATION = "sourceinvocation";
     private final static String PARAMPATTERN = "parampattern";
 
-    public final static String WEBSOURCEFLAG = "websourceflag";
-    public final static String GADGETSOURCEFLAGE = "gadgetsourceflag";
-    public final static String SETTERGETTERCONSTRUCTORFLAG = "settergetterconstructorflag";
-    List<String> TaintFlows = Arrays.asList(WEBSOURCEFLAG, GADGETSOURCEFLAGE, SETTERGETTERCONSTRUCTORFLAG);
+    public final static String ALLFLAG = "all";
+    public final static String WEBSOURCEFLAG = "web";
+    public final static String GADGETSOURCEFLAGE = "gadget";
+    public final static String SETTERGETTERCONSTRUCTORFLAG = "json";
 
+    public static List<String> TaintedFlowFlags = Arrays.asList(WEBSOURCEFLAG, GADGETSOURCEFLAGE, SETTERGETTERCONSTRUCTORFLAG);
     private static String AnanlyzeFlag;
     private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4WebSource;
     private static HashSet<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource;
@@ -44,8 +45,8 @@ public class TaintedFlow {
         }
     }
 
-    public void Analyze() {
-        TaintFlows.forEach(flow -> {
+    private void Analyze() {
+        TaintedFlowFlags.forEach(flow -> {
             try {
                 Analyze(flow);
             } catch (Exception e) {
@@ -57,6 +58,9 @@ public class TaintedFlow {
     public void Analyze(String SourceFlag) throws SQLException {
         AnanlyzeFlag = SourceFlag;
         switch (SourceFlag) {
+            case ALLFLAG:
+                Analyze();
+                break;
             case WEBSOURCEFLAG:
                 AnalyzeFromSource();
                 if (taintedPaths4WebSource.size() != 0) {
@@ -218,15 +222,17 @@ public class TaintedFlow {
     }
 
     public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
-        ArrayList<HashMap<String, Object>> SemgrepScanRes;
-        if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0 ||
-                ParseParamSize(invocation.get(DbUtils.SUCCSIGNATURE)) == 0) {
-            // taint flow from non-param method to non-param invocation
-            // taint flow from has-param method to non-param invocation
-            SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2nonparaminvocation);
-        } else {
-            // taint flow from has-param method to has-param invocation
-            SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2invocation);
+        ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+        if (invocation.get(DbUtils.SUCCMETHODNAME) != null) {
+            if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0 ||
+                    ParseParamSize(invocation.get(DbUtils.SUCCSIGNATURE)) == 0) {
+                // taint flow from non-param method to non-param invocation
+                // taint flow from has-param method to non-param invocation
+                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2nonparaminvocation);
+            } else {
+                // taint flow from has-param method to has-param invocation
+                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2invocation);
+            }
         }
         return SemgrepScanRes;
     }
