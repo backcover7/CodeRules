@@ -3,6 +3,7 @@ package com.saucer.sast.lang.javascript;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.SemgrepUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class DependencyConfusion implements VulnScan {
     private final static String dependency_confusion_yaml =
             Paths.get(SemgrepUtils.SemgrepJavascriptSinkRules, "dependency_confusion.yaml").toString();
@@ -35,7 +37,7 @@ public class DependencyConfusion implements VulnScan {
 
     public void Scan(String codebase) throws IOException, InterruptedException {
         ArrayList<HashMap<String, Object>> resultList = SemgrepUtils.RunSemgrepRule(dependency_confusion_yaml, codebase);
-        System.out.println("[.] Running Dependency Confusion check...");
+        log.info("[.] Running Dependency Confusion check...");
         for (HashMap<String, Object> result : resultList) {
             CheckVuln(result);     // Example: "@rollup/plugin-replace": "^2.2.0"
             reportContent(result);
@@ -47,10 +49,10 @@ public class DependencyConfusion implements VulnScan {
         String lines = ((String) result.get(SemgrepUtils.Lines)).trim();
         String found = "[+] Found Dependency Confusion vulnerability!";
         if (FlagOrgDoesNotExists) {
-            System.out.println(String.join(CharUtils.space,found, lines, position, "The organization could be registered!"));
+            log.info(String.join(CharUtils.space,found, lines, position, "The organization could be registered!"));
             FlagOrgDoesNotExists = false;
         } else if (FlagPckDoesNotExists) {
-            System.out.println(String.join(CharUtils.space,found, lines, position, "The package does not exist!"));
+            log.info(String.join(CharUtils.space,found, lines, position, "The package does not exist!"));
             FlagPckDoesNotExists = false;
         }
     }

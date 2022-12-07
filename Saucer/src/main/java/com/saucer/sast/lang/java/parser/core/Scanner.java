@@ -6,6 +6,7 @@ import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.MarkdownUtils;
 import com.saucer.sast.utils.SemgrepUtils;
+import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
@@ -21,23 +22,24 @@ import spoon.support.reflect.declaration.CtClassImpl;
 import java.sql.SQLException;
 import java.util.*;
 
+@Slf4j
 public class Scanner {
     public void Scan() throws Exception {
-        System.out.println("[*] Analyzing the target source code ...");
+        log.info("[*] Analyzing the target source code ...");
         init();
 
-        System.out.println("[*] Processing global tainted flow analysis ...");
+        log.info("[*] Processing global tainted flow analysis ...");
         TaintedFlow taintedFlow = new TaintedFlow();
         taintedFlow.Analyze();
 //        taintedFlow.Analyze(TaintedFlow.SETTERGETTERCONSTRUCTORFLAG);
 
-        System.out.println("[*] Creating final scan reports ...");
+        log.info("[*] Creating final scan reports ...");
         MarkdownUtils markdownUtils = new MarkdownUtils();
         markdownUtils.init();
         FlagThreats();
         markdownUtils.finish();
 
-        System.out.println("[!] Done!");
+        log.info("[!] Done!");
     }
 
     public void init() {

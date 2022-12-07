@@ -16,7 +16,7 @@ public class SpoonConfig {
     public static CtModel model;
 
     public void init(String codebase) {
-        SpoonConfig.codebase = Paths.get(codebase).toAbsolutePath().toString();
+        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().toString();
         launcher = getSpoonMavenLauncher();
         setEnv(launcher.getEnvironment());
         launcher.buildModel();

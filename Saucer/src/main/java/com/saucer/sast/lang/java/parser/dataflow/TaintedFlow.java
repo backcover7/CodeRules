@@ -2,6 +2,7 @@ package com.saucer.sast.lang.java.parser.dataflow;
 
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ProgressBar;
 
 import java.nio.file.Files;
@@ -10,6 +11,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
+@Slf4j
 public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
     private final static String SOURCEINVOCATION = "sourceinvocation";
@@ -60,26 +62,26 @@ public class TaintedFlow {
             case WEBSOURCEFLAG:
                 AnalyzeFromSource();
                 if (taintedPaths4WebSource.size() != 0) {
-                    System.out.println("[+] Found " + taintedPaths4WebSource.size() + " paths from web source to sinks!");
+                    log.info("[+] Found " + taintedPaths4WebSource.size() + " paths from web source to sinks!");
                 } else {
-                    System.out.println("[-] Found nothing from web sources to sinks.");
+                    log.info("[-] Found nothing from web sources to sinks.");
                 }
                 break;
             case GADGETSOURCEFLAGE:
                 AnalyzeFromGadgetSource();
                 if (taintedPaths4GadgetSource.size() != 0) {
-                    System.out.println("[+] Found " + taintedPaths4GadgetSource.size() + " paths from gadget source to sinks!");
+                    log.info("[+] Found " + taintedPaths4GadgetSource.size() + " paths from gadget source to sinks!");
                 } else {
-                    System.out.println("[-] Found nothing from gadget sources to sinks.");
+                    log.info("[-] Found nothing from gadget sources to sinks.");
                 }
                 break;
             case SETTERGETTERCONSTRUCTORFLAG:
                 AnalyzeFromSetterGetterConsrtructor();
                 if (taintedPaths4SetterGetterConstructorSource.size() != 0) {
-                    System.out.println("[+] Found " + taintedPaths4SetterGetterConstructorSource.size() +
+                    log.info("[+] Found " + taintedPaths4SetterGetterConstructorSource.size() +
                             " paths from JSON marshalsec source to sinks!");
                 } else {
-                    System.out.println("[-] Found nothing from JSON marshalsec sources to sinks.");
+                    log.info("[-] Found nothing from JSON marshalsec sources to sinks.");
                 }
                 break;
             default:

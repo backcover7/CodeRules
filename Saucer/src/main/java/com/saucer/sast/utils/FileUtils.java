@@ -13,12 +13,14 @@ public class FileUtils {
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();
     public static String sources = Paths.get(collections, "sources.csv").toString();
+    
     public static String resources = Paths.get("src/main/resources").toAbsolutePath().toString();
-
     public static String tmp = Paths.get(resources, "tmp").toString();
-    public static String taint4source = Paths.get(resources, "taint4source.yaml").toString();
-    public static String taint2invocation = Paths.get(resources, "taint2invocation.yaml").toString();
-    public static String taint2nonparaminvocation = Paths.get(resources, "taint2nonparaminvocation.yaml").toString();
+    public static String templates = Paths.get(resources, "templates").toString();
+    
+    public static String taint4source = Paths.get(templates, "taint4source.yaml").toString();
+    public static String taint2invocation = Paths.get(templates, "taint2invocation.yaml").toString();
+    public static String taint2nonparaminvocation = Paths.get(templates, "taint2nonparaminvocation.yaml").toString();
 
     public static String report = Paths.get(resources, "report").toString();
 
