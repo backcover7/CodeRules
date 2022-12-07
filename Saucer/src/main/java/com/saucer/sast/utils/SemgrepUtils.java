@@ -1,14 +1,12 @@
 package com.saucer.sast.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.Hash;
 
 import java.io.IOException;
 import java.util.*;
 import java.nio.file.Paths;
 
-@Slf4j
 public class SemgrepUtils {
     public final static String SemgrepRules = Paths.get("../semgrep").toAbsolutePath().toString();
 
@@ -124,7 +122,7 @@ public class SemgrepUtils {
      */
     @Deprecated
     public static ArrayList<HashMap<String, String>> ProcessEMACSResult(Process process) throws IOException {
-        log.info("[.] Processing EMAC format result...");
+        System.out.println("[.] Processing EMAC format result...");
         String stdout = ProcessUtils.StdoutProcess(process);
 
         String[] resultArray = stdout.split(CharUtils.LF);

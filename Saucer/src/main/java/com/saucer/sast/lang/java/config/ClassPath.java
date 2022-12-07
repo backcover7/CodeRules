@@ -1,10 +1,7 @@
 package com.saucer.sast.lang.java.config;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.nio.file.Paths;
 
-@Slf4j
 public class ClassPath {
     public final static String SRC_MAIN = Paths.get("src/main").toAbsolutePath().toString();
     public final static String SRC_MAIN_LIB = Paths.get(SRC_MAIN, "lib").toString();
@@ -21,7 +18,7 @@ public class ClassPath {
     public void DownloadPomDepdencies(String POM, String directory) {
         String[] MvnCmd = new String[] {"mvn", "-f", POM, "dependency:copy-dependencies", "-DoutputDirectory=" + directory, "-DexcludeTransitive=true"};
 
-        log.info("[.] Downloading dependencies from pom.xml ...");
+        System.out.println("[.] Downloading dependencies from pom.xml ...");
         try {
             Process process = Runtime.getRuntime().exec(MvnCmd);
             process.waitFor();
