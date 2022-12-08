@@ -1,0 +1,21 @@
+rules:
+  - id: taint2invocation
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: getIndexedProperty($VAR0,$VAR1,$VAR2){...}
+        - pattern-either:
+          - pattern: $VAR0
+          - pattern: $VAR1
+          - pattern: $VAR2
+    pattern-sinks:
+      - pattern: new NoSuchMethodException("Unknown property '" +
+                    name + "' on bean class '" + bean.getClass() + "'")
+    paths:
+      include:
+        - /Users/kang.hou/Downloads/commons-beanutils-master/src/main/java/org/apache/commons/beanutils2/PropertyUtilsBean.java
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING

@@ -12,6 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
 public class TaintedFlow {
     private final static String METHODDEFINITION = "methodDefinition";
@@ -171,10 +173,88 @@ public class TaintedFlow {
                 e.printStackTrace();
             }
         });
+    }
 
+    class FlowAnalysisTask extends RecursiveTask<Void> {
+        private HashMap<String, String> invocation;
+        private LinkedList<HashMap<String, String>> taintedFlow;
+
+        public FlowAnalysisTask(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) {
+            this.invocation = invocation;
+            this.taintedFlow = taintedFlow;
+        }
+
+        @Override
+        protected Void compute() {
+            if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetNodeFlowType)) {
+                LinkedList<HashMap<String, String>> taintedFlowClone =
+                        (LinkedList<HashMap<String, String>>) taintedFlow.clone();
+                switch (AnanlyzeFlag) {
+                    case TaintedFlow.WEBSOURCEFLAG:
+                        taintedPaths4WebSource.add(taintedFlowClone);
+                        break;
+                    case TaintedFlow.GADGETSOURCEFLAGE:
+                        taintedPaths4GadgetSource.add(taintedFlowClone);
+                        break;
+                    case TaintedFlow.SETTERGETTERCONSTRUCTORFLAG:
+                        taintedPaths4SetterGetterConstructorSource.add(taintedFlowClone);
+                        break;
+                    default:
+                        break;
+                }
+                try {
+                    DbUtils.UpdateSinkFlowEdge(invocation);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                taintedFlow.removeLast();
+                return null;
+            }
+            String namespace = invocation.get(DbUtils.SUCCNAMESPACE);
+            String classtype = invocation.get(DbUtils.SUCCCLASSTYPE);
+            String methodname = invocation.get(DbUtils.SUCCMETHODNAME);
+            String signature = invocation.get(DbUtils.SUCCSIGNATURE);
+            ArrayList<HashMap<String, String>> succinvocations = null;
+            try {
+                succinvocations = DbUtils.QuerySuccCallGraph(namespace, classtype, methodname, signature);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            ArrayList<FlowAnalysisTask> tasks = new ArrayList<>();
+            for (HashMap<String, String> succinvocation : succinvocations) {
+                LinkedList<HashMap<String, String>> taintedFlowCopy = (LinkedList<HashMap<String, String>>) taintedFlow.clone();
+                ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+                if (taintedFlowCopy.contains(succinvocation)) {
+                    continue;
+                }
+
+                if (SemgrepScanRes.size() != 0) {
+                    taintedFlowCopy.add(succinvocation);
+                    FlowAnalysisTask task = new FlowAnalysisTask(succinvocation, taintedFlowCopy);
+                    task.fork();
+                    tasks.add(task);
+                }
+            }
+
+            for (FlowAnalysisTask task : tasks) {
+                task.join();
+            }
+            taintedFlow.removeLast();
+            return null;
+        }
     }
 
     private void FlowAnalysis(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
+        FlowAnalysisTask flowAnalysisTask = new FlowAnalysisTask(invocation, taintedFlow);
+        ForkJoinPool pool = new ForkJoinPool(16);
+        pool.invoke(flowAnalysisTask);
+    }
+
+    @Deprecated
+    // This method use parallelstream to improve the performance of the for loop in the recursive method.
+    // It is not better than using recursivetask to imporve the performance of whole method
+    private void FlowAnalysis0(HashMap<String, String> invocation, LinkedList<HashMap<String, String>> taintedFlow) throws SQLException {
         if (invocation.get(DbUtils.EDGETYPE).equals(CallGraphNode.SinkGadgetNodeFlowType)) {
             LinkedList<HashMap<String, String>> taintedFlowClone =
                     (LinkedList<HashMap<String, String>>) taintedFlow.clone();
@@ -245,6 +325,7 @@ public class TaintedFlow {
         String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), temaple);
 
         try {
+            // TODO delete when exit
             Path tmpRule = Files.createTempFile(Paths.get(FileUtils.OutputDirectory), "temprule", ".yaml");
             FileUtils.WriteFile(tmpRule.toAbsolutePath().toString(), yamlRule, false);
             SemgrepScanRes = SemgrepUtils.RunSemgrepRule(

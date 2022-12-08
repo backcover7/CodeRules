@@ -1,0 +1,16 @@
+rules:
+  - id: taint2nonparaminvocation
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: invokeMethod($VAR0,$VAR1,$VAR2){...}
+    pattern-sinks:
+      - pattern: cause.getMessage()
+    paths:
+      include:
+        - /Users/kang.hou/Downloads/commons-beanutils-master/src/main/java/org/apache/commons/beanutils2/PropertyUtilsBean.java
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING

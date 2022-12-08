@@ -1,0 +1,18 @@
+rules:
+  - id: taint2invocation
+    options:
+      symbolic_propagation: true
+    mode: taint
+    pattern-sources:
+      - patterns:
+        - pattern-inside: getIntrospectionData($VAR0){...}
+        - pattern-either:
+          - pattern: $VAR0
+    pattern-sinks:
+      - pattern: descriptorsCache.put(beanClass, data);
+    paths:
+      include:
+        - /Users/kang.hou/Downloads/commons-beanutils-master/src/main/java/org/apache/commons/beanutils2/PropertyUtilsBean.java
+    message: Semgrep found a taint flow from specific argument to other arguments
+    languages: [java]
+    severity: WARNING
