@@ -29,7 +29,7 @@ public class MarkdownUtils {
         String filenametimestamp = FilenameDateFormat.format(date);
         formatedtimestamp = TitleDateFormat.format(date);
 
-        report = Paths.get(FileUtils.report,
+        report = Paths.get(FileUtils.OutputDirectory,
                 Paths.get(SpoonConfig.codebase).getFileName().toString() +
                 "_Saucer_SAST_Report_" + filenametimestamp + CharUtils.MarkdownExtension).toAbsolutePath().toString();
         stringBuilder = new StringBuilder();

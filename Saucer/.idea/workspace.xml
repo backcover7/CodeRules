@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="Saucer:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Saucer_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/ClassPath.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/JdbcRowSetImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-cases/java/test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../templates/taint2invocation.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../templates/taint2nonparaminvocation.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../templates/taint4source.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../test-cases/java/test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +38,7 @@
         <option value="AnnotationType" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="module-info" />
       </list>
     </option>
   </component>
@@ -76,11 +85,11 @@
       <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/resources/templates" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main/lib" />
+      <recent name="$PROJECT_DIR$/src/main/resources/templates" />
       <recent name="$PROJECT_DIR$/src/main/test-cases" />
       <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
-      <recent name="$PROJECT_DIR$/src/main/spoon" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
@@ -94,15 +103,15 @@
   <component name="RunManager" selected="Application.run_java">
     <configuration name="run_java" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.java.Main" />
-      <module name="Saucer" />
-      <option name="PROGRAM_PARAMETERS" value="-d . -f gadget $PROJECT_DIR$/src/main/test-cases/java/test.java" />
+      <module name="Sacuer" />
+      <option name="PROGRAM_PARAMETERS" value="-d . -r ../csv/nodes -f web $PROJECT_DIR$/../test-cases/java/test.java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="run_js" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.javascript.run" />
-      <module name="Saucer" />
+      <module name="Sacuer" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.saucer.sast.lang.javascript.*" />
@@ -147,7 +156,8 @@
       <workItem from="1669837248927" duration="66123000" />
       <workItem from="1670007052393" duration="106141000" />
       <workItem from="1670432817055" duration="224000" />
-      <workItem from="1670433065021" duration="15505000" />
+      <workItem from="1670433065021" duration="26703000" />
+      <workItem from="1670474766294" duration="3165000" />
     </task>
     <servers />
   </component>
@@ -172,6 +182,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="649" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java</url>
+          <line>101</line>
+          <option name="timeStamp" value="693" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -1,27 +1,39 @@
 package com.saucer.sast.utils;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.saucer.sast.lang.java.Main;
+import com.saucer.sast.lang.java.config.PropertyConfig;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class FileUtils {
+    public final static String RulesDirectory =
+            Paths.get(Main.properties.getProperty(PropertyConfig.RULES)).toString();
+    public final static String OutputDirectory =
+            Paths.get(Main.properties.getProperty(PropertyConfig.OUTPUT)).toAbsolutePath().toString();
+
     public static String csv = Paths.get("../csv").toAbsolutePath().toString();
-    public final static String NodesDirectory = Paths.get(FileUtils.csv, "nodes").toString();
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();
     public static String sources = Paths.get(collections, "sources.csv").toString();
-    public static String resources = Paths.get("src/main/resources").toAbsolutePath().toString();
 
-    public static String tmp = Paths.get(resources, "tmp").toString();
-    public static String taint4source = Paths.get(resources, "templates/taint4source.yaml").toString();
-    public static String taint2invocation = Paths.get(resources, "templates/taint2invocation.yaml").toString();
-    public static String taint2nonparaminvocation = Paths.get(resources, "templates/taint2nonparaminvocation.yaml").toString();
+    public static String readTaint4Source() {
+        InputStream taint4sourceInputStream = FileUtils.class.getResourceAsStream("/taint4source.yaml");
+        return ReadFile2String(taint4sourceInputStream);
+    }
 
-    public static String report = Paths.get(resources, "report").toString();
+    public static String readTaint2Invocation() {
+        InputStream taint2invocationInputStream = FileUtils.class.getResourceAsStream("/taint2invocation.yaml");
+        return ReadFile2String(taint2invocationInputStream);
+    }
+
+    public static String readTaint2Nonparaminvocation() {
+        InputStream taint2nonparaminvocationInputStream = FileUtils.class.getResourceAsStream("/taint2nonparaminvocation.yaml");
+        return ReadFile2String(taint2nonparaminvocationInputStream);
+    }
 
     public static String Expanduser(String path) {
         String user = System.getProperty("user.home");
@@ -71,5 +83,22 @@ public class FileUtils {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public static String ReadFile2String(InputStream in) {
+        String content = null;
+        try {
+            content = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
+    public static void main(String[] args) {
+        String a = readTaint4Source();
+        String b = readTaint2Invocation();
+        String c = readTaint2Nonparaminvocation();
+        System.out.println(a + b + c);
     }
 }

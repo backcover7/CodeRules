@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DbUtils {
     public static Connection conn;
-    public final static String dbname = Paths.get(FileUtils.NodesDirectory, "nodes.db").toAbsolutePath().toString();
+    public final static String dbname = Paths.get(FileUtils.OutputDirectory, "nodes.db").toAbsolutePath().toString();
 
     private final static String NAMESPACE = "namespace";
     private final static String CLASSTYPE = "classtype";
@@ -82,10 +82,10 @@ public class DbUtils {
     }
 
     private static void ImportNodes() throws Exception {
-        ImportNodes(Paths.get(FileUtils.NodesDirectory, "sources.csv").toString(), RuleNode.SOURCENODE);
-        ImportNodes(Paths.get(FileUtils.NodesDirectory, "sinks.csv").toString(), RuleNode.SINKNODE);
-        ImportNodes(Paths.get(FileUtils.NodesDirectory, "gadget.csv").toString(), RuleNode.GADGETSOURCENODE);
-        ImportNodes(Paths.get(FileUtils.NodesDirectory, "negative.csv").toString(), RuleNode.NEGATIVENODE);
+        ImportNodes(Paths.get(FileUtils.RulesDirectory, "sources.csv").toString(), RuleNode.SOURCENODE);
+        ImportNodes(Paths.get(FileUtils.RulesDirectory, "sinks.csv").toString(), RuleNode.SINKNODE);
+        ImportNodes(Paths.get(FileUtils.RulesDirectory, "gadget.csv").toString(), RuleNode.GADGETSOURCENODE);
+        ImportNodes(Paths.get(FileUtils.RulesDirectory, "negative.csv").toString(), RuleNode.NEGATIVENODE);
     }
 
     private static void ImportNodes(String nodePath, String nodeType) throws Exception {

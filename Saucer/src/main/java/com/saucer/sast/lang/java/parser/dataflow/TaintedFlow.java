@@ -4,6 +4,9 @@ import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.utils.*;
 import me.tongfei.progressbar.ProgressBar;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,7 +67,7 @@ public class TaintedFlow {
             case WEBSOURCEFLAG:
                 AnalyzeFromSource();
                 if (taintedPaths4WebSource.size() != 0) {
-                    System.out.println("[+] Found " + taintedPaths4WebSource.size() + " paths from web source to sinks!");
+                    System.out.println("[+] Found " + taintedPaths4WebSource.size() + " paths from web sources to sinks!");
                 } else {
                     System.out.println("[-] Found nothing from web sources to sinks.");
                 }
@@ -72,7 +75,7 @@ public class TaintedFlow {
             case GADGETSOURCEFLAGE:
                 AnalyzeFromGadgetSource();
                 if (taintedPaths4GadgetSource.size() != 0) {
-                    System.out.println("[+] Found " + taintedPaths4GadgetSource.size() + " paths from gadget source to sinks!");
+                    System.out.println("[+] Found " + taintedPaths4GadgetSource.size() + " paths from gadget sources to sinks!");
                 } else {
                     System.out.println("[-] Found nothing from gadget sources to sinks.");
                 }
@@ -81,7 +84,7 @@ public class TaintedFlow {
                 AnalyzeFromSetterGetterConsrtructor();
                 if (taintedPaths4SetterGetterConstructorSource.size() != 0) {
                     System.out.println("[+] Found " + taintedPaths4SetterGetterConstructorSource.size() +
-                            " paths from JSON marshalsec source to sinks!");
+                            " paths from JSON marshalsec sources to sinks!");
                 } else {
                     System.out.println("[-] Found nothing from JSON marshalsec sources to sinks.");
                 }
@@ -148,7 +151,7 @@ public class TaintedFlow {
                     } else {
                         // Invocation source
                         invocation.put(SOURCEINVOCATION, source.get(DbUtils.SUCCCODE));
-                        SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint4source);
+                        SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.readTaint4Source());
                     }
 
                     if (SemgrepScanRes.size() != 0) {
@@ -228,20 +231,21 @@ public class TaintedFlow {
                     ParseParamSize(invocation.get(DbUtils.SUCCSIGNATURE)) == 0) {
                 // taint flow from non-param method to non-param invocation
                 // taint flow from has-param method to non-param invocation
-                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2nonparaminvocation);
+                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.readTaint2Nonparaminvocation());
             } else {
                 // taint flow from has-param method to has-param invocation
-                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.taint2invocation);
+                SemgrepScanRes = SemgrepTemplateScan(invocation, FileUtils.readTaint2Invocation());
             }
         }
         return SemgrepScanRes;
     }
 
-    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String templatePath) {
+    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String temaple) {
         ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
-        String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), FileUtils.ReadFile2String(templatePath));
+        String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), temaple);
+
         try {
-            Path tmpRule = Files.createTempFile(Paths.get(FileUtils.tmp), Paths.get(templatePath).getFileName().toString(), ".yaml");
+            Path tmpRule = Files.createTempFile(Paths.get(FileUtils.OutputDirectory), "temprule", ".yaml");
             FileUtils.WriteFile(tmpRule.toAbsolutePath().toString(), yamlRule, false);
             SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
                     tmpRule.toAbsolutePath().toString(), SpoonConfig.codebase);
