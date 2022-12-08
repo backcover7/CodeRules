@@ -8,6 +8,7 @@ import java.io.IOException;
 public class test {
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String user = req.getParameter("hello");
+        Runtime.getRuntime().exec(user);
         target s = new target();
         s.rce(user);
         System.out.println(user);

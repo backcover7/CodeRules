@@ -1,5 +1,4 @@
 .DS_Store
-csv/nodes/nodes.db
+*.db
+*.md
 Saucer/target/
-Saucer/src/main/resources/report/
-Saucer/src/main/resources/tmp/

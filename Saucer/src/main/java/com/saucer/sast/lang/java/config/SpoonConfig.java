@@ -64,9 +64,11 @@ public class SpoonConfig {
             if (e.getMessage().contains("Unable to read the pom")) {
                 System.err.println("[!] Error: The target project does not have pom.xml!");
                 System.exit(1);
+            } else {
+                System.err.println("[!] Error: Try to run `mvn dependency:build-classpath` command manually to make sure the maven project is configured correctly.");
+                System.exit(1);
             }
         }
-        assert launcher != null;
         launcher.addInputResource(codebase);
         return launcher;
     }
