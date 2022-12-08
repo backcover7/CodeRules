@@ -11,11 +11,11 @@ import java.util.ArrayList;
 
 public class FileUtils {
     public final static String RulesDirectory =
-            Paths.get(Main.properties.getProperty(PropertyConfig.RULES)).toString();
+            Paths.get(Main.properties.getProperty(PropertyConfig.RULES)).toAbsolutePath().normalize().toString();
     public final static String OutputDirectory =
-            Paths.get(Main.properties.getProperty(PropertyConfig.OUTPUT)).toAbsolutePath().toString();
+            Paths.get(Main.properties.getProperty(PropertyConfig.OUTPUT)).toAbsolutePath().normalize().toString();
 
-    public static String csv = Paths.get("../csv").toAbsolutePath().toString();
+    public static String csv = Paths.get("../csv").toAbsolutePath().normalize().toString();
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();
     public static String sources = Paths.get(collections, "sources.csv").toString();
@@ -93,12 +93,5 @@ public class FileUtils {
             e.printStackTrace();
         }
         return content;
-    }
-
-    public static void main(String[] args) {
-        String a = readTaint4Source();
-        String b = readTaint2Invocation();
-        String c = readTaint2Nonparaminvocation();
-        System.out.println(a + b + c);
     }
 }

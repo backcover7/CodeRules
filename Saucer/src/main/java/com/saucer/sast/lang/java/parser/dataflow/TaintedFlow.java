@@ -144,7 +144,7 @@ public class TaintedFlow {
                         return;
                     }
 
-                    ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+                    ArrayList<HashMap<String, Object>> SemgrepScanRes;
                     if (source.get(DbUtils.SUCCMETHODNAME) == null ||
                             flag.equals(GADGETSOURCEFLAGE) ||
                             flag.equals(SETTERGETTERCONSTRUCTORFLAG)) {
@@ -320,16 +320,16 @@ public class TaintedFlow {
         return SemgrepScanRes;
     }
 
-    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String temaple) {
+    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String template) {
         ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
-        String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), temaple);
+        String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), template);
 
         try {
             // TODO delete when exit
             Path tmpRule = Files.createTempFile(Paths.get(FileUtils.OutputDirectory), "temprule", ".yaml");
-            FileUtils.WriteFile(tmpRule.toAbsolutePath().toString(), yamlRule, false);
+            FileUtils.WriteFile(tmpRule.toAbsolutePath().normalize().toString(), yamlRule, false);
             SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
-                    tmpRule.toAbsolutePath().toString(), SpoonConfig.codebase);
+                    tmpRule.toAbsolutePath().normalize().toString(), SpoonConfig.codebase);
             Files.deleteIfExists(tmpRule);
         } catch (Exception e) {
             e.printStackTrace();

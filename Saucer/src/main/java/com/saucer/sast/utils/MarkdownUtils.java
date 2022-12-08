@@ -31,7 +31,7 @@ public class MarkdownUtils {
 
         report = Paths.get(FileUtils.OutputDirectory,
                 Paths.get(SpoonConfig.codebase).getFileName().toString() +
-                "_Saucer_SAST_Report_" + filenametimestamp + CharUtils.MarkdownExtension).toAbsolutePath().toString();
+                "_Saucer_SAST_Report_" + filenametimestamp + CharUtils.MarkdownExtension).toAbsolutePath().normalize().toString();
         stringBuilder = new StringBuilder();
     }
 
@@ -148,7 +148,8 @@ public class MarkdownUtils {
             );
         } else {
             stringBuilder.append(
-                    Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype()) + CharUtils.sharp + ruleNode.getMethod(), position));
+                    Link(String.join(CharUtils.dot, ruleNode.getNamespace(), ruleNode.getClasstype())
+                            + CharUtils.sharp + ReplaceInitMethod(ruleNode), position));
         }
         stringBuilder.append(CharUtils.LF);
 //        stringBuilder.append(CodeBlock(ruleNode.getMethodcode(), ruleNode.getCode()));

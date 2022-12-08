@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class DbUtils {
     public static Connection conn;
-    public final static String dbname = Paths.get(FileUtils.OutputDirectory, "nodes.db").toAbsolutePath().toString();
+    public final static String dbname = Paths.get(FileUtils.OutputDirectory, "nodes.db").toAbsolutePath().normalize().toString();
 
     private final static String NAMESPACE = "namespace";
     private final static String CLASSTYPE = "classtype";

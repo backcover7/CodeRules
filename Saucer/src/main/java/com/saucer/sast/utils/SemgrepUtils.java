@@ -7,14 +7,14 @@ import java.util.*;
 import java.nio.file.Paths;
 
 public class SemgrepUtils {
-    public final static String SemgrepRules = Paths.get("../semgrep").toAbsolutePath().toString();
+    public final static String SemgrepRules = Paths.get("../semgrep").toAbsolutePath().normalize().toString();
 
-    public final static String SemgrepJavaRules = Paths.get(SemgrepRules, "java").toAbsolutePath().toString();
-    public final static String SemgrepJavaSourceRules = Paths.get(SemgrepJavaRules, "sources").toAbsolutePath().toString();
-    public final static String SemgrepJavaSinkRules = Paths.get(SemgrepJavaRules, "sinks").toAbsolutePath().toString();
+    public final static String SemgrepJavaRules = Paths.get(SemgrepRules, "java").toAbsolutePath().normalize().toString();
+    public final static String SemgrepJavaSourceRules = Paths.get(SemgrepJavaRules, "sources").toAbsolutePath().normalize().toString();
+    public final static String SemgrepJavaSinkRules = Paths.get(SemgrepJavaRules, "sinks").toAbsolutePath().normalize().toString();
 
-    public final static String SemgrepJavascriptRules = Paths.get(SemgrepRules, "javascript").toAbsolutePath().toString();
-    public final static String SemgrepJavascriptSinkRules = Paths.get(SemgrepJavascriptRules, "sinks").toAbsolutePath().toString();
+    public final static String SemgrepJavascriptRules = Paths.get(SemgrepRules, "javascript").toAbsolutePath().normalize().toString();
+    public final static String SemgrepJavascriptSinkRules = Paths.get(SemgrepJavascriptRules, "sinks").toAbsolutePath().normalize().toString();
     
     public final static String EnableFixFlag = "--autofix";
     public final static String DisableAutoFix = "--no-autofix";

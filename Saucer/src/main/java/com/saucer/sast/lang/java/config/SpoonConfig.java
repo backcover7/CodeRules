@@ -22,7 +22,7 @@ public class SpoonConfig {
     public static CtModel model;
 
     public void init(String codebase) {
-        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().toString();
+        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().normalize().toString();
         launcher = getSpoonMavenLauncher();
         setEnv(launcher.getEnvironment());
         launcher.buildModel();
@@ -30,7 +30,7 @@ public class SpoonConfig {
     }
 
     public void init(String codebase, String jarLibsPath) {
-        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().toString();
+        SpoonConfig.codebase = Paths.get(FileUtils.Expanduser(codebase)).toAbsolutePath().normalize().toString();
         launcher = getSpoonLauncher(jarLibsPath);
         setEnv(launcher.getEnvironment());
         launcher.buildModel();
@@ -39,7 +39,7 @@ public class SpoonConfig {
 
     private Launcher getSpoonLauncher(String jarlibPath) {
         // TODO add .m2
-        File directory = new File(Paths.get(FileUtils.Expanduser(jarlibPath)).toAbsolutePath().toString());
+        File directory = new File(Paths.get(FileUtils.Expanduser(jarlibPath)).toAbsolutePath().normalize().toString());
         IOFileFilter jarFilter = new SuffixFileFilter(CharUtils.JarExtension);
         Collection<File> jars = org.apache.commons.io.FileUtils.listFiles(
                 directory, jarFilter, TrueFileFilter.INSTANCE);

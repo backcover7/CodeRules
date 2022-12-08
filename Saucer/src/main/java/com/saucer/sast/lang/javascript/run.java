@@ -15,7 +15,7 @@ public class run {
     public static void main(String[] args) throws Exception {
         String codebase = Paths.get(FileUtils.Expanduser(
                 "~/Downloads/sfdc/"
-        )).toAbsolutePath().toString();
+        )).toAbsolutePath().normalize().toString();
         start(codebase);
     }
 }
