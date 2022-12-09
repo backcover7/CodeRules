@@ -1,6 +1,11 @@
 package com.saucer.sast.utils;
 
+import com.contrastsecurity.sarif.Result;
+import com.contrastsecurity.sarif.Run;
+import com.contrastsecurity.sarif.SarifSchema210;
+import com.contrastsecurity.sarif.ThreadFlow;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saucer.sast.lang.java.parser.core.RuleNode;
 
 import java.io.IOException;
 import java.util.*;
@@ -49,33 +54,43 @@ public class SemgrepUtils {
     public final static int MatchCodeIndex = 4;
     public final static int MessageIndex = 5;
 
+    public final static String SARIF_FORMAT = "--sarif";
+
     public final static String DATAFLOWTRACE_FLAG = "--dataflow-traces";
 
     public final static String EllipsisBody = "{...}";
     public final static String ParamPatternTemplate = "          - pattern: ";
 
-    public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", DATAFLOWTRACE_FLAG, JSON_FORMAT, "-f"};
+    public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", DATAFLOWTRACE_FLAG, "-f"};
 
-    public static ArrayList<HashMap<String, Object>> RunSemgrepRule(String yaml, String codebase) throws IOException {
+    public static ArrayList<HashMap<String, Object>> RunSemgrepRuleJSON(String yaml, String codebase) throws IOException {
+        return ProcessJSONResult(RunSemgrepRule(yaml, codebase, JSON_FORMAT));
+    }
+
+    public static List<Result> RunSemgrepRuleSARIF(String yaml, String codebase) throws IOException {
+        return ProcessSarifResult(RunSemgrepRule(yaml, codebase, SARIF_FORMAT));
+    }
+
+    public static Process RunSemgrepRule(String yaml, String codebase, String format) throws IOException {
         ArrayList<String> cmd = new ArrayList<>(Arrays.asList(SemgrepCLI));
         cmd.add(yaml);
         cmd.add(codebase);
-//        System.out.println("[.] Running semgrep rule scan...");
+        cmd.add(format);
         Process process = Runtime.getRuntime().exec(cmd.toArray(new String[0]));
-        return ProcessJSONResult(process);
+        return process;
     }
 
     // TODO
-    public static ArrayList<HashMap<String, Object>> ProcessSarifResult(Process process) throws IOException {
+    public static List<Result> ProcessSarifResult(Process process) throws IOException {
         String stdout = ProcessUtils.StdoutProcess(process);
         ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,Object> map = mapper.readValue(stdout, Map.class);
+        Run run = mapper.readValue(stdout, SarifSchema210.class).getRuns().get(0);
 
-        ArrayList<HashMap<String, Object>> semgrepResultList = (ArrayList<HashMap<String, Object>>) map.get(Results);
-
-        return resultList;
+        ArrayList<RuleNode> ruleNodes = new ArrayList<>();
+        List<Result> results = run.getResults();
+        return results;
     }
 
     public static ArrayList<HashMap<String, Object>> ProcessJSONResult(Process process) throws IOException {

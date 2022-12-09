@@ -94,14 +94,19 @@
             <version>3.39.3.0</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
-        </dependency>
-        <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
             <version>4.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.contrastsecurity</groupId>
+            <artifactId>java-sarif</artifactId>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

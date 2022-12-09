@@ -1,12 +1,10 @@
 package com.saucer.sast.lang.java.parser.dataflow;
 
+import com.contrastsecurity.sarif.Result;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.utils.*;
 import me.tongfei.progressbar.ProgressBar;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -144,7 +142,7 @@ public class TaintedFlow {
                         return;
                     }
 
-                    ArrayList<HashMap<String, Object>> SemgrepScanRes;
+                    List<Result> SemgrepScanRes;
                     if (source.get(DbUtils.SUCCMETHODNAME) == null ||
                             flag.equals(GADGETSOURCEFLAGE) ||
                             flag.equals(SETTERGETTERCONSTRUCTORFLAG)) {
@@ -224,7 +222,7 @@ public class TaintedFlow {
             ArrayList<FlowAnalysisTask> tasks = new ArrayList<>();
             for (HashMap<String, String> succinvocation : succinvocations) {
                 LinkedList<HashMap<String, String>> taintedFlowCopy = (LinkedList<HashMap<String, String>>) taintedFlow.clone();
-                ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+                List<Result> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
                 if (taintedFlowCopy.contains(succinvocation)) {
                     continue;
                 }
@@ -287,7 +285,7 @@ public class TaintedFlow {
 
         succinvocations.parallelStream().forEach(succinvocation -> {
             LinkedList<HashMap<String, String>> taintedFlowCopy = (LinkedList<HashMap<String, String>>) taintedFlow.clone();
-            ArrayList<HashMap<String, Object>> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
+            List<Result> SemgrepScanRes = FlowFromArgs2Invocations(succinvocation);
             if (taintedFlowCopy.contains(succinvocation)) {
                 return;
             }
@@ -304,8 +302,8 @@ public class TaintedFlow {
         taintedFlow.removeLast();
     }
 
-    public ArrayList<HashMap<String, Object>> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
-        ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+    public List<Result> FlowFromArgs2Invocations(HashMap<String, String> invocation) {
+        List<Result> SemgrepScanRes = new ArrayList<>();
         if (invocation.get(DbUtils.SUCCMETHODNAME) != null) {
             if (ParseParamSize(invocation.get(DbUtils.PRESIGNATURE)) == 0 ||
                     ParseParamSize(invocation.get(DbUtils.SUCCSIGNATURE)) == 0) {
@@ -320,15 +318,15 @@ public class TaintedFlow {
         return SemgrepScanRes;
     }
 
-    private ArrayList<HashMap<String, Object>> SemgrepTemplateScan(HashMap<String, String> invocation, String template) {
-        ArrayList<HashMap<String, Object>> SemgrepScanRes = new ArrayList<>();
+    private List<Result> SemgrepTemplateScan(HashMap<String, String> invocation, String template) {
+        List<Result> SemgrepScanRes = new ArrayList<>();
         String yamlRule = CharUtils.StringSubsitute(ProcessTemplateMap(invocation), template);
 
         try {
             // TODO delete when exit
             Path tmpRule = Files.createTempFile(Paths.get(FileUtils.OutputDirectory), "temprule", ".yaml");
             FileUtils.WriteFile(tmpRule.toAbsolutePath().normalize().toString(), yamlRule, false);
-            SemgrepScanRes = SemgrepUtils.RunSemgrepRule(
+            SemgrepScanRes = SemgrepUtils.RunSemgrepRuleSARIF(
                     tmpRule.toAbsolutePath().normalize().toString(), SpoonConfig.codebase);
             Files.deleteIfExists(tmpRule);
         } catch (Exception e) {

@@ -34,7 +34,7 @@ public class DependencyConfusion implements VulnScan {
 //    private boolean FlagPckVersionDoesNotExists = false;
 
     public void Scan(String codebase) throws IOException, InterruptedException {
-        ArrayList<HashMap<String, Object>> resultList = SemgrepUtils.RunSemgrepRule(dependency_confusion_yaml, codebase);
+        ArrayList<HashMap<String, Object>> resultList = SemgrepUtils.RunSemgrepRuleJSON(dependency_confusion_yaml, codebase);
         System.out.println("[.] Running Dependency Confusion check...");
         for (HashMap<String, Object> result : resultList) {
             CheckVuln(result);     // Example: "@rollup/plugin-replace": "^2.2.0"

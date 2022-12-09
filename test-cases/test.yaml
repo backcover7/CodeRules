@@ -1,0 +1,8 @@
+rules:
+  - id: taint4source
+    options:
+      symbolic_propagation: true
+    pattern: Runtime.getRuntime().exec(user);
+    message: Semgrep found a tained data flow from source
+    languages: [java]
+    severity: WARNING

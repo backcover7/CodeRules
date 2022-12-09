@@ -1,11 +1,10 @@
 package com.saucer.sast.lang.java.parser.core;
 
+import com.contrastsecurity.sarif.Result;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
 import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
-import com.saucer.sast.utils.CharUtils;
-import com.saucer.sast.utils.MarkdownUtils;
-import com.saucer.sast.utils.SemgrepUtils;
+import com.saucer.sast.utils.*;
 import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
@@ -15,7 +14,6 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtExecutableReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.filter.TypeFilter;
-import com.saucer.sast.utils.DbUtils;
 import spoon.support.reflect.declaration.CtClassImpl;
 
 import java.sql.SQLException;
@@ -31,10 +29,13 @@ public class Scanner {
         taintedFlow.Analyze(flow);
 
         System.out.println("[*] Creating final scan reports ...");
-        MarkdownUtils markdownUtils = new MarkdownUtils();
-        markdownUtils.init();
-        FlagThreats();
-        markdownUtils.finish();
+
+//        MarkdownUtils markdownUtils = new MarkdownUtils();
+//        markdownUtils.init();
+//        FlagThreats();
+//        markdownUtils.finish();
+
+        SarifUtils.report();
 
         System.out.println("[!] Done!");
     }
@@ -283,22 +284,12 @@ public class Scanner {
             HashMap<String, String> invocation = getInvocation(callGraphNode);
             TaintedFlow taintedFlow = new TaintedFlow();
             // if method has no parameters, all sink inovcations can be reached to someway
-            if (taintedFlow.ParseParamSize(callGraphNode.getPreSignature()) == 0) {
+            List<Result> SemgrepScanRes = taintedFlow.FlowFromArgs2Invocations(invocation);
+            if (SemgrepScanRes.size() != 0) {
                 callGraphNode.setEdgeType(CallGraphNode.SinkGadgetNodeFlowType);
-                String datatrace = String.join(
-                        CharUtils.LF,
-                        callGraphNode.getPreLineNum() + CharUtils.space + callGraphNode.getPreSignature(),
-                        callGraphNode.getSuccLineNum() + CharUtils.space + callGraphNode.getSuccCode()
-                );
-                callGraphNode.setDatatrace(datatrace);
+                callGraphNode.setDatatrace(SemgrepScanRes.get(0).toString());
             } else {
-                ArrayList<HashMap<String, Object>> SemgrepScanRes = taintedFlow.FlowFromArgs2Invocations(invocation);
-                if (SemgrepScanRes.size() != 0) {
-                    callGraphNode.setEdgeType(CallGraphNode.SinkGadgetNodeFlowType);
-                    callGraphNode.setDatatrace((String) SemgrepScanRes.get(0).get(SemgrepUtils.Dataflow_Traces));
-                } else {
-                    callGraphNode.setEdgeType(CallGraphNode.SinkNodeType);
-                }
+                callGraphNode.setEdgeType(CallGraphNode.SinkNodeType);
             }
         }
     }

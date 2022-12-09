@@ -1,0 +1,154 @@
+{
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "codeFlows": [
+            {
+              "message": {
+                "text": "Untrusted dataflow from test.java:33 to test.java:35"
+              },
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Source: 'payload' @ 'test.java:33'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "test.java"
+                          },
+                          "region": {
+                            "endColumn": 43,
+                            "endLine": 33,
+                            "message": {
+                              "text": "Source: 'payload' @ 'test.java:33'"
+                            },
+                            "snippet": {
+                              "text": "payload"
+                            },
+                            "startColumn": 36,
+                            "startLine": 33
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Propagator : 'data' @ 'test.java:33'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "test.java"
+                          },
+                          "region": {
+                            "endColumn": 20,
+                            "endLine": 33,
+                            "message": {
+                              "text": "Propagator : 'data' @ 'test.java:33'"
+                            },
+                            "snippet": {
+                              "text": "data"
+                            },
+                            "startColumn": 16,
+                            "startLine": 33
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Sink: 'Runtime.getRuntime().exec(data);' @ 'test.java:35'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "test.java"
+                          },
+                          "region": {
+                            "endColumn": 41,
+                            "endLine": 35,
+                            "message": {
+                              "text": "Sink: 'Runtime.getRuntime().exec(data);' @ 'test.java:35'"
+                            },
+                            "snippet": {
+                              "text": "        Runtime.getRuntime().exec(data);"
+                            },
+                            "startColumn": 9,
+                            "startLine": 35
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "fingerprints": {
+            "matchBasedId/v1": "1016b10bb1f70f1a88722648dedc9144b628d47465afa1cc1a20cd214f6c0dd1c20170cc43eae126b7c3fad5667df408d52d7d229de787a551bc807820c3b01a_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "test.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 41,
+                  "endLine": 35,
+                  "snippet": {
+                    "text": "        Runtime.getRuntime().exec(data);"
+                  },
+                  "startColumn": 9,
+                  "startLine": 35
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Semgrep found a taint flow from specific argument to other arguments"
+          },
+          "ruleId": "taint2invocation"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "semgrep",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Semgrep found a taint flow from specific argument to other arguments"
+              },
+              "id": "taint2invocation",
+              "name": "taint2invocation",
+              "properties": {
+                "precision": "very-high",
+                "tags": []
+              },
+              "shortDescription": {
+                "text": "Semgrep found a taint flow from specific argument to other arguments"
+              }
+            }
+          ],
+          "semanticVersion": "1.1.0"
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

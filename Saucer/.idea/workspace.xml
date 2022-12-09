@@ -11,6 +11,12 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/InterProcedure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/IntraProcedure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -78,11 +84,11 @@
       <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils" />
       <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/main/lib" />
-      <recent name="$PROJECT_DIR$/src/main/resources/templates" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
@@ -99,7 +105,7 @@
     <configuration name="run_java" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.java.Main" />
       <module name="Sacuer" />
-      <option name="PROGRAM_PARAMETERS" value="-r ../csv/nodes ../test-cases/java/test.java" />
+      <option name="PROGRAM_PARAMETERS" value="-o target -r ../csv/nodes ../test-cases/java/test.java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -156,6 +162,7 @@
       <workItem from="1670533023449" duration="1954000" />
       <workItem from="1670535114410" duration="2260000" />
       <workItem from="1670545641639" duration="1739000" />
+      <workItem from="1670603758184" duration="6391000" />
     </task>
     <servers />
   </component>
@@ -180,6 +187,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="649" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="669" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

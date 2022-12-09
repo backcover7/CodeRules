@@ -17,6 +17,15 @@ public class test {
     public void finalize() {
         System.out.println("gadgetsource");
     }
+
+    public void setAutoCommit(boolean autoCommit) throws SQLException {
+        if(conn != null) {
+            conn.setAutoCommit(autoCommit);
+        } else {
+            conn = connect();
+            conn.setAutoCommit(autoCommit);
+        }
+    }
 }
 
 class target {
