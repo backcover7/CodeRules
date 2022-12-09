@@ -11,17 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/taint2invocation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint2invocation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/taint2nonparaminvocation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint2nonparaminvocation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/taint4source.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint4source.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,8 +91,8 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn -f /Users/kang.hou/Documents/CodeRules/SemSpoon/pom.xml dependency:copy-dependencies -DoutputDirectory=/Users/kang.hou/Documents/CodeRules/SemSpoon/src/main/Lib/Dependencies" />
-      <command value="mvn clean package" />
       <command value="mvn -v" />
+      <command value="mvn clean package" />
     </option>
   </component>
   <component name="RunManager" selected="Application.run_java">
@@ -165,6 +155,7 @@
       <workItem from="1670474766294" duration="12418000" />
       <workItem from="1670533023449" duration="1954000" />
       <workItem from="1670535114410" duration="2260000" />
+      <workItem from="1670545641639" duration="1739000" />
     </task>
     <servers />
   </component>
@@ -189,11 +180,6 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="649" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java</url>
-          <line>155</line>
-          <option name="timeStamp" value="662" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -65,11 +65,20 @@ public class SemgrepUtils {
         return ProcessJSONResult(process);
     }
 
-    /**
-     * @return ArrayList or null
-     */
+    // TODO
+    public static ArrayList<HashMap<String, Object>> ProcessSarifResult(Process process) throws IOException {
+        String stdout = ProcessUtils.StdoutProcess(process);
+        ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String,Object> map = mapper.readValue(stdout, Map.class);
+
+        ArrayList<HashMap<String, Object>> semgrepResultList = (ArrayList<HashMap<String, Object>>) map.get(Results);
+
+        return resultList;
+    }
+
     public static ArrayList<HashMap<String, Object>> ProcessJSONResult(Process process) throws IOException {
-//        System.out.println("[.] Processing JSON format result...");
         String stdout = ProcessUtils.StdoutProcess(process);
 
         ArrayList<HashMap<String, Object>> resultList = new ArrayList<>();
@@ -88,18 +97,26 @@ public class SemgrepUtils {
             HashMap<String, String> metavars = (HashMap<String, String>) extraMap.get(Metavars);
 
             String dataflow_trace = CharUtils.empty;
-            if (extraMap.containsKey(Dataflow_Traces)) {
-                HashMap<String, Object> dataflowtraceMap = (HashMap<String, Object>) extraMap.get(Dataflow_Traces);
-                HashMap<String, Object> taintsourceMap = (HashMap<String, Object>) dataflowtraceMap.get(Taint_Source);
-                dataflow_trace += ConcatFlowLine(taintsourceMap) + CharUtils.LF;
-                if (dataflowtraceMap.containsKey(Intermediate_Vars)) {
-                    ArrayList<HashMap<String, Object>> intermediatevarsMap =
-                            (ArrayList<HashMap<String, Object>>) dataflowtraceMap.get(Intermediate_Vars);
-                    for (HashMap<String, Object> var : intermediatevarsMap) {
-                        dataflow_trace += ConcatFlowLine(var) + CharUtils.LF;
+            try {
+                if (extraMap.containsKey(Dataflow_Traces)) {
+                    HashMap<String, Object> dataflowtraceMap = (HashMap<String, Object>) extraMap.get(Dataflow_Traces);
+                    ArrayList<Object> taintSourceObject =
+                            (ArrayList<Object>) ((ArrayList<Object>) dataflowtraceMap.get(Taint_Source)).get(1);
+                    String sourceCode = (String) taintSourceObject.get(1);
+                    HashMap<String, Object> taintsourceMap = (HashMap<String, Object>) taintSourceObject.get(0);
+                    dataflow_trace += ConcatFlowLine(sourceCode, taintsourceMap) + CharUtils.LF;
+                    if (dataflowtraceMap.containsKey(Intermediate_Vars)) {
+                        ArrayList<HashMap<String, Object>> intermediatevarsMap =
+                                (ArrayList<HashMap<String, Object>>) dataflowtraceMap.get(Intermediate_Vars);
+                        for (HashMap<String, Object> var : intermediatevarsMap) {
+                            dataflow_trace += ConcatFlowLine((String) var.get(Content), var) + CharUtils.LF;
+                        }
                     }
+                    dataflow_trace += line + CharUtils.vertical + CharUtils.space + lines.trim();
                 }
-                dataflow_trace += line + CharUtils.vertical + CharUtils.space + lines.trim();
+            } catch (ClassCastException e) {
+                System.err.println("[?] Semgrep has updated the json format result. SAST parser needs to be updated.");
+                System.exit(1);
             }
 
             HashMap<String, Object> resultMap = new HashMap<>();
@@ -149,11 +166,14 @@ public class SemgrepUtils {
                 resultMap.get(Col);
     }
 
-    private static String ConcatFlowLine(HashMap<String, Object> flowNode) {
-        String sourceContent = (String) flowNode.get(Content);
-
-        String sourceLine = String.valueOf(((HashMap<String, Object>) ((HashMap<String, Object>)
-                flowNode.get(Location)).get(Start)).get(Line));
-        return sourceLine + CharUtils.vertical + CharUtils.space + sourceContent.trim();
+    private static String ConcatFlowLine(String sourceCode, HashMap<String, Object> flowNode) {
+        String sourceLine;
+        if (flowNode.containsKey(Location)) {
+            sourceLine = String.valueOf(((HashMap<String, Object>) ((HashMap<String, Object>)
+                    flowNode.get(Location)).get(Start)).get(Line));
+        } else {
+            sourceLine = String.valueOf(((HashMap<String, Object>) flowNode.get(Start)).get(Line));
+        }
+        return sourceLine + CharUtils.vertical + CharUtils.space + sourceCode.trim();
     }
 }
