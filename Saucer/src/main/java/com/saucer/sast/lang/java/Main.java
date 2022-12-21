@@ -26,7 +26,7 @@ public class Main implements Runnable {
 
     @Option(names = {"-d", "--dependency"}, defaultValue = "", description = "The path of dependency jar files of target codebase.\n* Default is None.")
     private static String dependency;
-    
+
     @Option(names = {"-o", "--output"}, defaultValue = ".", description = "The path of output report.\n* Default is current directory.")
     private static String output;
 
@@ -38,7 +38,6 @@ public class Main implements Runnable {
             properties = propertyConfig.getProperties();
             properties.setProperty(PropertyConfig.RULES, rules);
             properties.setProperty(PropertyConfig.DEPENDENCY, dependency);
-            properties.setProperty(PropertyConfig.FLOW, flow);
             properties.setProperty(PropertyConfig.OUTPUT, output);
 
             System.out.println();
