@@ -26,11 +26,7 @@ public class Main implements Runnable {
 
     @Option(names = {"-d", "--dependency"}, defaultValue = "", description = "The path of dependency jar files of target codebase.\n* Default is None.")
     private static String dependency;
-
-    @Option(names = {"-f", "--flow"}, defaultValue = "all", completionCandidates = TaintedFlowFlagsCandidate.class,
-            description = "Designate the specific flow you would like to analyze.\nCandidate flows: [all], [web], [gadget], [json].\n* Default is [all].\n[WARNING] The JSON flow might cost much time!")
-    private static String flow;
-
+    
     @Option(names = {"-o", "--output"}, defaultValue = ".", description = "The path of output report.\n* Default is current directory.")
     private static String output;
 
