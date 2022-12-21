@@ -5,13 +5,13 @@ rules:
     mode: taint
     pattern-sources:
       - patterns:
-        - pattern-inside: ${methodDefinition}
-        - pattern: ${sourceinvocation}
+        - pattern-inside: ${method_signature}
+        - pattern: ${invocation_source_snippet}
     pattern-sinks:
-      - pattern: ${succcode}
+      - pattern: ${invocation_sink_snippet}
     paths:
       include:
-        - ${filepath}
+        - ${file_path}
     message: Semgrep found a tained data flow from source
     languages: [java]
     severity: WARNING

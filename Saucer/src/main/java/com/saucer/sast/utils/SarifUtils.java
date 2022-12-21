@@ -1,173 +1,72 @@
 package com.saucer.sast.utils;
 
 import com.contrastsecurity.sarif.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.saucer.sast.lang.java.parser.core.RuleNode;
-import com.saucer.sast.lang.java.parser.dataflow.TaintedFlow;
+import com.saucer.sast.lang.java.parser.core.FlowAnalysis;
+import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 
-import java.io.IOException;
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.*;
 
 // https://github.com/Contrast-Security-OSS/java-sarif
 public class SarifUtils {
-    private static Location parseNodeLocation(HashMap<String, String> invocation) {
-        String qualifiedName = getFullyQualifiedName(
-                invocation.get(DbUtils.SUCCNAMESPACE), invocation.get(DbUtils.SUCCCLASSTYPE), invocation.get(DbUtils.SUCCMETHODNAME));
-        return parseNodeLocation(
-                qualifiedName,
-                "", // todo
-                invocation.get(DbUtils.FILEPATH),
-                invocation.get(DbUtils.SUCCCODE),
-                Integer.parseInt(invocation.get(DbUtils.SUCCLINENUM))
-        );
+    private static List<Result> getSinkGadgets() {
+        return DbUtils.QuerySinkGadgets();
     }
 
-
-    private static Location parseNodeLocation(RuleNode ruleNode) {
-        String qualifiedName = getFullyQualifiedName(
-                ruleNode.getNamespace(), ruleNode.getClasstype(), ruleNode.getMethod());
-        return parseNodeLocation(
-                qualifiedName,
-                ruleNode.getKind(),
-                ruleNode.getFile(),
-                ruleNode.getCode(),
-                Integer.parseInt(ruleNode.getLine())
-        );
-    }
-
-    private static String getFullyQualifiedName(String namespace, String classtype, String method) {
-        String qualifiedName = String.join(
-                CharUtils.dot, namespace, classtype);
-        if (method != null) {
-            qualifiedName += CharUtils.dot + method;
+    private static List<Result> getNodes() {
+        List<Result> sinkNodesResults = new ArrayList<>();
+        List<InvocationNode> sinkNodes = DbUtils.QuerySinkNodes();
+        for (InvocationNode sinkNode : sinkNodes) {
+            List<Location> sinkLocations = new ArrayList<>();
+            Location sinkLocation = sinkNode.getInvocationLocation();
+            sinkLocations.add(sinkLocation);
+            Result sinks = new Result().withMessage(new Message().withText(
+                    "[FYI - Sink functions] " +
+                    new ArrayList<>(sinkLocation.getLogicalLocations()).get(0).getFullyQualifiedName()
+                            .replaceAll("\\.null", CharUtils.empty))); // remove null methodname in annotation
+            sinkLocations.add(sinkNode.getInvocationLocation());
+            sinks.setLocations(sinkLocations);
+            sinks.setRuleId(sinkNode.getRuleNode().getRule());
+            sinkNodesResults.add(sinks);
         }
-        return qualifiedName;
-    }
-
-    private static Location parseNodeLocation(String qualifiedname, String kind, String file, String code, int line) {
-        Set<LogicalLocation> logicalLocations = new HashSet<>();
-        LogicalLocation logicalLocation = new LogicalLocation();
-        logicalLocation.setFullyQualifiedName(qualifiedname);
-        logicalLocation.setKind(kind);
-        logicalLocations.add(logicalLocation);
-
-        PhysicalLocation physicalLocation = new PhysicalLocation();
-        physicalLocation.setArtifactLocation(new ArtifactLocation().withUri(file));
-        physicalLocation.setRegion(
-                new Region().withSnippet(new ArtifactContent().withText(code)).withStartLine(line));
-
-        return new Location().withLogicalLocations(logicalLocations).withPhysicalLocation(physicalLocation);
-    }
-
-    private static Result getTaintedFlowResult(HashSet<LinkedList<HashMap<String, String>>> flows, String description) {
-        List<CodeFlow> codeFlows = new ArrayList<>();
-        flows.parallelStream().forEach(flow -> {
-            List<ThreadFlowLocation> threadFlowLocations = new LinkedList<>();
-            for (HashMap<String, String> node : flow) {
-                Location location = parseNodeLocation(node);
-
-                ThreadFlowLocation threadFlowLocation = new ThreadFlowLocation();
-                threadFlowLocation.setLocation(location);
-
-                threadFlowLocations.add(threadFlowLocation);
-            }
-            ThreadFlow threadFlow = new ThreadFlow();
-            threadFlow.setLocations(threadFlowLocations);
-
-            List<ThreadFlow> threadFlows = new ArrayList<>();
-            threadFlows.add(threadFlow);
-
-            CodeFlow codeFlow = new CodeFlow();
-            codeFlow.setThreadFlows(threadFlows);
-
-        });
-        Result result = new Result();
-
-        result.setCodeFlows(codeFlows);
-        result.setMessage(new Message().withText(description));
-
-        return result;
-    }
-
-    private static Result getSourceNodeResult() throws SQLException {
-        ArrayList<RuleNode> SourceNodes = DbUtils.QuerySourceNodeFlowRuleNode();
-        return getNodeResult(SourceNodes, "Source Nodes");
-    }
-
-    private static Result getSinkNodeResult() throws SQLException {
-        ArrayList<RuleNode> SourceNodes = DbUtils.QuerySinkNodeFlowRuleNode();
-        return getNodeResult(SourceNodes, "Sink Nodes");
-    }
-
-    private static Result getNodeResult(ArrayList<RuleNode> nodes, String text) {
-        Result result = new Result().withMessage(new Message().withText(text));
-        List<Location> locations = new ArrayList<>();
-
-        for (RuleNode node : nodes) {
-            Location location = parseNodeLocation(node);
-            locations.add(location);
+        
+        List<Result> sourceNodesResults = new ArrayList<>();
+        List<InvocationNode> sourceNodes = DbUtils.QuerySourceNodes();
+        for (InvocationNode sourceNode : sourceNodes) {
+            List<Location> sourceLocations = new ArrayList<>();
+            Location sourcLocation = sourceNode.getInvocationLocation();
+            sourceLocations.add(sourcLocation);
+            Result sources = new Result().withMessage(new Message().withText(
+                    "[FYI - Source functions] " +
+                    new ArrayList<>(sourcLocation.getLogicalLocations()).get(0).getFullyQualifiedName()
+                            .replaceAll("\\.null", CharUtils.empty))); // remove null methodname in annotation
+            sources.setLocations(sourceLocations);
+            sources.setRuleId(sourceNode.getRuleNode().getRule());
+            sourceNodesResults.add(sources);
         }
-        result.setLocations(locations);
-        return result;
+
+        List<Result> nodes = new ArrayList<>();
+        nodes.addAll(sinkNodesResults);
+        nodes.addAll(sourceNodesResults);
+        return nodes;
     }
 
-    private static List<Result> getSinkGadgetResult() throws SQLException {
-        List<Result> results = new ArrayList<>();
-        ArrayList<HashMap<String, Object>> SinkGadgetNodes = DbUtils.QuerySinkGadgetNodeFlowRuleNode();
-        for (HashMap<String, Object> sinkGadgetNode : SinkGadgetNodes) {
-            String result = (String) sinkGadgetNode.get(DbUtils.DATATRACE);
-            results.add(getResult4Str(result));
-        }
-        return results;
-    }
-
-    private static Result getResult4Str(String result) {
-        // TODO
-        return new Result();
-    }
-
-    private static Result getWebFlowResult() {
-        String description = "";
-        Result result = getTaintedFlowResult(TaintedFlow.getTaintedPaths4WebSource(), description);
-        result.setMessage(new Message().withText("Saucer found a taint flow from web sources to sinks"));
-        return result;
-    }
-
-    private static Result getGadgetFlowResult() {
-        String description = "";
-        Result result = getTaintedFlowResult(TaintedFlow.getTaintedPaths4GadgetSource(), description);
-        result.setMessage(new Message().withText("Saucer found a taint flow from native gadget sources to sinks"));
-        return result;
-    }
-
-    private static Result getJsonFlowResult() {
-        String description = "";
-        Result result = getTaintedFlowResult(TaintedFlow.getTaintedPaths4SetterGetterConstructorSource(), description);
-        result.setMessage(new Message().withText("Saucer found a taint flow from json gadget sources to sinks"));
-        return result;
-    }
-
-    public static void report() throws SQLException, IOException {
+    public static void report() {
         Run run = new Run();
 
         ToolComponent toolComponent = new ToolComponent()
+                .withName("Saucer")
                 .withFullName("Saucer")
                 .withDownloadUri(URI.create("https://git.soma.salesforce.com/kang-hou/"))
                 .withLanguage("Java");
 
         Tool tool = new Tool();
         tool.setDriver(toolComponent);
-
         List<Result> results = new ArrayList<>();
 
-        results.add(getWebFlowResult());
-        results.add(getGadgetFlowResult());
-        results.add(getJsonFlowResult());
-//        results.addAll(getSinkGadgetResult());
-        results.add(getSinkNodeResult());
-        results.add(getSourceNodeResult());
+        results.addAll(new FlowAnalysis().getTaintFlows());
+        results.addAll(getSinkGadgets());
+        results.addAll(getNodes());
 
         run.setTool(tool);
         run.setResults(results);
@@ -180,14 +79,7 @@ public class SarifUtils {
                 .withRuns(runs)
                 .withVersion(SarifSchema210.Version._2_1_0);
 
-//        StringWriter writer = new StringWriter();
-//        ObjectMapper mapper = new ObjectMapper();
-//        JsonGenerator generator = mapper.writerWithDefaultPrettyPrinter().createGenerator(writer);
-//        generator.writeObject(sarifSchema210);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String sarif = objectMapper.writeValueAsString(sarifSchema210);
-
+        String sarif = CharUtils.Object2Json(sarifSchema210);
         FileUtils.WriteFile("target/result.sarif", sarif, false);
     }
 }

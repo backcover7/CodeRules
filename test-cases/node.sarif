@@ -10,24 +10,144 @@
       ],
       "results": [
         {
+          "codeFlows": [
+            {
+              "message": {
+                "text": "Untrusted dataflow from java/test.java:33 to java/test.java:37"
+              },
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Source: 'public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }' @ 'java/test.java:33'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "java/test.java"
+                          },
+                          "region": {
+                            "endColumn": 6,
+                            "endLine": 38,
+                            "message": {
+                              "text": "Source: 'public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }' @ 'java/test.java:33'"
+                            },
+                            "snippet": {
+                              "text": "public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }"
+                            },
+                            "startColumn": 5,
+                            "startLine": 33
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Sink: 'Runtime.getRuntime().exec(data); //3' @ 'java/test.java:37'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "java/test.java"
+                          },
+                          "region": {
+                            "endColumn": 40,
+                            "endLine": 37,
+                            "message": {
+                              "text": "Sink: 'Runtime.getRuntime().exec(data); //3' @ 'java/test.java:37'"
+                            },
+                            "snippet": {
+                              "text": "        Runtime.getRuntime().exec(data); //3"
+                            },
+                            "startColumn": 9,
+                            "startLine": 37
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "message": {
+                "text": "Untrusted dataflow from java/test.java:33 to java/test.java:37"
+              },
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Source: 'public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }' @ 'java/test.java:33'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "java/test.java"
+                          },
+                          "region": {
+                            "endColumn": 6,
+                            "endLine": 38,
+                            "message": {
+                              "text": "Source: 'public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }' @ 'java/test.java:33'"
+                            },
+                            "snippet": {
+                              "text": "public void rce(String payload) throws IOException {\n        branch();\n        String data = intermediate(payload); // 2\n        Object anything = \"A\".toUpperCase(java.util.Locale.ROOT);\n        Runtime.getRuntime().exec(data); //3\n    }"
+                            },
+                            "startColumn": 5,
+                            "startLine": 33
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "location": {
+                        "message": {
+                          "text": "Sink: 'Runtime.getRuntime().exec(data); //3' @ 'java/test.java:37'"
+                        },
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "java/test.java"
+                          },
+                          "region": {
+                            "endColumn": 40,
+                            "endLine": 37,
+                            "message": {
+                              "text": "Sink: 'Runtime.getRuntime().exec(data); //3' @ 'java/test.java:37'"
+                            },
+                            "snippet": {
+                              "text": "        Runtime.getRuntime().exec(data); //3"
+                            },
+                            "startColumn": 9,
+                            "startLine": 37
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "fingerprints": {
-            "matchBasedId/v1": "43a6d7cc9e935e5bac659322eb3799d6c03b6e2308e380e74b7c7623be4c9adf8c1dcb0f919488a4a18ed4b2babc8eb9a1001997ff423c1e0a1f2b04794f2ea3_0"
+            "matchBasedId/v1": "342c2a48ed4c72c5e2c90299c413753bef938393364ac050b031e0a798160de48588fe18b1bd69de4c32fa45d97851adb1536821a39fa5032a7815b30adddf5b_0"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "test-cases/java/test.java",
+                  "uri": "java/test.java",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "endColumn": 41,
-                  "endLine": 11,
+                  "endColumn": 40,
+                  "endLine": 37,
                   "snippet": {
-                    "text": "        Runtime.getRuntime().exec(user);"
+                    "text": "        Runtime.getRuntime().exec(data); //3"
                   },
                   "startColumn": 9,
-                  "startLine": 11
+                  "startLine": 37
                 }
               }
             }
@@ -35,7 +155,7 @@
           "message": {
             "text": "Semgrep found a tained data flow from source"
           },
-          "ruleId": "test-cases.taint4source"
+          "ruleId": "taint4source"
         }
       ],
       "tool": {
@@ -49,8 +169,8 @@
               "fullDescription": {
                 "text": "Semgrep found a tained data flow from source"
               },
-              "id": "test-cases.taint4source",
-              "name": "test-cases.taint4source",
+              "id": "taint4source",
+              "name": "taint4source",
               "properties": {
                 "precision": "very-high",
                 "tags": []

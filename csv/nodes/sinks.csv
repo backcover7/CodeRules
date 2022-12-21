@@ -89,8 +89,8 @@ org.apache.commons.beanutils:BeanUtils:populate:beans
 org.apache.commons.beanutils:BeanUtilsBean:populate:beans
 org.springframework.beans:BeanUtils:copyProperties:beans
 java.awt:Desktop:browse:command
+java.lang:ProcessBuilder:<init>:command
 java.lang:ProcessBuilder:command:command
-java.lang:ProcessBuilder:start:command
 java.lang:Runtime:exec:command
 java.lang:Runtime:load:command
 java.lang:Runtime:loadLibrary:command
@@ -464,8 +464,8 @@ org.apache.sling.scripting.jsp.jasper.runtime:JspRuntimeLibrary:include:jsp
 org.apache.taglibs.standard.tag.rt.core:ImportTag:setUrl:jsp
 org.apache.taglibs.standard.tag.rt.xml:TransformTag:setXslt:jsp
 org.springframework.web.servlet.tags:EvalTag:setExpression:jsp
-com.unboundid.ldap.sdk:LDAPInterface::search:ldap
-com.unboundid.ldap.sdk:LDAPInterface::searchForEntry:ldap
+com.unboundid.ldap.sdk:LDAPInterface:search:ldap
+com.unboundid.ldap.sdk:LDAPInterface:searchForEntry:ldap
 com.unboundid.ldap.sdk:LDAPConnection:asyncSearch:ldap
 javax.naming:Context:lookup:ldap
 javax.naming.directory:DirContext:search:ldap
@@ -864,6 +864,7 @@ javax.xml.validation:Validator:validate:xxe
 javax.xml.xpath:XPathExpression:evaluate:xxe
 org.apache.commons.digester:Digester:parse:xxe
 org.apache.commons.digester3:Digester:parse:xxe
+org.apache.commons.scxml2.io:SCXMLReader:read:xxe
 org.apache.tomcat.util.digester:Digester:parse:xxe
 org.dom4j.io:SAXReader:read:xxe
 org.jdom.input:SAXBuilder:build:xxe

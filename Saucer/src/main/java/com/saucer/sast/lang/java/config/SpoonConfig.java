@@ -38,7 +38,6 @@ public class SpoonConfig {
     }
 
     private Launcher getSpoonLauncher(String jarlibPath) {
-        // TODO add .m2
         File directory = new File(Paths.get(FileUtils.Expanduser(jarlibPath)).toAbsolutePath().normalize().toString());
         IOFileFilter jarFilter = new SuffixFileFilter(CharUtils.JarExtension);
         Collection<File> jars = org.apache.commons.io.FileUtils.listFiles(

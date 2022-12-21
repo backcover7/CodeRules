@@ -2,7 +2,11 @@ rules:
   - id: taint4source
     options:
       symbolic_propagation: true
-    pattern: Runtime.getRuntime().exec(user);
+    mode: taint
+    pattern-sources:
+      - pattern: public void rce($VAR) {...}
+    pattern-sinks:
+      - pattern: Runtime.getRuntime().exec(...)
     message: Semgrep found a tained data flow from source
     languages: [java]
     severity: WARNING

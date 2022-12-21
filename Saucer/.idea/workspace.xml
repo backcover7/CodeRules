@@ -10,14 +10,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/InterProcedure.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/IntraProcedure.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/SpoonConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/RuleNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/CallGraphNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/dataflow/TaintedFlow.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/MarkdownUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/taint2invocation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint2invocation.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/taint2nonparaminvocation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint2nonparaminvocation.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/taint4source.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/taint4source.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/nodes/schema" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sarif-schema-2.1.0.json.1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/java/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../test-cases/java/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/node.sarif" beforeDir="false" afterPath="$PROJECT_DIR$/../test-cases/node.sarif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/test.sarif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/test.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../test-cases/test.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,18 +81,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.39425287" />
-    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.grazie" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;e8360d346c647a3079ab4ae02e73b4bb&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -84,13 +105,14 @@
       <recent name="$PROJECT_DIR$/src/main/test-cases/java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils" />
       <recent name="$PROJECT_DIR$/lib" />
+      <recent name="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/main/lib" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.saucer.sast.utils" />
       <recent name="" />
     </key>
   </component>
@@ -99,20 +121,21 @@
       <command value="mvn -f /Users/kang.hou/Documents/CodeRules/SemSpoon/pom.xml dependency:copy-dependencies -DoutputDirectory=/Users/kang.hou/Documents/CodeRules/SemSpoon/src/main/Lib/Dependencies" />
       <command value="mvn -v" />
       <command value="mvn clean package" />
+      <command value="mvn dependency:build-classpath" />
     </option>
   </component>
   <component name="RunManager" selected="Application.run_java">
     <configuration name="run_java" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.java.Main" />
-      <module name="Sacuer" />
-      <option name="PROGRAM_PARAMETERS" value="-o target -r ../csv/nodes ../test-cases/java/test.java" />
+      <module name="Saucer" />
+      <option name="PROGRAM_PARAMETERS" value="-o target -r ../csv/nodes $USER_HOME$/Downloads/target" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="run_js" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.lang.javascript.run" />
-      <module name="Sacuer" />
+      <module name="Saucer" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.saucer.sast.lang.javascript.*" />
@@ -162,7 +185,20 @@
       <workItem from="1670533023449" duration="1954000" />
       <workItem from="1670535114410" duration="2260000" />
       <workItem from="1670545641639" duration="1739000" />
-      <workItem from="1670603758184" duration="6391000" />
+      <workItem from="1670603758184" duration="14929000" />
+      <workItem from="1670622801485" duration="583000" />
+      <workItem from="1670623392243" duration="33332000" />
+      <workItem from="1670877019190" duration="118000" />
+      <workItem from="1670877156467" duration="397000" />
+      <workItem from="1670877685640" duration="36371000" />
+      <workItem from="1670967340747" duration="183000" />
+      <workItem from="1670967525420" duration="16419000" />
+      <workItem from="1670990872488" duration="51535000" />
+      <workItem from="1671215534768" duration="5933000" />
+      <workItem from="1671221972926" duration="39377000" />
+      <workItem from="1671558772962" duration="35692000" />
+      <workItem from="1671649327732" duration="9324000" />
+      <workItem from="1671661448100" duration="3320000" />
     </task>
     <servers />
   </component>
@@ -183,14 +219,11 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <breakpoint type="java-exception">
-          <properties class="java.lang.NullPointerException" package="java.lang" />
-          <option name="timeStamp" value="649" />
-        </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="669" />
+          <condition expression="intraflow.getLocations() == null || intraflow.getLocations().get(1) == null" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java</url>
+          <line>755</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

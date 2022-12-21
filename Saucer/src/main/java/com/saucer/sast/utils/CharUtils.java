@@ -1,7 +1,7 @@
 package com.saucer.sast.utils;
 
-import com.saucer.sast.lang.java.parser.core.RuleNode;
-import com.saucer.sast.lang.java.parser.dataflow.CallGraphNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.util.Map;
@@ -69,8 +69,54 @@ public class CharUtils {
         return lastOccurence;
     }
 
-    public static String StringSubsitute(Map<String, String> map, String template) {
+    public static String StringSubstitute(Map<String, String> map, String template) {
         StringSubstitutor stringSubstitutor = new StringSubstitutor(map);
         return stringSubstitutor.replace(template);
+    }
+
+    public static String replaceEmpty2Null(String str) {
+        if (str.equals(empty)) {
+            return null;
+        } else {
+            return str;
+        }
+    }
+
+    public static String Object2Json(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = CharUtils.empty;
+        try {
+            json = mapper.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+    public static Object Json2Object(String json, Class<?> clazz) {
+        ObjectMapper mapper = new ObjectMapper();
+        Object obj = new Object();
+        try {
+            obj = mapper.readValue(json, clazz);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    public static boolean Integer2Boolean(int code) {
+        return code != 0;
+    }
+
+    public static int Boolean2Integer(boolean flag) {
+        if (!flag) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }
