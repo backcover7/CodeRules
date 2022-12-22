@@ -27,6 +27,7 @@ public class CharUtils {
     public final static String singleQuote = "'";
     public final static String doubleQuote = "\"";
     public final static String sharp = "#";
+    public final static String underscore = "_";
     public final static String space = " ";
     public final static String leftbracket = "(";
     public final static String leftbracketRegex = "\\(";
@@ -44,6 +45,7 @@ public class CharUtils {
     public final static String MarkdownExtension = ".md";
     public final static String PdfExtension = ".pdf";
     public final static String HtmlExtension = ".html";
+    public final static String SarifExtension = ".sarif";
     public final static String JAVA = "java";
     public final static String banner = " ________  ________  ___  ___  ________  _______   ________          ___       \n" +
             "|\\   ____\\|\\   __  \\|\\  \\|\\  \\|\\   ____\\|\\  ___ \\ |\\   __  \\        |\\  \\      \n" +

@@ -1,10 +1,13 @@
 package com.saucer.sast.utils;
 
 import com.contrastsecurity.sarif.*;
+import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.FlowAnalysis;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 
 import java.net.URI;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 // https://github.com/Contrast-Security-OSS/java-sarif
@@ -80,6 +83,10 @@ public class SarifUtils {
                 .withVersion(SarifSchema210.Version._2_1_0);
 
         String sarif = CharUtils.Object2Json(sarifSchema210);
-        FileUtils.WriteFile("target/result.sarif", sarif, false);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH.mm");
+        String report = Paths.get(SpoonConfig.codebase).getFileName().toString() + CharUtils.underscore
+                + dateFormat.format(new Date()) + CharUtils.SarifExtension;
+        FileUtils.WriteFile(Paths.get(FileUtils.OutputDirectory, report).toAbsolutePath().toString(), sarif, false);
     }
 }

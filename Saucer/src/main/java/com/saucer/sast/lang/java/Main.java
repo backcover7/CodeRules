@@ -9,7 +9,6 @@ import com.saucer.sast.utils.DbUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 //@Command(name = "Java", mixinStandardHelpOptions = true, version = "Saucer/0.1",
@@ -56,7 +55,8 @@ public class Main implements Runnable {
             SpoonConfig spoonConfig = new SpoonConfig();
             // todo
             codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/test.java";
-//            codebase = "/Users/kang.hou/Downloads/click-2.3.0/framework/src/";
+//            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/JdbcRowSetImpl.java";
+//            codebase = "/Users/kang.hou/Downloads/click-2.3.0/framework/";
             maven = false;
             if (!maven) {
                 spoonConfig.init(codebase, dependency);

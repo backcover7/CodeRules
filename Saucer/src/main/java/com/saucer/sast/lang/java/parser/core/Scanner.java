@@ -35,14 +35,14 @@ public class Scanner {
     public void init() {
         Collection<CtType<?>> classtypes = SpoonConfig.model.getElements(new TypeFilter<>(CtType.class));
 
-        for(CtType<?> classtype: ProgressBar.wrap(classtypes, "[.] Class Analysis       ")) {
+        ProgressBar.wrap(classtypes.parallelStream(), "[.] Class Analysis").forEach(classtype -> {
             Set<CtExecutable<?>> ctExecutables = new HashSet<>();
             if (classtype instanceof CtClassImpl) {
                 ctExecutables.addAll(((CtClassImpl<?>) classtype).getConstructors());
             }
             ctExecutables.addAll(classtype.getMethods());
 
-            for(CtExecutable<?> ctExecutable : ctExecutables) {
+            ctExecutables.parallelStream().forEach(ctExecutable -> {
                 CtExecutableReference<?> ctExecutableReference = ctExecutable.getReference();
 
                 // TODO xstream flow
@@ -55,20 +55,20 @@ public class Scanner {
                 int MethodID = DbUtils.ImportMethodNode(ctExecutableMethodNode);
 
                 try {
-                    ProcessAnnotation(ctExecutable, ctExecutableMethodNode, MethodID);
+                    ProcessAnnotation(ctExecutable, MethodID);
                     ProcessConstructor(ctExecutable, ctExecutableMethodNode, MethodID);
                     ProcessMethod(ctExecutable, ctExecutableMethodNode, MethodID);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.err.println("[!] Error");
+                    System.err.println("[!] Something wrong when analyzing the source code!");
                 }
-            }
-        }
+            });
+        });
 
         DbUtils.ImportWebInvocationSourceFlow();
     }
 
-    private void ProcessAnnotation(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
+    private void ProcessAnnotation(CtExecutable<?> ctExecutable, int MethodID) {
         List<CtAnnotation<?>> ctAnnotationList = ctExecutable.getElements(new TypeFilter<>(CtAnnotation.class));
         ctAnnotationList.parallelStream().forEach(annotation -> {
             String annotationType = annotation.getAnnotationType().getQualifiedName();
@@ -83,7 +83,8 @@ public class Scanner {
             invocationAnnotation.getMethodNode().setSignature(annotation.getActualAnnotation().toString());
 
             int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationAnnotation.getMethodNode());
-            int InvocationID = DbUtils.ImportInvocationNode(invocationAnnotation, MethodIDofInvocation);
+            invocationAnnotation.setInvocationMethodID(MethodIDofInvocation);
+            int InvocationID = DbUtils.ImportInvocationNode(invocationAnnotation);
             DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID);
 //            DbUtils.ImportCallgraphNode(MethodID, InvocationID, null);
         });
@@ -92,7 +93,6 @@ public class Scanner {
     private void ProcessConstructor(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
         List<CtConstructorCall<?>> constructorCallList = ctExecutable.getElements(new TypeFilter<>(CtConstructorCall.class));
         constructorCallList.parallelStream().forEach(constructorCall -> {
-            // All sink constructor should be fed with tainted data
             if (constructorCall.getExecutable().getParameters().size() != 0) {
                 CtExecutableReference<?> executableReference = constructorCall.getExecutable();
                 String qualifiedName = executableReference.getDeclaringType().getQualifiedName();
@@ -105,7 +105,8 @@ public class Scanner {
                 setInvocationProperties(invocationConstructor.getMethodNode(), executableReference);
 
                 int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationConstructor.getMethodNode());
-                int InvocationID = DbUtils.ImportInvocationNode(invocationConstructor, MethodIDofInvocation);
+                invocationConstructor.setInvocationMethodID(MethodIDofInvocation);
+                int InvocationID = DbUtils.ImportInvocationNode(invocationConstructor);
                 ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationConstructor);
 
                 CallGraphNode callGraphNode = new CallGraphNode();
@@ -120,14 +121,14 @@ public class Scanner {
 
     private void ProcessMethod(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
         List<CtInvocation<?>> ctInvocationList = ctExecutable.getElements(new TypeFilter<>(CtInvocation.class));
-        for (CtInvocation<?> invocation : ctInvocationList) {
+        ctInvocationList.parallelStream().forEach(invocation -> {
             CtExecutableReference<?> executableReference = invocation.getExecutable();
             CtTypeReference<?> executableInvocation = executableReference.getDeclaringType();
 
-            // missing classpath
             if (executableInvocation == null || executableInvocation.getTypeDeclaration() == null) {
-                continue;
+                // missing classpath
                 // throw new Exception("[!] Missing classpath!");
+                return;
             }
 
             if (executableReference.isConstructor()) {
@@ -175,12 +176,6 @@ public class Scanner {
                 }
             }
 
-//            if (!SpoonConfig.model.getElements(new TypeFilter<>(CtType.class)).contains(executableInvocation.getTypeDeclaration())) {
-//                // This is an invocation from third party dependency. Will not set gadgetsource flag to true on it.
-//                invocationMethod.getMethodNode().setNativeGadgetSource(false);
-//                invocationMethod.getMethodNode().setJsonGadgetSource(false);
-//            }
-
             if (executableReference.getParameters().size() == 0) {
                 // Native gadget source might have no parameters like readObject.
                 // But setter/getter/constructor must have parameters to be a Json gadget source
@@ -188,7 +183,8 @@ public class Scanner {
             }
 
             int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationMethod.getMethodNode());
-            int InvocationID = DbUtils.ImportInvocationNode(invocationMethod, MethodIDofInvocation);
+            invocationMethod.setInvocationMethodID(MethodIDofInvocation);
+            int InvocationID = DbUtils.ImportInvocationNode(invocationMethod);
             ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationMethod);
 
             CallGraphNode callGraphNode = new CallGraphNode();
@@ -197,7 +193,7 @@ public class Scanner {
             callGraphNode.setIntraflow(intraflow);
 
             DbUtils.ImportCallgraphNode(callGraphNode);
-        }
+        });
     }
 
     private void setInvocationProperties(MethodNode methodNode, CtExecutableReference<?> executableReference) {
@@ -217,61 +213,4 @@ public class Scanner {
             methodNode.setMethodLocation(new Location());
         }
     }
-
-//    public void FlagThreats() throws SQLException {
-//        // Flag flow of web vulnerability bug
-//        HashSet<LinkedList<HashMap<String, String>>> taintedPaths4WebSource = FlowAnalysis.getTaintedPaths4WebSource();
-//        if (taintedPaths4WebSource.size() != 0) {
-//            MarkdownUtils.ReportTaintedFlow4WebSourceHeader();
-//            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4WebSource) {
-//                MarkdownUtils.ReportTaintedFlow(taintedFlow, FlowAnalysis.WEBSOURCEFLAG);
-//            }
-//        }
-//
-//        // Flag flow of native deserialization gadget bug
-//        HashSet<LinkedList<HashMap<String, String>>> taintedPaths4GadgetSource = FlowAnalysis.getTaintedPaths4GadgetSource();
-//        if (taintedPaths4GadgetSource.size() != 0) {
-//            MarkdownUtils.ReportTaintedFlow4GadgetSourceHeader();
-//            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4GadgetSource) {
-//                MarkdownUtils.ReportTaintedFlow(taintedFlow, FlowAnalysis.GADGETSOURCEFLAGE);
-//            }
-//        }
-//
-//        // Flag flow of marshalsec deserialization gadget bug
-//        HashSet<LinkedList<HashMap<String, String>>> taintedPaths4SetterGetterConstructorSource =
-//                FlowAnalysis.getTaintedPaths4SetterGetterConstructorSource();
-//        if (taintedPaths4SetterGetterConstructorSource.size() != 0) {
-//            MarkdownUtils.ReportTaintedFlow4SetterGetterConstructorSourceHeader();
-//            for (LinkedList<HashMap<String, String>> taintedFlow : taintedPaths4SetterGetterConstructorSource) {
-//                MarkdownUtils.ReportTaintedFlow(taintedFlow, FlowAnalysis.SETTERGETTERCONSTRUCTORFLAG);
-//            }
-//        }
-//
-//        // Flag sink gadget bug
-//        ArrayList<HashMap<String, Object>> SinkGadgetNodes = DbUtils0.QuerySinkGadgetNodeFlowRuleNode();
-//        if (SinkGadgetNodes.size() != 0) {
-//            MarkdownUtils.ReportGadgetSinkNode();
-//            for (HashMap<String, Object> sinkGadgetNode : SinkGadgetNodes) {
-//                MarkdownUtils.ReportGadgetSinkNode(sinkGadgetNode);
-//            }
-//        }
-//
-//        // Flag sink node bug
-//        ArrayList<FlowNode0> SinkNodes = DbUtils0.QuerySinkNodeFlowRuleNode();
-//        if (SinkNodes.size() != 0) {
-//            MarkdownUtils.ReportSinkNodeHeader();
-//            for (FlowNode0 node : SinkNodes) {
-//                MarkdownUtils.ReportNode(node);
-//            }
-//        }
-//
-//        // Flag all source nodes
-//        ArrayList<FlowNode0> SourceNodes = DbUtils0.QuerySourceNodeFlowRuleNode();
-//        if (SourceNodes.size() != 0) {
-//            MarkdownUtils.ReportSourceNodeHeader();
-//            for (FlowNode0 node : SourceNodes) {
-//                MarkdownUtils.ReportNode(node);
-//            }
-//        }
-//    }
 }

@@ -188,8 +188,8 @@ public class DbUtils {
                 + MethodNode.ISJSONGADGETSOURCE + " integer,\n"
                 + MethodNode.ISSINKINVOCATION + " integer,\n"
                 + MethodNode.ISSOURCEPROPAGATOR + " integer,\n"
-                + MethodNode.ISSINKPROPAGATOR + " integer,\n" +
-                "UNIQUE (" + MethodNode.RETURNTYPE+ "," + MethodNode.SIGNATURE + "," + MethodNode.SOURCECODE + "," + MethodNode.METHODLOCATION + ")" +
+                + MethodNode.ISSINKPROPAGATOR + " integer,\n"
+                + "UNIQUE (" + MethodNode.RETURNTYPE+ "," + MethodNode.SIGNATURE + "," + MethodNode.SOURCECODE + "," + MethodNode.METHODLOCATION + ")" +
                 ");";
 
         try (Statement stmt = conn.createStatement()) {
@@ -245,15 +245,16 @@ public class DbUtils {
             statement.setInt(17, Boolean2Integer(methodNode.isSinkPropagator()));
 
             int row = statement.executeUpdate();
+            id = QueryExistingMethodNodeRowId(methodNode);
 
-            if (row != 0) {
-                ResultSet rs = statement.getGeneratedKeys();
-                if (rs.next()) {
-                    id = rs.getInt(1);
-                }
-            } else {
-                id = QueryExistingMethodNodeRowId(methodNode);
-            }
+//            if (row != 0) {
+//                ResultSet rs = statement.getGeneratedKeys();
+//                if (rs.next()) {
+//                    id = rs.getInt(1);
+//                }
+//            } else {
+//                id = QueryExistingMethodNodeRowId(methodNode);
+//            }
 
             statement.close();
         } catch (SQLException e) {
@@ -298,7 +299,9 @@ public class DbUtils {
                 + RuleNode.KIND + " varchar,\n"
                 + RuleNode.RULE + " varchar,\n"
                 + InvocationNode.SNIPPET + " varchar,\n"
-                + InvocationNode.INVOCATIONLOCATION + " varchar);";
+                + InvocationNode.INVOCATIONLOCATION + " varchar,\n"
+                + "UNIQUE (" + InvocationNode.INVOCATIOMETHODID+ "," + InvocationNode.INVOCATIONLOCATION + ")" +
+                ");";
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -307,7 +310,7 @@ public class DbUtils {
         }
     }
 
-    public static int ImportInvocationNode(InvocationNode invocationNode, int InvocationMethodID) {
+    public static int ImportInvocationNode(InvocationNode invocationNode) {
         String sql = "INSERT or IGNORE INTO " + invocationsTable + " (" +
                 InvocationNode.INVOCATIOMETHODID + ", " +
                 ClassNode.NAMESPACE + ", " +
@@ -330,7 +333,7 @@ public class DbUtils {
         int id = -1;
         try {
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setInt(1, InvocationMethodID);
+            statement.setInt(1, invocationNode.getInvocationMethodID());
             statement.setString(2, classNode.getNamespace());
             statement.setString(3, classNode.getName());
             statement.setString(4, methodNode.getName());
@@ -345,9 +348,33 @@ public class DbUtils {
 
             statement.executeUpdate();
 
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()) {
-                id = rs.getInt(1);
+            id = QueryExistingInvocationNodeRowId(invocationNode);
+
+//            ResultSet rs = statement.getGeneratedKeys();
+//            if (rs.next()) {
+//                id = rs.getInt(1);
+//            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+
+    // TODO one invocationMethodID might have several invocationIDs in invocations table.
+    private static int QueryExistingInvocationNodeRowId(InvocationNode invocationNode) {
+        int id = -1;
+        try {
+            String sql = "SELECT " + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + InvocationNode.INVOCATIOMETHODID + " = ? AND " + InvocationNode.INVOCATIONLOCATION + " = ?";
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, invocationNode.getInvocationMethodID());
+            statement.setString(2, Object2Json(invocationNode.getInvocationLocation()));
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt(1);
             }
 
             statement.close();
@@ -589,12 +616,12 @@ public class DbUtils {
     // and find out if there's a data flow from web source invocations to these invocations
     // at last store the data flow to callgraphs table
     /*
-     * SELECT * FROM invocations WHERE invocations.InvocationID in (SELECT callgraphs.InvocationID FROM callgraphs WHERE callgraphs.MethodID = (SELECT callgraphs.MethodID FROM callgraphs WHERE callgraphs.InvocationID = (SELECT invocations.InvocationID FROM invocations WHERE invocations.InvocationMethodID = 3)));
+     * SELECT * FROM invocations WHERE invocations.InvocationID in (SELECT callgraphs.InvocationID FROM callgraphs WHERE callgraphs.MethodID in (SELECT callgraphs.MethodID FROM callgraphs WHERE callgraphs.InvocationID in (SELECT invocations.InvocationID FROM invocations WHERE invocations.InvocationMethodID = 3)));
      */
     public static void ImportWebInvocationSourceFlow() {
         List<InvocationNode> webInvocationSourceInvocationNodes = QueryExistingWebInvocationSourceInvocationNode();
         for (InvocationNode webInvocationSourceInvocationNode : webInvocationSourceInvocationNodes) {
-            String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.METHODID + " = (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " = (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?)))";
+            String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?)))";
 
             PreparedStatement statement;
             try {
@@ -620,7 +647,7 @@ public class DbUtils {
     }
 
     public static MethodNode QueryMethodNodeFromWebSourceInvocation(int MethodID) {
-        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + CallGraphNode.METHODID + " = (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " = (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?))";
+        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?))";
         PreparedStatement statement;
         try {
             statement = conn.prepareStatement(sql);
@@ -769,9 +796,6 @@ public class DbUtils {
         return results;
     }
 
-    /*
-     * SELECT * FROM methods WHERE MethodID = (SELECT invocations.InvocationMethodID FROM invocations WHERE invocations.InvocationID = ?)
-     */
     private static String QueryRuleFromCallgraph(int InvocationID) {
         String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " = ?";
 
@@ -941,7 +965,7 @@ public class DbUtils {
             location.getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
         }
 
-        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " = 1 AND " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " = (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + InvocationNode.INVOCATIOMETHODID + " = ?))";
+        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " = 1 AND " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + InvocationNode.INVOCATIOMETHODID + " = ?))";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, methodNode.getMethodID());
