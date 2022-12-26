@@ -43,7 +43,7 @@ public class SemgrepUtils {
         cmd.add(yaml);
         cmd.add(codebase);
         cmd.add(SARIF_FORMAT);
-        return ProcessSarifResult(Runtime.getRuntime().exec(cmd.toArray(new String[0])));
+        return ProcessSarifResult(new ProcessBuilder(cmd.toArray(new String[0])).start());
     }
 
     private static List<Result> ProcessSarifResult(Process process) throws IOException {

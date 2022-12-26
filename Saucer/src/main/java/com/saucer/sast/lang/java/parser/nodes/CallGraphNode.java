@@ -1,6 +1,5 @@
 package com.saucer.sast.lang.java.parser.nodes;
 
-import com.contrastsecurity.sarif.Location;
 import com.contrastsecurity.sarif.ThreadFlow;
 import com.contrastsecurity.sarif.ThreadFlowLocation;
 import com.saucer.sast.utils.CharUtils;
@@ -39,9 +38,7 @@ public class CallGraphNode {
     public void setIntraflow(ThreadFlow intraflow) {
         if (intraflow != null) {
             List<ThreadFlowLocation> threadFlowLocations = intraflow.getLocations();
-            for (ThreadFlowLocation threadFlowLocation : threadFlowLocations) {
-                modifyThreadFlowLocationMessage(threadFlowLocation);
-            }
+            threadFlowLocations.parallelStream().forEach(this::modifyThreadFlowLocationMessage);
         }
         this.intraflow = intraflow;
     }

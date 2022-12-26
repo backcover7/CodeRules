@@ -61,8 +61,14 @@ public class FlowAnalysis {
 
             DefaultMutableTreeNode convergencePredTreeNode = new DefaultMutableTreeNode(convergenLocation);
             DefaultMutableTreeNode convergenceSuccTreeNode = (DefaultMutableTreeNode) convergencePredTreeNode.clone();
-            DbUtils.QueryPredNodes(convergence, convergencePredTreeNode);
-            DbUtils.QuerySuccNodes(convergence, convergenceSuccTreeNode);
+
+            Set<Integer> uniquePred = new HashSet<>();
+            uniquePred.add(convergence.getMethodID());
+            Set<Integer> uniqueSucc = new HashSet<>();
+            uniqueSucc.add(convergence.getMethodID());
+
+            DbUtils.QueryPredNodes(convergence, convergencePredTreeNode, uniquePred);
+            DbUtils.QuerySuccNodes(convergence, convergenceSuccTreeNode, uniqueSucc);
 
             List<Location[]> predLeafPaths = getAllLeafPath(convergencePredTreeNode);
             List<Location[]> succLeafPaths = getAllLeafPath(convergenceSuccTreeNode);
@@ -70,10 +76,9 @@ public class FlowAnalysis {
             for (Location[] predLeafPath : predLeafPaths) {
                 for (Location[] succLeafPath : succLeafPaths) {
                     List<Location> succLeafPathList = new ArrayList<>(Arrays.asList(succLeafPath));
-                    succLeafPathList.remove(0);
-
                     List<Location> predLeafPathList = new ArrayList<>(Arrays.asList(predLeafPath));
                     Collections.reverse(predLeafPathList);
+                    succLeafPathList.remove(0);
                     predLeafPathList.addAll(succLeafPathList);
 
                     paths.add(predLeafPathList);

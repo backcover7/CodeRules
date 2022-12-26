@@ -1,6 +1,7 @@
 package com.saucer.sast.lang.java.parser.core;
 
 import com.contrastsecurity.sarif.*;
+import com.google.common.base.Stopwatch;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.*;
 import com.saucer.sast.utils.DbUtils;
@@ -17,16 +18,22 @@ import spoon.reflect.visitor.filter.TypeFilter;
 import spoon.support.reflect.declaration.CtClassImpl;
 
 import java.lang.Exception;
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Scanner {
     public void Scan() {
         System.out.println("[*] Analyzing the target source code ...");
-        init();
+//        init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
+        Stopwatch taintWatch = Stopwatch.createStarted();
         FlowAnalysis flowAnalysis = new FlowAnalysis(Integer.MAX_VALUE - 1);
         flowAnalysis.Analyze();
+        taintWatch.stop();
+        System.out.println(new StringBuilder().append("[+] Elapsed time of taint flow analysis: ")
+                .append(taintWatch.elapsed(TimeUnit.MINUTES)).append(" minutes"));
 
         System.out.println("[*] Create Sarif Report ...");
         SarifUtils.report();
@@ -55,9 +62,19 @@ public class Scanner {
                 int MethodID = DbUtils.ImportMethodNode(ctExecutableMethodNode);
 
                 try {
-                    ProcessAnnotation(ctExecutable, MethodID);
-                    ProcessConstructor(ctExecutable, ctExecutableMethodNode, MethodID);
-                    ProcessMethod(ctExecutable, ctExecutableMethodNode, MethodID);
+                    Method processAnnotation = Scanner.class.getDeclaredMethod("ProcessAnnotation", CtExecutable.class, MethodNode.class, int.class);
+                    Method processConstructor = Scanner.class.getDeclaredMethod("ProcessConstructor", CtExecutable.class, MethodNode.class, int.class);
+                    Method processMethod = Scanner.class.getDeclaredMethod("ProcessMethod", CtExecutable.class, MethodNode.class, int.class);
+                    List<Method> methods = Arrays.asList(processAnnotation, processConstructor, processMethod);
+                    methods.stream()
+                            .parallel()
+                            .forEach(method -> {
+                                try {
+                                    method.invoke(this, ctExecutable, ctExecutableMethodNode, MethodID);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            });
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("[!] Something wrong when analyzing the source code!");
@@ -68,7 +85,7 @@ public class Scanner {
         DbUtils.ImportWebInvocationSourceFlow();
     }
 
-    private void ProcessAnnotation(CtExecutable<?> ctExecutable, int MethodID) {
+    private void ProcessAnnotation(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
         List<CtAnnotation<?>> ctAnnotationList = ctExecutable.getElements(new TypeFilter<>(CtAnnotation.class));
         ctAnnotationList.parallelStream().forEach(annotation -> {
             String annotationType = annotation.getAnnotationType().getQualifiedName();
@@ -85,7 +102,10 @@ public class Scanner {
             int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationAnnotation.getMethodNode());
             invocationAnnotation.setInvocationMethodID(MethodIDofInvocation);
             int InvocationID = DbUtils.ImportInvocationNode(invocationAnnotation);
-            DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID);
+
+            if (invocationAnnotation.getMethodNode().isWebAnnotationSource()) {
+                DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID);
+            }
 //            DbUtils.ImportCallgraphNode(MethodID, InvocationID, null);
         });
     }
@@ -93,29 +113,27 @@ public class Scanner {
     private void ProcessConstructor(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
         List<CtConstructorCall<?>> constructorCallList = ctExecutable.getElements(new TypeFilter<>(CtConstructorCall.class));
         constructorCallList.parallelStream().forEach(constructorCall -> {
-            if (constructorCall.getExecutable().getParameters().size() != 0) {
-                CtExecutableReference<?> executableReference = constructorCall.getExecutable();
-                String qualifiedName = executableReference.getDeclaringType().getQualifiedName();
-                String namespace = FilenameUtils.getBaseName(qualifiedName);
-                String classtype = FilenameUtils.getExtension(qualifiedName);
-                InvocationNode invocationConstructor = DbUtils.QueryInvocationConstructorNode(namespace, classtype);
-                invocationConstructor.setSnippet(constructorCall.getOriginalSourceFragment().getSourceCode());
-                invocationConstructor.setInvocationLocation(
-                        SpoonUtils.ConvertPosition2Location(invocationConstructor, constructorCall.getOriginalSourceFragment().getSourcePosition()));
-                setInvocationProperties(invocationConstructor.getMethodNode(), executableReference);
+            CtExecutableReference<?> executableReference = constructorCall.getExecutable();
+            String qualifiedName = executableReference.getDeclaringType().getQualifiedName();
+            String namespace = FilenameUtils.getBaseName(qualifiedName);
+            String classtype = FilenameUtils.getExtension(qualifiedName);
+            InvocationNode invocationConstructor = DbUtils.QueryInvocationConstructorNode(namespace, classtype);
+            invocationConstructor.setSnippet(constructorCall.getOriginalSourceFragment().getSourceCode());
+            invocationConstructor.setInvocationLocation(
+                    SpoonUtils.ConvertPosition2Location(invocationConstructor, constructorCall.getOriginalSourceFragment().getSourcePosition()));
+            setInvocationProperties(invocationConstructor.getMethodNode(), executableReference);
 
-                int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationConstructor.getMethodNode());
-                invocationConstructor.setInvocationMethodID(MethodIDofInvocation);
-                int InvocationID = DbUtils.ImportInvocationNode(invocationConstructor);
-                ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationConstructor);
+            int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationConstructor.getMethodNode());
+            invocationConstructor.setInvocationMethodID(MethodIDofInvocation);
+            int InvocationID = DbUtils.ImportInvocationNode(invocationConstructor);
+            ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationConstructor);
 
-                CallGraphNode callGraphNode = new CallGraphNode();
-                callGraphNode.setMethodID(MethodID);
-                callGraphNode.setInvocationID(InvocationID);
-                callGraphNode.setIntraflow(intraflow);
+            CallGraphNode callGraphNode = new CallGraphNode();
+            callGraphNode.setMethodID(MethodID);
+            callGraphNode.setInvocationID(InvocationID);
+            callGraphNode.setIntraflow(intraflow);
 
-                DbUtils.ImportCallgraphNode(callGraphNode);
-            }
+            DbUtils.ImportCallgraphNode(callGraphNode);
         });
     }
 

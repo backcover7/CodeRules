@@ -17,63 +17,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.saucer.sast.utils.CharUtils.*;
 
 public class DbUtils {
-    /**
-     * CREATE TABLE rules (
-     *     namespace varchar,
-     *     classtype varchar,
-     *     methodname varchar,
-     *     kind varchar,
-     *     category varchar,
-     *     rule varchar
-     * );
-     *
-     * CREATE TABLE methods (
-     *     MethodID integer primary key,
-     *     namespace varchar,
-     *     classtype varchar,
-     *     methodname varchar,
-     *     returntype varchar,
-     *     signature varchar,
-     *     sourcecode varchar,
-     *     location varchar,
-     *     isAnnotation integer,
-     *     isConstructor integer,
-     *     isMethod integer,
-     *     isWebAnnotationSource integer,
-     *     isNativeGadgetSource integer,
-     *     isJsonGadgetSource integer,
-     *     isWebInvocationSource integer,
-     *     isSink integer,
-     *     isSourcePropagator integer,
-     *     isSinkPropagator integer
-     * );
-     *
-     * CREATE TABLE invocations (
-     *     InvocationID integer primary key,   -> callgraphs.MethodID
-     *     InvocationMethodID integer,         -> methods.MethodID
-     *     namespace varchar,
-     *     classtype varchar,
-     *     methodname varchar,
-     *     returntype varchar,
-     *     signature varchar,
-     *     sourcecode varchar,
-     *     category varchar,
-     *     kind varchar,
-     *     rule varchar,
-     *     snippet varchar,
-     *     location varchar);
-     *
-     * CREATE TABLE callgraphs (
-     *     MethodID integer ,     -> methods.MethodID
-     *     InvocationID integer,  -> invocations.InvocationID
-     *     intraflow varchar
-     * );
-     */
-
     public static Connection conn;
     public final static String dbname = Paths.get(FileUtils.OutputDirectory, "saucer.db").toAbsolutePath().normalize().toString();
     public final static String rulesTable = "rules";
@@ -82,7 +30,7 @@ public class DbUtils {
     public final static String fieldsTable = "fields";
     public final static String callgraphsTable = "callgraphs";
 
-    public void init() throws Exception {
+    public static void init() throws Exception {
         File nodeDb = new File(dbname);
         if (nodeDb.exists()) {
             nodeDb.delete();
@@ -112,13 +60,14 @@ public class DbUtils {
     }
 
     private static void CreateRulesTable() {
-        String sql = "CREATE TABLE " + rulesTable + " (\n"
-                + ClassNode.NAMESPACE + " varchar,\n"
-                + ClassNode.CLASSTYPE + " varchar,\n"
-                + MethodNode.METHOD + " varchar,\n"   // Might be CharUtils.empty if annotation
-                + RuleNode.KIND + " varchar,\n"       // Might be CharUtils.empty if negative
-                + RuleNode.CATEGORY + " varchar,\n"
-                + RuleNode.RULE + " varchar);";
+        String sql = new StringBuilder()
+                .append("CREATE TABLE " + rulesTable + " (\n")
+                .append(ClassNode.NAMESPACE).append(" varchar,\n")
+                .append(ClassNode.CLASSTYPE).append(" varchar,\n")
+                .append(MethodNode.METHOD).append(" varchar,\n")   // Might be CharUtils.empty if annotation
+                .append(RuleNode.KIND).append(" varchar,\n")       // Might be CharUtils.empty if negative
+                .append(RuleNode.CATEGORY).append(" varchar,\n")
+                .append(RuleNode.RULE).append(" varchar);").toString();
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -135,13 +84,14 @@ public class DbUtils {
     }
 
     private static void ImportRules(String rulePath, String category) {
-        String sql = "INSERT INTO " + rulesTable + " (" +
-                ClassNode.NAMESPACE + ", " +
-                ClassNode.CLASSTYPE + ", " +
-                MethodNode.METHOD + ", " +
-                RuleNode.KIND + ", " +
-                RuleNode.CATEGORY + ", " +
-                RuleNode.RULE + ") VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = new StringBuilder()
+                .append("INSERT INTO ").append(rulesTable).append(" (")
+                .append(ClassNode.NAMESPACE).append(", ")
+                .append(ClassNode.CLASSTYPE).append(", ")
+                .append(MethodNode.METHOD).append(", ")
+                .append(RuleNode.KIND).append(", ")
+                .append(RuleNode.CATEGORY).append(", ")
+                .append(RuleNode.RULE).append(") VALUES (?, ?, ?, ?, ?, ?)").toString();
 
         try {
             BufferedReader lineReader = new BufferedReader(new FileReader(rulePath));
@@ -170,27 +120,27 @@ public class DbUtils {
 
     private static void CreateMethodsTable() {
         // TODO: sink annotation
-        String sql = "CREATE TABLE " + methodsTable + " (\n"
-                + CallGraphNode.METHODID + " integer PRIMARY KEY,\n"
-                + ClassNode.NAMESPACE + " varchar,\n"
-                + ClassNode.CLASSTYPE + " varchar,\n"
-                + MethodNode.METHOD + " varchar,\n"
-                + MethodNode.RETURNTYPE + " varchar,\n"
-                + MethodNode.SIGNATURE + " varchar,\n"
-                + MethodNode.SOURCECODE + " varchar,\n"
-                + MethodNode.METHODLOCATION + " varchar,\n"
-                + MethodNode.ISANNOTATION + " integer,\n"   // 1 is true, 0 is false
-                + MethodNode.ISCONSTRUCTOR + " integer,\n"
-                + MethodNode.ISMETHOD + " integer,\n"
-                + MethodNode.ISWEBANNOTATIONSOURCE + " integer,\n"
-                + MethodNode.ISWEBINVOCATIONSOURCE + " integer,\n"
-                + MethodNode.ISNATIVEGADGETSOURCE + " integer,\n"
-                + MethodNode.ISJSONGADGETSOURCE + " integer,\n"
-                + MethodNode.ISSINKINVOCATION + " integer,\n"
-                + MethodNode.ISSOURCEPROPAGATOR + " integer,\n"
-                + MethodNode.ISSINKPROPAGATOR + " integer,\n"
-                + "UNIQUE (" + MethodNode.RETURNTYPE+ "," + MethodNode.SIGNATURE + "," + MethodNode.SOURCECODE + "," + MethodNode.METHODLOCATION + ")" +
-                ");";
+        String sql = new StringBuilder()
+                .append("CREATE TABLE ").append(methodsTable).append(" (\n")
+                .append(CallGraphNode.METHODID).append(" integer PRIMARY KEY,\n")
+                .append(ClassNode.NAMESPACE).append(" varchar,\n")
+                .append(ClassNode.CLASSTYPE).append(" varchar,\n")
+                .append(MethodNode.METHOD).append(" varchar,\n")
+                .append(MethodNode.RETURNTYPE).append(" varchar,\n")
+                .append(MethodNode.SIGNATURE).append(" varchar,\n")
+                .append(MethodNode.SOURCECODE).append(" varchar,\n")
+                .append(MethodNode.METHODLOCATION).append(" varchar,\n")
+                .append(MethodNode.ISANNOTATION).append(" integer,\n")   // 1 is true, 0 is false
+                .append(MethodNode.ISCONSTRUCTOR).append(" integer,\n")
+                .append(MethodNode.ISMETHOD).append(" integer,\n")
+                .append(MethodNode.ISWEBANNOTATIONSOURCE).append(" integer,\n")
+                .append(MethodNode.ISWEBINVOCATIONSOURCE).append(" integer,\n")
+                .append(MethodNode.ISNATIVEGADGETSOURCE).append(" integer,\n")
+                .append(MethodNode.ISJSONGADGETSOURCE).append(" integer,\n")
+                .append(MethodNode.ISSINKINVOCATION).append(" integer,\n")
+                .append(MethodNode.ISSOURCEPROPAGATOR).append(" integer,\n")
+                .append(MethodNode.ISSINKPROPAGATOR).append(" integer,\n")
+                .append("UNIQUE (").append(MethodNode.RETURNTYPE).append(",").append(MethodNode.SIGNATURE).append(",").append(MethodNode.SOURCECODE).append(",").append(MethodNode.METHODLOCATION).append(")").append(");").toString();
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -200,25 +150,26 @@ public class DbUtils {
     }
 
     public static int ImportMethodNode(MethodNode methodNode) {
-        String sql = "INSERT or IGNORE INTO " + methodsTable + " (" +
-                ClassNode.NAMESPACE + ", " +
-                ClassNode.CLASSTYPE + ", " +
-                MethodNode.METHOD + ", " +
-                MethodNode.RETURNTYPE + ", " +
-                MethodNode.SIGNATURE + ", " +
-                MethodNode.SOURCECODE + ", " +
-                MethodNode.METHODLOCATION + ", " +
-                MethodNode.ISANNOTATION + ", " +
-                MethodNode.ISCONSTRUCTOR + ", " +
-                MethodNode.ISMETHOD + ", " +
-                MethodNode.ISWEBANNOTATIONSOURCE + ", " +
-                MethodNode.ISWEBINVOCATIONSOURCE + ", " +
-                MethodNode.ISNATIVEGADGETSOURCE + ", " +
-                MethodNode.ISJSONGADGETSOURCE + ", " +
-                MethodNode.ISSINKINVOCATION + ", " +
-                MethodNode.ISSOURCEPROPAGATOR + ", " +
-                MethodNode.ISSINKPROPAGATOR + ") " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = new StringBuilder()
+                .append("INSERT or IGNORE INTO ").append(methodsTable).append(" (")
+                .append(ClassNode.NAMESPACE).append(", ")
+                .append(ClassNode.CLASSTYPE).append(", ")
+                .append(MethodNode.METHOD).append(", ")
+                .append(MethodNode.RETURNTYPE).append(", ")
+                .append(MethodNode.SIGNATURE).append(", ")
+                .append(MethodNode.SOURCECODE).append(", ")
+                .append(MethodNode.METHODLOCATION).append(", ")
+                .append(MethodNode.ISANNOTATION).append(", ")
+                .append(MethodNode.ISCONSTRUCTOR).append(", ")
+                .append(MethodNode.ISMETHOD).append(", ")
+                .append(MethodNode.ISWEBANNOTATIONSOURCE).append(", ")
+                .append(MethodNode.ISWEBINVOCATIONSOURCE).append(", ")
+                .append(MethodNode.ISNATIVEGADGETSOURCE).append(", ")
+                .append(MethodNode.ISJSONGADGETSOURCE).append(", ")
+                .append(MethodNode.ISSINKINVOCATION).append(", ")
+                .append(MethodNode.ISSOURCEPROPAGATOR).append(", ")
+                .append(MethodNode.ISSINKPROPAGATOR).append(") ")
+                .append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").toString();
 
         ClassNode classNode = methodNode.getFullClasstype();
 
@@ -244,17 +195,8 @@ public class DbUtils {
             statement.setInt(16, Boolean2Integer(methodNode.isSourcePropagator()));
             statement.setInt(17, Boolean2Integer(methodNode.isSinkPropagator()));
 
-            int row = statement.executeUpdate();
+            statement.executeUpdate();
             id = QueryExistingMethodNodeRowId(methodNode);
-
-//            if (row != 0) {
-//                ResultSet rs = statement.getGeneratedKeys();
-//                if (rs.next()) {
-//                    id = rs.getInt(1);
-//                }
-//            } else {
-//                id = QueryExistingMethodNodeRowId(methodNode);
-//            }
 
             statement.close();
         } catch (SQLException e) {
@@ -266,7 +208,7 @@ public class DbUtils {
     private static int QueryExistingMethodNodeRowId(MethodNode methodNode) {
         int id = -1;
         try {
-            String sql = "SELECT " + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + MethodNode.RETURNTYPE + " = ? AND " + MethodNode.SIGNATURE + " = ? AND " + MethodNode.SOURCECODE + " = ? AND " + MethodNode.METHODLOCATION + " = ?";
+            String sql = new StringBuilder().append("SELECT ").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(MethodNode.RETURNTYPE).append(" = ? AND ").append(MethodNode.SIGNATURE).append(" = ? AND ").append(MethodNode.SOURCECODE).append(" = ? AND ").append(MethodNode.METHODLOCATION).append(" = ?").toString();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, methodNode.getReturntype());
             statement.setString(2, methodNode.getSignature());
@@ -286,22 +228,21 @@ public class DbUtils {
     }
 
     private static void CreateInvocationsTable() {
-        String sql = "CREATE TABLE " + invocationsTable + " (\n"
-                + CallGraphNode.INVOCATIONID + " integer primary key,\n"
-                + InvocationNode.INVOCATIOMETHODID + " integer,\n"
-                + ClassNode.NAMESPACE + " varchar,\n"
-                + ClassNode.CLASSTYPE + " varchar,\n"
-                + MethodNode.METHOD + " varchar,\n"
-                + MethodNode.RETURNTYPE + " varchar,\n"
-                + MethodNode.SIGNATURE + " varchar,\n"
-                + MethodNode.SOURCECODE + " varchar,\n"
-                + RuleNode.CATEGORY + " varchar,\n"
-                + RuleNode.KIND + " varchar,\n"
-                + RuleNode.RULE + " varchar,\n"
-                + InvocationNode.SNIPPET + " varchar,\n"
-                + InvocationNode.INVOCATIONLOCATION + " varchar,\n"
-                + "UNIQUE (" + InvocationNode.INVOCATIOMETHODID+ "," + InvocationNode.INVOCATIONLOCATION + ")" +
-                ");";
+        String sql = new StringBuilder().append("CREATE TABLE ").append(invocationsTable).append(" (\n")
+                .append(CallGraphNode.INVOCATIONID).append(" integer primary key,\n")
+                .append(InvocationNode.INVOCATIOMETHODID).append(" integer,\n")
+                .append(ClassNode.NAMESPACE).append(" varchar,\n")
+                .append(ClassNode.CLASSTYPE).append(" varchar,\n")
+                .append(MethodNode.METHOD).append(" varchar,\n")
+                .append(MethodNode.RETURNTYPE).append(" varchar,\n")
+                .append(MethodNode.SIGNATURE).append(" varchar,\n")
+                .append(MethodNode.SOURCECODE).append(" varchar,\n")
+                .append(RuleNode.CATEGORY).append(" varchar,\n")
+                .append(RuleNode.KIND).append(" varchar,\n")
+                .append(RuleNode.RULE).append(" varchar,\n")
+                .append(InvocationNode.SNIPPET).append(" varchar,\n")
+                .append(InvocationNode.INVOCATIONLOCATION).append(" varchar,\n")
+                .append("UNIQUE (").append(InvocationNode.INVOCATIOMETHODID).append(",").append(InvocationNode.INVOCATIONLOCATION).append("));").toString();
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -311,20 +252,20 @@ public class DbUtils {
     }
 
     public static int ImportInvocationNode(InvocationNode invocationNode) {
-        String sql = "INSERT or IGNORE INTO " + invocationsTable + " (" +
-                InvocationNode.INVOCATIOMETHODID + ", " +
-                ClassNode.NAMESPACE + ", " +
-                ClassNode.CLASSTYPE + ", " +
-                MethodNode.METHOD + ", " +
-                MethodNode.RETURNTYPE + ", " +
-                MethodNode.SIGNATURE + ", " +
-                MethodNode.SOURCECODE + ", " +
-                RuleNode.CATEGORY + ", " +
-                RuleNode.KIND + ", " +
-                RuleNode.RULE + ", " +
-                InvocationNode.SNIPPET + ", " +
-                InvocationNode.INVOCATIONLOCATION + ") " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = new StringBuilder().append("INSERT or IGNORE INTO ").append(invocationsTable).append(" (")
+                .append(InvocationNode.INVOCATIOMETHODID).append(", ")
+                .append(ClassNode.NAMESPACE).append(", ")
+                .append(ClassNode.CLASSTYPE).append(", ")
+                .append(MethodNode.METHOD).append(", ")
+                .append(MethodNode.RETURNTYPE).append(", ")
+                .append(MethodNode.SIGNATURE).append(", ")
+                .append(MethodNode.SOURCECODE).append(", ")
+                .append(RuleNode.CATEGORY).append(", ")
+                .append(RuleNode.KIND).append(", ")
+                .append(RuleNode.RULE).append(", ")
+                .append(InvocationNode.SNIPPET).append(", ")
+                .append(InvocationNode.INVOCATIONLOCATION).append(") ")
+                .append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").toString();
 
         MethodNode methodNode = invocationNode.getMethodNode();
         ClassNode classNode = methodNode.getFullClasstype();
@@ -347,13 +288,7 @@ public class DbUtils {
             statement.setString(12, Object2Json(invocationNode.getInvocationLocation()));
 
             statement.executeUpdate();
-
             id = QueryExistingInvocationNodeRowId(invocationNode);
-
-//            ResultSet rs = statement.getGeneratedKeys();
-//            if (rs.next()) {
-//                id = rs.getInt(1);
-//            }
 
             statement.close();
         } catch (SQLException e) {
@@ -367,7 +302,7 @@ public class DbUtils {
     private static int QueryExistingInvocationNodeRowId(InvocationNode invocationNode) {
         int id = -1;
         try {
-            String sql = "SELECT " + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + InvocationNode.INVOCATIOMETHODID + " = ? AND " + InvocationNode.INVOCATIONLOCATION + " = ?";
+            String sql = new StringBuilder().append("SELECT ").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(InvocationNode.INVOCATIOMETHODID).append(" = ? AND ").append(InvocationNode.INVOCATIONLOCATION).append(" = ?").toString();
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, invocationNode.getInvocationMethodID());
             statement.setString(2, Object2Json(invocationNode.getInvocationLocation()));
@@ -385,10 +320,10 @@ public class DbUtils {
     }
 
     private static void CreateCallgraphsTable() {
-        String sql = "CREATE TABLE " + callgraphsTable + " (\n"
-                + CallGraphNode.METHODID + " integer ,\n"
-                + CallGraphNode.INVOCATIONID + " integer,\n"
-                + CallGraphNode.INTRAFLOW + " varchar );";
+        String sql = new StringBuilder().append("CREATE TABLE ").append(callgraphsTable).append(" (\n")
+                .append(CallGraphNode.METHODID).append(" integer ,\n")
+                .append(CallGraphNode.INVOCATIONID).append(" integer,\n")
+                .append(CallGraphNode.INTRAFLOW).append(" varchar );").toString();
 
         try (Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -398,10 +333,10 @@ public class DbUtils {
     }
 
     public static void ImportCallgraphNode(CallGraphNode callGraphNode) {
-        String sql = "INSERT or IGNORE INTO " + callgraphsTable + " (" +
-                CallGraphNode.METHODID + ", " +
-                CallGraphNode.INVOCATIONID + ", " +
-                CallGraphNode.INTRAFLOW + ") VALUES (?, ?, ?)";
+        String sql = new StringBuilder("INSERT or IGNORE INTO ").append(callgraphsTable).append(" (")
+                .append(CallGraphNode.METHODID).append(", ")
+                .append(CallGraphNode.INVOCATIONID).append(", ")
+                .append(CallGraphNode.INTRAFLOW).append(") VALUES (?, ?, ?)").toString();
 
         PreparedStatement statement;
         try {
@@ -419,8 +354,7 @@ public class DbUtils {
     }
 
     public static InvocationNode QueryInvocationAnnotationNode(String namespace, String classtype) {
-        String sql = "SELECT * FROM " + rulesTable + " WHERE " + ClassNode.NAMESPACE + " = ? AND " + ClassNode.CLASSTYPE + " = ? " +
-                "AND " + RuleNode.KIND + " LIKE 'annotation%'";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(rulesTable).append(" WHERE ").append(ClassNode.NAMESPACE).append(" = ? AND ").append(ClassNode.CLASSTYPE).append(" = ? ").append("AND ").append(RuleNode.KIND).append(" LIKE 'annotation%'").toString();
         RuleNode ruleNode = QueryRuleNode(sql, namespace, classtype, null);
 
         InvocationNode invocationNode = new InvocationNode();
@@ -431,8 +365,7 @@ public class DbUtils {
     }
 
     public static InvocationNode QueryInvocationConstructorNode(String namespace, String classtype) {
-        String sql = "SELECT * FROM " + rulesTable + " WHERE "+ ClassNode.NAMESPACE + " = ? AND " + ClassNode.CLASSTYPE + " = ? " +
-                "AND " + MethodNode.METHOD + " = '<init>'";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(rulesTable).append(" WHERE "+ ClassNode.NAMESPACE).append(" = ? AND ").append(ClassNode.CLASSTYPE).append(" = ? ").append("AND ").append(MethodNode.METHOD).append(" = '<init>'").toString();
         RuleNode ruleNode = QueryRuleNode(sql, namespace, classtype, "<init>");
 
         InvocationNode invocationNode = new InvocationNode();
@@ -443,8 +376,7 @@ public class DbUtils {
     }
 
     public static RuleNode QueryInvocationMethodNode(String namespace, String classtype, String methodname) {
-        String sql = "SELECT * FROM " + rulesTable + " WHERE " + ClassNode.NAMESPACE + " = ? AND " + ClassNode.CLASSTYPE + " = ? " +
-                "AND " + RuleNode.CATEGORY + " != " + "\"" + RuleNode.GADGET + "\"";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(rulesTable).append(" WHERE ").append(ClassNode.NAMESPACE).append(" = ? AND ").append(ClassNode.CLASSTYPE).append(" = ? ").append("AND ").append(RuleNode.CATEGORY).append(" != ").append("\"").append(RuleNode.GADGET).append("\"").toString();
         return QueryRuleNode(sql, namespace, classtype, methodname);
     }
 
@@ -453,7 +385,7 @@ public class DbUtils {
         // Todo should this be improved? because processmethod will repeat the QueryInvocationMethodNode() again later.
         RuleNode ruleNode =
                 QueryInvocationMethodNode(
-                        ctExecutableReference.getDeclaringType().getTypeDeclaration().getPackage().getQualifiedName(),
+                        ctExecutableReference.getDeclaringType().getTopLevelType().getPackage().getQualifiedName(),
                         ctExecutableReference.getDeclaringType().getTypeDeclaration().getSimpleName(),
                         ctExecutableReference.getDeclaringType().getSimpleName()
                 );
@@ -465,8 +397,7 @@ public class DbUtils {
     }
 
     private static MethodNode QueryNativeGadgetSourceMethodNode(String namespace, String classtype, String methodname) {
-        String sql = "SELECT * FROM " + rulesTable + " WHERE " + ClassNode.NAMESPACE + " = ? AND " + ClassNode.CLASSTYPE + " = ? " +
-                "AND " + RuleNode.CATEGORY + " = " + "\"" + RuleNode.GADGET + "\"";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(rulesTable).append(" WHERE ").append(ClassNode.NAMESPACE).append(" = ? AND ").append(ClassNode.CLASSTYPE).append(" = ? ").append("AND ").append(RuleNode.CATEGORY).append(" = ").append("\"").append(RuleNode.GADGET).append("\"").toString();
         RuleNode ruleNode = QueryRuleNode(sql, namespace, classtype, methodname);
 
         return ruleNode.getMethodNode();
@@ -477,7 +408,7 @@ public class DbUtils {
 
         ClassNode classNode = new ClassNode();
         CtTypeReference<?> executableInvocation = ctExecutableReference.getDeclaringType();
-        classNode.setNamespace(executableInvocation.getTypeDeclaration().getPackage().getQualifiedName());
+        classNode.setNamespace(executableInvocation.getTopLevelType().getPackage().getQualifiedName());
         classNode.setName(executableInvocation.getTypeDeclaration().getSimpleName());
         CtType<?> clazz = executableInvocation.getDeclaration();
         methodNode.setNativeGadgetSource(methodNode.isNativeGadgetSource() && (MethodHierarchy.isSerializable(clazz) || MethodHierarchy.isExternalizable(clazz)));
@@ -524,8 +455,7 @@ public class DbUtils {
     }
 
     public static MethodNode QueryNegativeNode(String namespace, String classtype, String methodname) {
-        String sql = "SELECT * FROM " + rulesTable + " WHERE " + ClassNode.NAMESPACE + " = ? AND " + ClassNode.CLASSTYPE + " = ? " +
-                "AND " + RuleNode.CATEGORY + " = " + "\"" + RuleNode.NEGATIVE + "\"";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(rulesTable).append(" WHERE ").append(ClassNode.NAMESPACE).append(" = ? AND ").append(ClassNode.CLASSTYPE).append(" = ? ").append("AND ").append(RuleNode.CATEGORY).append(" = ").append("\"").append(RuleNode.NEGATIVE).append("\"").toString();
         RuleNode ruleNode = QueryRuleNode(sql, namespace, classtype, methodname);
 
         return ruleNode.getMethodNode();
@@ -601,7 +531,7 @@ public class DbUtils {
     }
 
     public static List<InvocationNode> QueryExistingWebInvocationSourceInvocationNode() {
-        String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISWEBINVOCATIONSOURCE + " = 1)";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISWEBINVOCATIONSOURCE).append(" = 1)").toString();
         try {
             Statement statement = conn.createStatement();
             List<InvocationNode> invocationNodes = QueryInvocationNode(statement.executeQuery(sql));
@@ -621,7 +551,7 @@ public class DbUtils {
     public static void ImportWebInvocationSourceFlow() {
         List<InvocationNode> webInvocationSourceInvocationNodes = QueryExistingWebInvocationSourceInvocationNode();
         for (InvocationNode webInvocationSourceInvocationNode : webInvocationSourceInvocationNodes) {
-            String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?)))";
+            String sql = new StringBuilder().append("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" = ?)))").toString();
 
             PreparedStatement statement;
             try {
@@ -647,7 +577,7 @@ public class DbUtils {
     }
 
     public static MethodNode QueryMethodNodeFromWebSourceInvocation(int MethodID) {
-        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?))";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" = ?))").toString();
         PreparedStatement statement;
         try {
             statement = conn.prepareStatement(sql);
@@ -720,7 +650,7 @@ public class DbUtils {
                 invocationNode.setInvocationLocation(
                         (Location) CharUtils.Json2Object(resultSet.getString(InvocationNode.INVOCATIONLOCATION), Location.class));
 
-                String sql = "SELECT * FROM " + methodsTable + " WHERE " + CallGraphNode.METHODID + " = " + invocationNode.getInvocationMethodID();
+                String sql = new StringBuilder().append("SELECT * FROM ").append(methodsTable).append(" WHERE ").append(CallGraphNode.METHODID).append(" = ").append(invocationNode.getInvocationMethodID()).toString();
                 Statement statement = conn.createStatement();
                 List<MethodNode> methodNodes;
                 methodNodes = QueryMethodNode(statement.executeQuery(sql));
@@ -740,7 +670,7 @@ public class DbUtils {
     public static List<InvocationNode> QuerySinkNodes() {
         List<InvocationNode> invocationNodes = new ArrayList<>();
 
-        String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSINKINVOCATION + " = 1)";
+        String sql = new StringBuilder("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSINKINVOCATION).append(" = 1)").toString();
         try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
             invocationNodes = QueryInvocationNode(rs);
@@ -751,10 +681,11 @@ public class DbUtils {
         return invocationNodes;
     }
 
+    // TODO there are duplicate annotation sources.
     public static List<InvocationNode> QuerySourceNodes() {
         List<InvocationNode> invocationNodes = new ArrayList<>();
 
-        String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISWEBINVOCATIONSOURCE + " = 1 OR " + methodsTable + "." + MethodNode.ISWEBANNOTATIONSOURCE + " = 1)";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISWEBINVOCATIONSOURCE).append(" = 1 OR (").append(methodsTable).append(".").append(MethodNode.ISWEBANNOTATIONSOURCE).append(" = 1 AND ").append(methodsTable).append(".").append(MethodNode.ISANNOTATION).append(" = 1))").toString();
         try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(sql);
             invocationNodes = QueryInvocationNode(rs);
@@ -767,7 +698,7 @@ public class DbUtils {
 
     public static List<Result> QuerySinkGadgets() {
         List<Result> results = new ArrayList<>();
-        String sql = "SELECT * FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " +  invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSINKINVOCATION + " = 1))";
+        String sql = new StringBuilder("SELECT * FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INTRAFLOW).append(" IS NOT NULL AND ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append( invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSINKINVOCATION).append(" = 1))").toString();
 
         try (Statement stmt = conn.createStatement()) {
             ResultSet resultSet = stmt.executeQuery(sql);
@@ -797,7 +728,7 @@ public class DbUtils {
     }
 
     private static String QueryRuleFromCallgraph(int InvocationID) {
-        String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " = ?";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" = ?").toString();
 
         String rule = empty;
         try {
@@ -814,7 +745,7 @@ public class DbUtils {
 
     // Update methods with source annotation as annotation source method
     public static void UpdateParentMethodAsWebAnnoationSource(int methodID) {
-        String sql = "UPDATE " + methodsTable + " SET " + MethodNode.ISWEBANNOTATIONSOURCE + " = 1 WHERE " + CallGraphNode.METHODID + " = ?";
+        String sql = new StringBuilder().append("UPDATE ").append(methodsTable).append(" SET ").append(MethodNode.ISWEBANNOTATIONSOURCE).append(" = 1 WHERE ").append(CallGraphNode.METHODID).append(" = ?").toString();
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, methodID);
@@ -829,7 +760,7 @@ public class DbUtils {
      * UPDATE methods SET isSourcePropagator = 1 WHERE isWebAnnotationSource = 1 OR isWebInvocationSource = 1 OR isNativeGadgetSource = 1 OR isJsonGadgetSource = 1
      */
     public static int UpdateSources2SourcePropagator() {
-        String sql = "UPDATE " + methodsTable + " SET " + MethodNode.ISSOURCEPROPAGATOR + " = 1 WHERE " + MethodNode.ISWEBANNOTATIONSOURCE + " = 1 OR " + MethodNode.ISWEBINVOCATIONSOURCE + " = 1 OR " + MethodNode.ISNATIVEGADGETSOURCE + " = 1 OR " + MethodNode.ISJSONGADGETSOURCE + " = 1";
+        String sql = new StringBuilder().append("UPDATE ").append(methodsTable).append(" SET ").append(MethodNode.ISSOURCEPROPAGATOR).append(" = 1 WHERE ").append(MethodNode.ISWEBANNOTATIONSOURCE).append(" = 1 OR ").append(MethodNode.ISWEBINVOCATIONSOURCE).append(" = 1 OR ").append(MethodNode.ISNATIVEGADGETSOURCE).append(" = 1 OR ").append(MethodNode.ISJSONGADGETSOURCE).append(" = 1").toString();
 
         int updateRows = 0;
         try (Statement stmt = conn.createStatement()) {
@@ -844,7 +775,7 @@ public class DbUtils {
      * UPDATE methods SET isSinkPropagator = 1 WHERE isSinkInvocation = 1
      */
     public static int UpdateSinks2SinkPropagator() {
-        String sql = "UPDATE methods SET " + MethodNode.ISSINKPROPAGATOR + " = 1 WHERE " + MethodNode.ISSINKINVOCATION + " = 1";
+        String sql = new StringBuilder().append("UPDATE methods SET ").append(MethodNode.ISSINKPROPAGATOR).append(" = 1 WHERE ").append(MethodNode.ISSINKINVOCATION).append(" = 1").toString();
 
         int updateRows = 0;
         try (Statement stmt = conn.createStatement()) {
@@ -861,7 +792,7 @@ public class DbUtils {
      */
     // special case: after last time propagation, now the chain is like source -> source propagator -> sink propagator -> sink, so there might exist two nodes which is source propagator and sink propagator at the same time. And we always propagate from sink at first for convenience in finding convergences, so check if node is sink propagator before setting source propagator to the successor node.
     public static int UpdateForwardPropagator() {
-        String sql = "UPDATE " + methodsTable + " SET " + MethodNode.ISSOURCEPROPAGATOR + " = 1 WHERE " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " != 1 AND " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.METHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " = 1 AND " + methodsTable + "." + MethodNode.ISSINKPROPAGATOR + " != 1)))";
+        String sql = new StringBuilder().append("UPDATE ").append(methodsTable).append(" SET ").append(MethodNode.ISSOURCEPROPAGATOR).append(" = 1 WHERE ").append(methodsTable).append(".").append(MethodNode.ISSOURCEPROPAGATOR).append(" != 1 AND ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INTRAFLOW).append(" IS NOT NULL AND ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSOURCEPROPAGATOR).append(" = 1 AND ").append(methodsTable).append(".").append(MethodNode.ISSINKPROPAGATOR).append(" != 1)))").toString();
 
         int updateRows = 0;
         try (Statement stmt = conn.createStatement()) {
@@ -876,7 +807,7 @@ public class DbUtils {
      * UPDATE methods SET isSinkPropagator = 1 WHERE methods.isSinkPropagator != 1 AND methods.MethodID in (SELECT callgraphs.MethodID FROM callgraphs where callgraphs.intraflow IS NOT NULL AND callgraphs.InvocationID in (SELECT invocations.InvocationID FROM invocations WHERE invocations.InvocationMethodID in (SELECT methods.MethodID FROM methods WHERE methods.isSinkPropagator = 1 AND methods.isSourcePropagator != 1)))
      */
     public static int UpdateBackwardPropagator() {
-        String sql = "UPDATE " + methodsTable + " SET " + MethodNode.ISSINKPROPAGATOR + " = 1 WHERE " + methodsTable + "." + MethodNode.ISSINKPROPAGATOR + " != 1 AND " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " where " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " in (SELECT " + methodsTable + "." + CallGraphNode.METHODID + " FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSINKPROPAGATOR + " = 1 AND " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " != 1)))";
+        String sql = new StringBuilder().append("UPDATE ").append(methodsTable).append(" SET ").append(MethodNode.ISSINKPROPAGATOR).append(" = 1 WHERE ").append(methodsTable).append(".").append(MethodNode.ISSINKPROPAGATOR).append(" != 1 AND ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(callgraphsTable).append(" where ").append(callgraphsTable).append(".").append(CallGraphNode.INTRAFLOW).append(" IS NOT NULL AND ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" in (SELECT ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSINKPROPAGATOR).append(" = 1 AND ").append(methodsTable).append(".").append(MethodNode.ISSOURCEPROPAGATOR).append(" != 1)))").toString();
 
         int updateRows = 0;
         try (Statement stmt = conn.createStatement()) {
@@ -888,7 +819,7 @@ public class DbUtils {
     }
 
     public static List<MethodNode> QueryPropagatorConvergence() {
-        String sql = "SELECT * FROM " + methodsTable + " WHERE " + MethodNode.ISSINKPROPAGATOR + " = 1 AND " + MethodNode.ISSOURCEPROPAGATOR + " = 1";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(methodsTable).append(" WHERE ").append(MethodNode.ISSINKPROPAGATOR).append(" = 1 AND ").append(MethodNode.ISSOURCEPROPAGATOR).append(" = 1").toString();
 
         List<MethodNode> convergences = new ArrayList<>();
         try (Statement stmt = conn.createStatement()) {
@@ -902,7 +833,7 @@ public class DbUtils {
 
     @Nullable
     private static InvocationNode QueryInvocationNodeOfMethodNode(MethodNode methodNode) {
-        String sql = "SELECT * FROM " + invocationsTable + " WHERE " + invocationsTable + "." + InvocationNode.INVOCATIOMETHODID + " = ?";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" = ?").toString();
 
         List<InvocationNode> invocationNodes = null;
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -938,7 +869,9 @@ public class DbUtils {
         }
     }
 
-    public static void QueryPredNodes(MethodNode methodNode, DefaultMutableTreeNode treeNode) {
+    public static void QueryPredNodes(MethodNode methodNode, DefaultMutableTreeNode treeNode, Set<Integer> unique) {
+        // TODO BUG When found source node, should continue to propagate till non-pred node is found
+        DefaultMutableTreeNode treeNodePropagatorClone = (DefaultMutableTreeNode) treeNode.clone();
         if (methodNode.isWebAnnotationSource() ||
                 methodNode.isNativeGadgetSource() ||
                 methodNode.isJsonGadgetSource()) {
@@ -949,32 +882,37 @@ public class DbUtils {
 
             ((Location) treeNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
                     new Message().withText(getSourceType(methodNode)));
-
-            return;
         } else if (methodNode.isWebInvocationSource()) {
             String text = "Source: '" + QueryInvocationNodeOfMethodNode(methodNode).getSnippet() + "'";
             ((Location) treeNode.getUserObject()).setMessage(new Message().withText(text));
             ((Location) treeNode.getUserObject()).getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
             ((Location) treeNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
                     new Message().withText(getSourceType(methodNode)));
-            return;
         } else {
-            Location location = (Location) treeNode.getUserObject();
-            String text = "Propagator: '" + QueryInvocationSnippetOfMethodNode(methodNode) + "'";
-            location.setMessage(new Message().withText(text));
-            location.getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
+            setPropagator(methodNode, treeNode);
         }
 
-        String sql = "SELECT * FROM " + methodsTable + " WHERE " + methodsTable + "." + MethodNode.ISSOURCEPROPAGATOR + " = 1 AND " + methodsTable + "." + CallGraphNode.METHODID + " in (SELECT " + callgraphsTable + "." + CallGraphNode.METHODID + " FROM " + callgraphsTable + " WHERE " + callgraphsTable + "." + CallGraphNode.INTRAFLOW + " IS NOT NULL AND " + callgraphsTable + "." + CallGraphNode.INVOCATIONID + " in (SELECT " + invocationsTable + "." + CallGraphNode.INVOCATIONID + " FROM " + invocationsTable + " WHERE " + InvocationNode.INVOCATIOMETHODID + " = ?))";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSOURCEPROPAGATOR).append(" = 1 AND ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INTRAFLOW).append(" IS NOT NULL AND ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(InvocationNode.INVOCATIOMETHODID).append(" = ?))").toString();
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, methodNode.getMethodID());
             ResultSet rs = stmt.executeQuery();
             List<MethodNode> methodNodes = QueryMethodNode(rs);
+
             for (MethodNode predNode: methodNodes) {
                 DefaultMutableTreeNode predTreeNode = new DefaultMutableTreeNode(QueryInvocationLocationOfMethodNode(predNode));
-                treeNode.add(predTreeNode);
-                QueryPredNodes(predNode, predTreeNode);
+                if (unique.add(predNode.getMethodID())) {
+                    if (getSourceType(methodNode) != null && treeNode.getParent() != null) {
+                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treeNode.getParent();
+                        setPropagator(methodNode, treeNodePropagatorClone);
+                        parentNode.add(treeNodePropagatorClone);
+                        treeNodePropagatorClone.add(predTreeNode);
+                    } else {
+                        treeNode.add(predTreeNode);
+                    }
+                    QueryPredNodes(predNode, predTreeNode, unique);
+                    unique.remove(predNode.getMethodID());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -994,7 +932,9 @@ public class DbUtils {
         }
     }
 
-    public static void QuerySuccNodes(MethodNode methodNode, DefaultMutableTreeNode treeNode) {
+    public static void QuerySuccNodes(MethodNode methodNode, DefaultMutableTreeNode treeNode, Set<Integer> unique) {
+        // TODO BUG When found sink node, should continue to propagate till non-succ node is found
+        DefaultMutableTreeNode treeNodePropagatorClone = (DefaultMutableTreeNode) treeNode.clone();
         if (methodNode.isSinkInvocation()) {
             InvocationNode invocationNode = QueryInvocationNodeOfMethodNode(methodNode);
             String text = "Sink: '" + invocationNode.getSnippet() + "'";
@@ -1002,15 +942,11 @@ public class DbUtils {
             ((Location) treeNode.getUserObject()).getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
             ((Location) treeNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
                     new Message().withText(invocationNode.getRuleNode().getRule()));
-            return;
         } else {
-            Location location = (Location) treeNode.getUserObject();
-            String text = "Propagator: '" + QueryInvocationSnippetOfMethodNode(methodNode) + "'";
-            location.setMessage(new Message().withText(text));
-            location.getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
+            setPropagator(methodNode, treeNode);
         }
 
-        String sql = "SELECT * FROM methods WHERE methods.isSinkPropagator = 1 AND methods.MethodID in (SELECT invocations.InvocationMethodID FROM invocations WHERE invocations.InvocationID in (SELECT callgraphs.InvocationID FROM callgraphs WHERE callgraphs.intraflow IS NOT NULL AND callgraphs.MethodID = ?))";
+        String sql = new StringBuilder().append("SELECT * FROM ").append(methodsTable).append(" WHERE ").append(methodsTable).append(".").append(MethodNode.ISSINKPROPAGATOR).append(" = 1 AND ").append(methodsTable).append(".").append(CallGraphNode.METHODID).append(" in (SELECT ").append(invocationsTable).append(".").append(InvocationNode.INVOCATIOMETHODID).append(" FROM ").append(invocationsTable).append(" WHERE ").append(invocationsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" in (SELECT ").append(callgraphsTable).append(".").append(CallGraphNode.INVOCATIONID).append(" FROM ").append(callgraphsTable).append(" WHERE ").append(callgraphsTable).append(".").append(CallGraphNode.INTRAFLOW).append(" IS NOT NULL AND ").append(callgraphsTable).append(".").append(CallGraphNode.METHODID).append(" = ?))").toString();
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, methodNode.getMethodID());
@@ -1018,11 +954,28 @@ public class DbUtils {
             List<MethodNode> methodNodes = QueryMethodNode(rs);
             for (MethodNode succNode: methodNodes) {
                 DefaultMutableTreeNode succTreeNode = new DefaultMutableTreeNode(QueryInvocationLocationOfMethodNode(succNode));
-                treeNode.add(succTreeNode);
-                QuerySuccNodes(succNode, succTreeNode);
+                if (unique.add(succNode.getMethodID())) {
+                    if (methodNode.isSinkInvocation() && treeNode.getParent() != null) {
+                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treeNode.getParent();
+                        setPropagator(methodNode, treeNodePropagatorClone);
+                        parentNode.add(treeNodePropagatorClone);
+                        treeNodePropagatorClone.add(succTreeNode);
+                    } else {
+                        treeNode.add(succTreeNode);
+                    }
+                    QuerySuccNodes(succNode, succTreeNode, unique);
+                    unique.remove(succNode.getMethodID());
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void setPropagator(MethodNode methodNode, DefaultMutableTreeNode treeNode) {
+        Location location = (Location) treeNode.getUserObject();
+        String text = "Propagator: '" + QueryInvocationSnippetOfMethodNode(methodNode) + "'";
+        location.setMessage(new Message().withText(text));
+        location.getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
     }
 }

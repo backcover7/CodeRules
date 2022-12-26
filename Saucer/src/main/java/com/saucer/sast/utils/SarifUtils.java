@@ -5,6 +5,7 @@ import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.FlowAnalysis;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 
+import java.lang.Exception;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -16,17 +17,16 @@ public class SarifUtils {
         return DbUtils.QuerySinkGadgets();
     }
 
-    private static List<Result> getNodes() {
+    public static List<Result> getNodes() {
         List<Result> sinkNodesResults = new ArrayList<>();
         List<InvocationNode> sinkNodes = DbUtils.QuerySinkNodes();
         for (InvocationNode sinkNode : sinkNodes) {
             List<Location> sinkLocations = new ArrayList<>();
             Location sinkLocation = sinkNode.getInvocationLocation();
             sinkLocations.add(sinkLocation);
+
             Result sinks = new Result().withMessage(new Message().withText(
-                    "[FYI - Sink functions] " +
-                    new ArrayList<>(sinkLocation.getLogicalLocations()).get(0).getFullyQualifiedName()
-                            .replaceAll("\\.null", CharUtils.empty))); // remove null methodname in annotation
+                    "[FYI - Sink functions] " + sinkNode.getMethodNode().getFullQualifiedName()));
             sinkLocations.add(sinkNode.getInvocationLocation());
             sinks.setLocations(sinkLocations);
             sinks.setRuleId(sinkNode.getRuleNode().getRule());
