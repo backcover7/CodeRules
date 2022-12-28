@@ -9,10 +9,14 @@ import java.util.List;
 public class CallGraphNode {
     private int MethodID;
     private int InvocationID;
+    private int InvocationSourceID;
+    private int InvocationTargetID;
     private ThreadFlow intraflow;
 
     public static String METHODID = "MethodID";
     public static String INVOCATIONID = "InvocationID";
+    public static String INVOCATIONSOURCEID = "InvocationSourceID";
+    public static String INVOCATIONTARGETID = "InvocationTargetID";
     public static String INTRAFLOW = "intraflow";
 
     public int getMethodID() {
@@ -29,6 +33,22 @@ public class CallGraphNode {
 
     public void setInvocationID(int invocationID) {
         InvocationID = invocationID;
+    }
+
+    public int getInvocationSourceID() {
+        return InvocationSourceID;
+    }
+
+    public void setInvocationSourceID(int invocationSourceID) {
+        InvocationSourceID = invocationSourceID;
+    }
+
+    public int getInvocationTargetID() {
+        return InvocationTargetID;
+    }
+
+    public void setInvocationTargetID(int invocationTargetID) {
+        InvocationTargetID = invocationTargetID;
     }
 
     public ThreadFlow getIntraflow() {

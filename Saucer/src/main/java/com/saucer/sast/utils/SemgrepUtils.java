@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 import com.saucer.sast.lang.java.parser.nodes.MethodNode;
+import com.saucer.sast.lang.java.parser.nodes.SourceNode;
 
 import java.io.IOException;
 import java.lang.Exception;
@@ -57,8 +58,8 @@ public class SemgrepUtils {
         List<Result> SemgrepScanRes = new ArrayList<>();
         String YamlRule;
         try {
-            if (!invocation.getMethodNode().isAnnotationFlag()) {
-                if (!invocation.getMethodNode().getMethodLocation().equals(source.getMethodNode().getMethodLocation())) {
+            if (!invocation.getSourceNode().getRuleNode().isAnnotationFlag()) {
+                if (!invocation.getSourceNode().getMethodNode().getMethodLocation().equals(source.getSourceNode().getMethodNode().getMethodLocation())) {
                     YamlRule = CharUtils.StringSubstitute(
                             CreateTemplateMap(source, invocation), FileUtils.readTaint4Source());
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
@@ -75,22 +76,22 @@ public class SemgrepUtils {
         }
     }
 
-    public static ThreadFlow DetectIntraFlow(MethodNode methodNode, InvocationNode invocationNode) {
+    public static ThreadFlow DetectIntraFlow(SourceNode sourceNode, InvocationNode invocationNode) {
         List<Result> SemgrepScanRes = new ArrayList<>();
         String YamlRule;
         try {
-            if (!invocationNode.getMethodNode().isAnnotationFlag()) {
-                if (ParseParamSize(methodNode.getSignature()) == 0 ||
-                        ParseParamSize(invocationNode.getMethodNode().getSignature()) == 0) {
+            if (!invocationNode.getSourceNode().getRuleNode().isAnnotationFlag()) {
+                if (ParseParamSize(sourceNode.getMethodNode().getSignature()) == 0 ||
+                        ParseParamSize(invocationNode.getSourceNode().getMethodNode().getSignature()) == 0) {
                     // taint flow from non-param method to non-param invocation
                     // taint flow from has-param method to non-param invocation
                     YamlRule = CharUtils.StringSubstitute(
-                            CreateTemplateMap(methodNode, invocationNode), FileUtils.readTaint2Nonparaminvocation());
+                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readTaint2Nonparaminvocation());
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
                 } else {
                     // taint flow from has-param method to has-param invocation
                     YamlRule = CharUtils.StringSubstitute(
-                            CreateTemplateMap(methodNode, invocationNode), FileUtils.readTaint2Invocation());
+                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readTaint2Invocation());
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
                 }
             }
@@ -102,7 +103,7 @@ public class SemgrepUtils {
             return null;
         } else {
             ThreadFlow intraflow = SemgrepScanRes.get(0).getCodeFlows().get(0).getThreadFlows().get(0);
-            intraflow.setMessage(new Message().withText(invocationNode.getMethodNode().getFullQualifiedName()));
+            intraflow.setMessage(new Message().withText(invocationNode.getSourceNode().getMethodNode().getSimpleMethodNode().getFullQualifiedName()));
             return intraflow;
         }
     }
@@ -124,9 +125,9 @@ public class SemgrepUtils {
     }
 
     private static Map<String, String> CreateTemplateMap(InvocationNode source, InvocationNode invocation) {
-        MethodNode ParentMethodNode = DbUtils.QueryMethodNodeFromWebSourceInvocation(source.getMethodNode().getMethodID());
-        String parentMethodName = ParentMethodNode.getName();
-        int paramSize = ParseParamSize(ParentMethodNode.getSignature());
+        SourceNode ParentSourceNode = DbUtils.QueryMethodNodeFromWebSourceInvocation(source.getInvocationID());
+        String parentMethodName = ParentSourceNode.getMethodNode().getSimpleMethodNode().getName();
+        int paramSize = ParseParamSize(ParentSourceNode.getMethodNode().getSignature());
         String methodSignature = parentMethodName + CharUtils.leftbracket;
         String eitherParameters = CharUtils.empty;
         for (int i = 0; i < paramSize; i++) {
@@ -151,8 +152,9 @@ public class SemgrepUtils {
         return map;
     }
 
-    private static Map<String, String> CreateTemplateMap(MethodNode methodNode, InvocationNode invocationNode) {
-        String parentMethodName = methodNode.getName();
+    private static Map<String, String> CreateTemplateMap(SourceNode sourceNode, InvocationNode invocationNode) {
+        MethodNode methodNode = sourceNode.getMethodNode();
+        String parentMethodName = methodNode.getSimpleMethodNode().getName();
         int paramSize = ParseParamSize(methodNode.getSignature());
         String methodSignature = parentMethodName + CharUtils.leftbracket;
         String eitherParameters = CharUtils.empty;
@@ -170,7 +172,7 @@ public class SemgrepUtils {
         methodSignature += CharUtils.rightbracket + EllipsisBody;
 
         Map<String, String> map = new HashMap<>();
-        map.put(INVOCATIONSOURCESNIPPET, methodNode.getName() + "(...)");
+        map.put(INVOCATIONSOURCESNIPPET, sourceNode.getMethodNode().getSimpleMethodNode().getName() + "(...)");
         map.put(METHODSIGNATURE, methodSignature);
         map.put(EITHERPARAMETERS, eitherParameters);
         map.put(INVOCATIONSINKSNIPPET, invocationNode.getSnippet());

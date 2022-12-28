@@ -26,25 +26,25 @@ public class SarifUtils {
             sinkLocations.add(sinkLocation);
 
             Result sinks = new Result().withMessage(new Message().withText(
-                    "[FYI - Sink functions] " + sinkNode.getMethodNode().getFullQualifiedName()));
+                    "[FYI - Sink functions] " + sinkNode.getSourceNode().getMethodNode().getSimpleMethodNode().getFullQualifiedName()));
             sinkLocations.add(sinkNode.getInvocationLocation());
             sinks.setLocations(sinkLocations);
-            sinks.setRuleId(sinkNode.getRuleNode().getRule());
+            sinks.setRuleId(sinkNode.getSourceNode().getRuleNode().getRule());
             sinkNodesResults.add(sinks);
         }
-        
+
         List<Result> sourceNodesResults = new ArrayList<>();
-        List<InvocationNode> sourceNodes = DbUtils.QuerySourceNodes();
-        for (InvocationNode sourceNode : sourceNodes) {
+        List<InvocationNode> invocationSourceNodes = DbUtils.QueryWebSourceNodes();
+        for (InvocationNode invocationSourceNode : invocationSourceNodes) {
             List<Location> sourceLocations = new ArrayList<>();
-            Location sourcLocation = sourceNode.getInvocationLocation();
+            Location sourcLocation = invocationSourceNode.getInvocationLocation();
             sourceLocations.add(sourcLocation);
             Result sources = new Result().withMessage(new Message().withText(
                     "[FYI - Source functions] " +
                     new ArrayList<>(sourcLocation.getLogicalLocations()).get(0).getFullyQualifiedName()
                             .replaceAll("\\.null", CharUtils.empty))); // remove null methodname in annotation
             sources.setLocations(sourceLocations);
-            sources.setRuleId(sourceNode.getRuleNode().getRule());
+            sources.setRuleId(invocationSourceNode.getSourceNode().getRuleNode().getRule());
             sourceNodesResults.add(sources);
         }
 

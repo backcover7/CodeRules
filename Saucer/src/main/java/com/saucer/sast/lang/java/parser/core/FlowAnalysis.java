@@ -1,6 +1,7 @@
 package com.saucer.sast.lang.java.parser.core;
 
 import com.contrastsecurity.sarif.*;
+import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 import com.saucer.sast.lang.java.parser.nodes.MethodNode;
 import com.saucer.sast.utils.DbUtils;
 
@@ -53,19 +54,17 @@ public class FlowAnalysis {
     }
 
     private Set<List<Location>> FlowGen() {
-        List<MethodNode> convergences = DbUtils.QueryPropagatorConvergence();
+        List<InvocationNode> convergences = DbUtils.QueryPropagatorConvergence();
 
         Set<List<Location>> paths = new HashSet<>();
-        for (MethodNode convergence : convergences) {
-            Location convergenLocation = DbUtils.QueryInvocationLocationOfMethodNode(convergence);
-
+        for (InvocationNode convergence : convergences) {
+            Location convergenLocation = convergence.getInvocationLocation();
             DefaultMutableTreeNode convergencePredTreeNode = new DefaultMutableTreeNode(convergenLocation);
             DefaultMutableTreeNode convergenceSuccTreeNode = (DefaultMutableTreeNode) convergencePredTreeNode.clone();
-
             Set<Integer> uniquePred = new HashSet<>();
-            uniquePred.add(convergence.getMethodID());
+            uniquePred.add(convergence.getInvocationID());
             Set<Integer> uniqueSucc = new HashSet<>();
-            uniqueSucc.add(convergence.getMethodID());
+            uniqueSucc.add(convergence.getInvocationID());
 
             DbUtils.QueryPredNodes(convergence, convergencePredTreeNode, uniquePred);
             DbUtils.QuerySuccNodes(convergence, convergenceSuccTreeNode, uniqueSucc);

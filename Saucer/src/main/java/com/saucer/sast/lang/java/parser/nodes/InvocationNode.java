@@ -3,31 +3,20 @@ package com.saucer.sast.lang.java.parser.nodes;
 import com.contrastsecurity.sarif.Location;
 
 public class InvocationNode {
-    private MethodNode methodNode;
-    private RuleNode ruleNode;
+    private SourceNode sourceNode;
     private String snippet;
     private Location invocationLocation;
     private int InvocationID;
-    private int InvocationMethodID;
 
     public static String SNIPPET = "snippet";
-    public static String INVOCATIONLOCATION = "location";
-    public static String INVOCATIOMETHODID = "InvocationMethodID";
+    public static String INVOCATIONLOCATION = "invocationlocation";
 
-    public MethodNode getMethodNode() {
-        return methodNode;
+    public SourceNode getSourceNode() {
+        return sourceNode;
     }
 
-    public void setMethodNode(MethodNode methodNode) {
-        this.methodNode = methodNode;
-    }
-
-    public RuleNode getRuleNode() {
-        return ruleNode;
-    }
-
-    public void setRuleNode(RuleNode ruleNode) {
-        this.ruleNode = ruleNode;
+    public void setSourceNode(SourceNode sourceNode) {
+        this.sourceNode = sourceNode;
     }
 
     public String getSnippet() {
@@ -52,13 +41,5 @@ public class InvocationNode {
 
     public void setInvocationID(int invocationID) {
         InvocationID = invocationID;
-    }
-
-    public int getInvocationMethodID() {
-        return InvocationMethodID;
-    }
-
-    public void setInvocationMethodID(int invocationMethodID) {
-        InvocationMethodID = invocationMethodID;
     }
 }

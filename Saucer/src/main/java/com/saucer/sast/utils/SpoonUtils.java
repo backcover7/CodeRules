@@ -11,8 +11,8 @@ import java.util.Set;
 public class SpoonUtils {
     public static Location ConvertPosition2Location(MethodNode methodNode, SourcePosition sourcePosition) {
         LogicalLocation logicalLocation = new LogicalLocation();
-        logicalLocation.setFullyQualifiedName(methodNode.getFullQualifiedName());
-        logicalLocation.setName(methodNode.getName());
+        logicalLocation.setFullyQualifiedName(methodNode.getSimpleMethodNode().getFullQualifiedName());
+        logicalLocation.setName(methodNode.getSimpleMethodNode().getName());
         Set<LogicalLocation> logicalLocations = new HashSet<>();
         logicalLocations.add(logicalLocation);
 
@@ -31,8 +31,8 @@ public class SpoonUtils {
 
     public static Location ConvertPosition2Location(InvocationNode invocationNode, SourcePosition sourcePosition) {
         LogicalLocation logicalLocation = new LogicalLocation();
-        logicalLocation.setFullyQualifiedName(invocationNode.getMethodNode().getFullQualifiedName());
-        logicalLocation.setName(invocationNode.getMethodNode().getName());
+        logicalLocation.setFullyQualifiedName(invocationNode.getSourceNode().getMethodNode().getSimpleMethodNode().getFullQualifiedName());
+        logicalLocation.setName(invocationNode.getSourceNode().getMethodNode().getSimpleMethodNode().getName());
         Set<LogicalLocation> logicalLocations = new HashSet<>();
         logicalLocations.add(logicalLocation);
 

@@ -94,5 +94,12 @@ public class MethodHierarchy {
                 .createCtTypeReference(java.io.Externalizable.class);
         return clazz.isSubtypeOf(Externalizable);
     }
+
+    public static HashSet<String> getHierachySet(CtType<?> clazz, String methodname, List<CtTypeReference<?>> parameters) {
+        MethodHierarchy methodHierarchy = new MethodHierarchy();
+        methodHierarchy.FindMethodDefinition(clazz, methodname, parameters);
+
+        return methodHierarchy.getMethodSet();
+    }
 }
 

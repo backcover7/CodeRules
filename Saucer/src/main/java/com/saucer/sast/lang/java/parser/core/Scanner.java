@@ -5,9 +5,9 @@ import com.google.common.base.Stopwatch;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.*;
 import com.saucer.sast.utils.DbUtils;
+import com.saucer.sast.utils.SarifUtils;
 import com.saucer.sast.utils.SemgrepUtils;
 import com.saucer.sast.utils.SpoonUtils;
-import com.saucer.sast.utils.SarifUtils;
 import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.code.*;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class Scanner {
     public void Scan() {
         System.out.println("[*] Analyzing the target source code ...");
-//        init();
+        init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
         Stopwatch taintWatch = Stopwatch.createStarted();
@@ -53,24 +53,30 @@ public class Scanner {
                 CtExecutableReference<?> ctExecutableReference = ctExecutable.getReference();
 
                 // TODO xstream flow
-                MethodNode ctExecutableMethodNode = DbUtils.QueryNativeGadgetSourceMethodNode(ctExecutableReference);
-                if (SemgrepUtils.ParseParamSize(ctExecutableReference.getSignature()) == 0) {
-                    ctExecutableMethodNode.setJsonGadgetSource(false);
-                }
+                RuleNode ctExecutableRuleNode = DbUtils.QueryNativeGadgetSourceMethodNode(ctExecutableReference);
 
-                setInvocationProperties(ctExecutableMethodNode, ctExecutableReference);
-                int MethodID = DbUtils.ImportMethodNode(ctExecutableMethodNode);
+                MethodNode methodNode = new MethodNode();
+                methodNode.setSimpleMethodNode(ctExecutableRuleNode.getSimpleMethodNode());
+                setInvocationProperties(methodNode, ctExecutableReference);
+
+                if (SemgrepUtils.ParseParamSize(ctExecutableReference.getSignature()) == 0 && ctExecutableRuleNode.isJsonGadgetSource()) {
+                    ctExecutableRuleNode.setJsonGadgetSource(false);
+                }
+                SourceNode ctExecutableSourceNode = new SourceNode();
+                ctExecutableSourceNode.setMethodNode(methodNode);
+                ctExecutableSourceNode.setRuleNode(ctExecutableRuleNode);
+                int MethodID = DbUtils.ImportSourcecode(ctExecutableSourceNode);
 
                 try {
-                    Method processAnnotation = Scanner.class.getDeclaredMethod("ProcessAnnotation", CtExecutable.class, MethodNode.class, int.class);
-                    Method processConstructor = Scanner.class.getDeclaredMethod("ProcessConstructor", CtExecutable.class, MethodNode.class, int.class);
-                    Method processMethod = Scanner.class.getDeclaredMethod("ProcessMethod", CtExecutable.class, MethodNode.class, int.class);
-                    List<Method> methods = Arrays.asList(processAnnotation, processConstructor, processMethod);
+                    ProcessAnnotation(ctExecutable, ctExecutableSourceNode, MethodID);
+                    Method processConstructor = Scanner.class.getDeclaredMethod("ProcessConstructor", CtExecutable.class, SourceNode.class, int.class);
+                    Method processMethod = Scanner.class.getDeclaredMethod("ProcessMethod", CtExecutable.class, SourceNode.class, int.class);
+                    List<Method> methods = Arrays.asList(processConstructor, processMethod);
                     methods.stream()
                             .parallel()
                             .forEach(method -> {
                                 try {
-                                    method.invoke(this, ctExecutable, ctExecutableMethodNode, MethodID);
+                                    method.invoke(this, ctExecutable, ctExecutableSourceNode, MethodID);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -85,7 +91,7 @@ public class Scanner {
         DbUtils.ImportWebInvocationSourceFlow();
     }
 
-    private void ProcessAnnotation(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
+    private void ProcessAnnotation(CtExecutable<?> ctExecutable, SourceNode ctExecutableSourceNode, int MethodID) {
         List<CtAnnotation<?>> ctAnnotationList = ctExecutable.getElements(new TypeFilter<>(CtAnnotation.class));
         ctAnnotationList.parallelStream().forEach(annotation -> {
             String annotationType = annotation.getAnnotationType().getQualifiedName();
@@ -96,21 +102,23 @@ public class Scanner {
             invocationAnnotation.setInvocationLocation(
                     SpoonUtils.ConvertPosition2Location(invocationAnnotation, annotation.getOriginalSourceFragment().getSourcePosition()));
 
-            setInvocationProperties(invocationAnnotation.getMethodNode(), ctExecutable.getReference());
-            invocationAnnotation.getMethodNode().setSignature(annotation.getActualAnnotation().toString());
+            SourceNode annotationSourcenode = invocationAnnotation.getSourceNode();
+            setInvocationProperties(annotationSourcenode.getMethodNode(), ctExecutable.getReference());
+            invocationAnnotation.getSourceNode().getMethodNode().setSignature(annotation.getActualAnnotation().toString());
 
-            int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationAnnotation.getMethodNode());
-            invocationAnnotation.setInvocationMethodID(MethodIDofInvocation);
-            int InvocationID = DbUtils.ImportInvocationNode(invocationAnnotation);
-
-            if (invocationAnnotation.getMethodNode().isWebAnnotationSource()) {
-                DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID);
+            DbUtils.ImportInvocationNode(invocationAnnotation);
+            RuleNode ruleNode = invocationAnnotation.getSourceNode().getRuleNode();
+            if (annotationSourcenode.getRuleNode().isWebAnnotationSource()) {
+                DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID, ruleNode, RuleNode.ISWEBANNOTATIONSOURCE);
+                ctExecutableSourceNode.getRuleNode().setWebAnnotationSource(true);
+            } else if (annotationSourcenode.getRuleNode().isAnnotationSink()) {
+                DbUtils.UpdateParentMethodAsWebAnnoationSource(MethodID, ruleNode, RuleNode.ISANNOTATIONSINK);
+                ctExecutableSourceNode.getRuleNode().setAnnotationSink(true);
             }
-//            DbUtils.ImportCallgraphNode(MethodID, InvocationID, null);
         });
     }
 
-    private void ProcessConstructor(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
+    private void ProcessConstructor(CtExecutable<?> ctExecutable, SourceNode ctExecutableSourceNode, int MethodID) {
         List<CtConstructorCall<?>> constructorCallList = ctExecutable.getElements(new TypeFilter<>(CtConstructorCall.class));
         constructorCallList.parallelStream().forEach(constructorCall -> {
             CtExecutableReference<?> executableReference = constructorCall.getExecutable();
@@ -121,23 +129,22 @@ public class Scanner {
             invocationConstructor.setSnippet(constructorCall.getOriginalSourceFragment().getSourceCode());
             invocationConstructor.setInvocationLocation(
                     SpoonUtils.ConvertPosition2Location(invocationConstructor, constructorCall.getOriginalSourceFragment().getSourcePosition()));
-            setInvocationProperties(invocationConstructor.getMethodNode(), executableReference);
+            setInvocationProperties(invocationConstructor.getSourceNode().getMethodNode(), executableReference);
 
-            int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationConstructor.getMethodNode());
-            invocationConstructor.setInvocationMethodID(MethodIDofInvocation);
+            ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableSourceNode, invocationConstructor);
+            Propagate(ctExecutableSourceNode, invocationConstructor, intraflow);
             int InvocationID = DbUtils.ImportInvocationNode(invocationConstructor);
-            ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationConstructor);
 
             CallGraphNode callGraphNode = new CallGraphNode();
             callGraphNode.setMethodID(MethodID);
             callGraphNode.setInvocationID(InvocationID);
             callGraphNode.setIntraflow(intraflow);
 
-            DbUtils.ImportCallgraphNode(callGraphNode);
+            DbUtils.ImportSourceNodeCallgraphNode(callGraphNode);
         });
     }
 
-    private void ProcessMethod(CtExecutable<?> ctExecutable, MethodNode ctExecutableMethodNode, int MethodID) {
+    private void ProcessMethod(CtExecutable<?> ctExecutable, SourceNode ctExecutableSourceNode, int MethodID) {
         List<CtInvocation<?>> ctInvocationList = ctExecutable.getElements(new TypeFilter<>(CtInvocation.class));
         ctInvocationList.parallelStream().forEach(invocation -> {
             CtExecutableReference<?> executableReference = invocation.getExecutable();
@@ -150,19 +157,11 @@ public class Scanner {
             }
 
             if (executableReference.isConstructor()) {
-                ProcessConstructor(executableReference.getExecutableDeclaration(), ctExecutableMethodNode, MethodID);
+                ProcessConstructor(executableReference.getExecutableDeclaration(), ctExecutableSourceNode, MethodID);
             }
 
-            MethodHierarchy methodHierarchy = new MethodHierarchy();
-            methodHierarchy.FindMethodDefinition(
-                    executableInvocation.getTypeDeclaration(),
-                    executableReference.getSimpleName(),
-                    executableReference.getParameters());
-
-            HashSet<String> methodSet = methodHierarchy.getMethodSet();
-
             InvocationNode invocationMethod = DbUtils.QueryInvocationMethodNode(executableReference);
-            setInvocationProperties(invocationMethod.getMethodNode(), executableReference);
+            setInvocationProperties(invocationMethod.getSourceNode().getMethodNode(), executableReference);
 
             try {
                 invocationMethod.setSnippet(invocation.getOriginalSourceFragment().getSourceCode());
@@ -177,49 +176,26 @@ public class Scanner {
                 invocationMethod.setInvocationLocation(new Location());
             }
 
-            RuleNode ruleNode;
-            for (String qualifiedName : methodSet) {
-                String namespace = FilenameUtils.getBaseName(qualifiedName);
-                String classtype = FilenameUtils.getExtension(qualifiedName);
-                ruleNode = DbUtils.QueryInvocationMethodNode(
-                        namespace, classtype, invocation.getExecutable().getSimpleName());
-                if (ruleNode.getMethodNode().isWebInvocationSource()) {
-                    invocationMethod.getMethodNode().setWebInvocationSource(true);
-                    invocationMethod.setRuleNode(ruleNode);
-                    break;
-                } else if (ruleNode.getMethodNode().isSinkInvocation()) {
-                    invocationMethod.getMethodNode().setSinkInvocation(true);
-                    invocationMethod.setRuleNode(ruleNode);
-                    break;
-                }
-            }
-
-            if (executableReference.getParameters().size() == 0) {
-                // Native gadget source might have no parameters like readObject.
-                // But setter/getter/constructor must have parameters to be a Json gadget source
-                invocationMethod.getMethodNode().setJsonGadgetSource(false);
-            }
-
-            int MethodIDofInvocation = DbUtils.ImportMethodNode(invocationMethod.getMethodNode());
-            invocationMethod.setInvocationMethodID(MethodIDofInvocation);
+            ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableSourceNode, invocationMethod);
+            Propagate(ctExecutableSourceNode, invocationMethod, intraflow);
             int InvocationID = DbUtils.ImportInvocationNode(invocationMethod);
-            ThreadFlow intraflow = SemgrepUtils.DetectIntraFlow(ctExecutableMethodNode, invocationMethod);
 
             CallGraphNode callGraphNode = new CallGraphNode();
             callGraphNode.setMethodID(MethodID);
             callGraphNode.setInvocationID(InvocationID);
             callGraphNode.setIntraflow(intraflow);
 
-            DbUtils.ImportCallgraphNode(callGraphNode);
+            DbUtils.ImportSourceNodeCallgraphNode(callGraphNode);
         });
     }
 
     private void setInvocationProperties(MethodNode methodNode, CtExecutableReference<?> executableReference) {
-        if (!SpoonConfig.model.getElements(new TypeFilter<>(CtType.class)).contains(executableReference.getDeclaringType().getTypeDeclaration())) {
-            // This is an invocation/constructor from third party dependency. Will not set gadgetsource flag to true on it.
-            methodNode.setNativeGadgetSource(false);
-            methodNode.setJsonGadgetSource(false);
-        }
+//        if (!SpoonConfig.model.getElements(new TypeFilter<>(CtType.class)).contains(executableReference.getDeclaringType().getTypeDeclaration())) {
+//            // This is an invocation/constructor from third party dependency. Will not set gadgetsource flag to true on it.
+//            methodNode..setNativeGadgetSource(false);
+//            methodNode.setJsonGadgetSource(false);
+//        }
+
         methodNode.setSignature(executableReference.getSignature());
         methodNode.setReturntype(executableReference.getType().getQualifiedName());
         try {
@@ -229,6 +205,24 @@ public class Scanner {
         } catch (Exception e) {
             methodNode.setSourceCode(executableReference.toString());
             methodNode.setMethodLocation(new Location());
+        }
+    }
+
+    private void Propagate(SourceNode parent, InvocationNode invocationNode, ThreadFlow intraflow) {
+        if (intraflow != null) {
+            RuleNode parentRule = parent.getRuleNode();
+            RuleNode sonRule = invocationNode.getSourceNode().getRuleNode();
+            sonRule.setSourcePropagator(
+                    parentRule.isSourcePropagator() ||
+                            parentRule.isNativeGadgetSource() ||
+                            parentRule.isJsonGadgetSource() ||
+                            parentRule.isWebAnnotationSource()
+            );
+
+            // This will help to find source endpoint in sourcenodes table easily
+            sonRule.setWebAnnotationSource(parentRule.isWebAnnotationSource());
+            sonRule.setNativeGadgetSource(parentRule.isNativeGadgetSource());
+            sonRule.setJsonGadgetSource(parentRule.isJsonGadgetSource());
         }
     }
 }

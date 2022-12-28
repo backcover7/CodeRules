@@ -4,15 +4,12 @@ import com.saucer.sast.lang.java.config.PropertyConfig;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 
 import com.saucer.sast.lang.java.parser.core.Scanner;
-import com.saucer.sast.lang.java.parser.nodes.MethodNode;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
 
-import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
 //@Command(name = "Java", mixinStandardHelpOptions = true, version = "Saucer/0.1",
 //        description = "Scan Java codebase to find security threats.")
@@ -52,15 +49,15 @@ public class Main implements Runnable {
             }
 
             System.out.println("[*] Initialize rules ...");
-//            DbUtils.init();
+            DbUtils.init();
             DbUtils.connect();
 
             SpoonConfig spoonConfig = new SpoonConfig();
             // todo
-//            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/test.java";
+            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/test.java";
 //            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/JdbcRowSetImpl.java";
-            codebase = "/Users/kang.hou/Downloads/commons-beanutils-master/";
-            maven = true;
+//            codebase = "/Users/kang.hou/Downloads/commons-beanutils-master/";
+//            maven = true;
             if (!maven) {
                 spoonConfig.init(codebase, dependency);
             } else {
