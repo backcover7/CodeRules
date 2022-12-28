@@ -833,13 +833,27 @@ public class DbUtils {
         // update sourceinvocation to sourcepropagator
         "UPDATE invocations SET isSourcePropagator = 1 WHERE invocations.isSourcePropagator != 1 AND invocations.InvocationID in (SELECT invocationCG.invocationTargetID FROM invocationCG WHERE invocationCG.intraflow IS NOT NULL AND invocationCG.InvocationSourceID in (SELECT invocations.InvocationID FROM invocations WHERE invocations.isWebInvocationSource = 1))";
 
-        int updateRows = 0;
+        int count = 0;
         try (Statement stmt = conn.createStatement()) {
-            updateRows = stmt.executeUpdate(sql);
+            count = stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return updateRows;
+
+        count += QueryOtherSourceNode();
+        return count;
+    }
+
+    private static int QueryOtherSourceNode() {
+        String sql = "SELECT * FROM invocations WHERE isWebAnnotationSource = 1 OR isNativeGadgetSource = 1 OR isJsonGadgetSource = 1";
+        List<InvocationNode> convergences = new ArrayList<>();
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            convergences = QueryInvocationNode(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return convergences.size();
     }
 
     /*
@@ -922,7 +936,7 @@ public class DbUtils {
         }
     }
 
-    private static InvocationNode QueryParentInvocationOfSourcePropagator(int InvocationID) {
+    private static List<InvocationNode> QueryParentInvocationOfSourcePropagator(int InvocationID) {
         String sql = "SELECT * FROM invocations WHERE invocations.InvocationID in (SELECT invocationCG.InvocationSourceID FROM invocationCG WHERE invocationCG.intraflow IS NOT NULL AND invocationCG.InvocationTargetID = ?)";
         PreparedStatement statement;
         try {
@@ -931,7 +945,7 @@ public class DbUtils {
 
             List<InvocationNode> ParentSourceNode = QueryInvocationNode(statement.executeQuery());
             statement.close();
-            return ParentSourceNode.get(0);
+            return ParentSourceNode;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -949,16 +963,9 @@ public class DbUtils {
             ((Location) parentNode.getUserObject()).getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
             ((Location) parentNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
                     new Message().withText(getSourceType(realSourceNode.getRuleNode())));
+
+            setPropagatorLabel(invocationNode, treeNode);
             treeNode.add(parentNode);
-        } else if (ruleNode.isWebInvocationSource()) {
-            InvocationNode realSourceInvocationNode = QueryParentInvocationOfSourcePropagator(invocationNode.getInvocationID());
-            String text = "Source: '" + realSourceInvocationNode.getSnippet() + "'";
-            DefaultMutableTreeNode parentInvocationNode = new DefaultMutableTreeNode(realSourceInvocationNode.getInvocationLocation());
-            ((Location) treeNode.getUserObject()).setMessage(new Message().withText(text));
-            ((Location) treeNode.getUserObject()).getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
-            ((Location) treeNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
-                    new Message().withText(getSourceType(realSourceInvocationNode.getSourceNode().getRuleNode())));
-            treeNode.add(parentInvocationNode);
         } else {
             setPropagatorLabel(invocationNode, treeNode);
         }
@@ -968,23 +975,31 @@ public class DbUtils {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, invocationNode.getInvocationID());
             ResultSet rs = stmt.executeQuery();
-            for (InvocationNode predNode: QueryInvocationNode(rs)) {
+            List<InvocationNode> predNodes = QueryInvocationNode(rs);
+
+            if (predNodes.size() == 0) {
+                // Check web invocation prednode
+                predNodes = QueryParentInvocationOfSourcePropagator(invocationNode.getInvocationID());
+            }
+
+            for (InvocationNode predNode: predNodes) {
                 DefaultMutableTreeNode predTreeNode = new DefaultMutableTreeNode(predNode.getInvocationLocation());
                 if (unique.add(predNode.getInvocationID())) {
-//                    if (getSourceType(ruleNode) != null && treeNode.getParent() != null) {
-//                        DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) treeNode.getParent();
-//                        setPropagatorLabel(invocationNode, treeNodePropagatorClone);
-//                        parentNode.add(treeNodePropagatorClone);
-//                        treeNodePropagatorClone.add(predTreeNode);
-//                    } else {
-//                        treeNode.add(predTreeNode);
-//                    }
-                    treeNode.add(predTreeNode);
-                    QueryPredNodes(predNode, predTreeNode, unique);
+                    if (predNode.getSourceNode().getRuleNode().isWebInvocationSource()) {
+                        String text = "Source: '" + predNode.getSnippet() + "'";
+                        ((Location) predTreeNode.getUserObject()).setMessage(new Message().withText(text));
+                        ((Location) predTreeNode.getUserObject()).getPhysicalLocation().getRegion().setMessage(new Message().withText(text));
+                        ((Location) predTreeNode.getUserObject()).getPhysicalLocation().getArtifactLocation().setDescription(
+                                new Message().withText(getSourceType(predNode.getSourceNode().getRuleNode())));
+                        treeNode.add(predTreeNode);
+                    } else {
+                        treeNode.add(predTreeNode);
+                        QueryPredNodes(predNode, predTreeNode, unique);
+                    }
                     unique.remove(predNode.getInvocationID());
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

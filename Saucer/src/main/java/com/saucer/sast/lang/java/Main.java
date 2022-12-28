@@ -54,10 +54,10 @@ public class Main implements Runnable {
 
             SpoonConfig spoonConfig = new SpoonConfig();
             // todo
-            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/test.java";
+//            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/test.java";
 //            codebase = "/Users/kang.hou/Documents/CodeRules/test-cases/java/JdbcRowSetImpl.java";
-//            codebase = "/Users/kang.hou/Downloads/commons-beanutils-master/";
-//            maven = true;
+            codebase = "/Users/kang.hou/Downloads/commons-beanutils-master/";
+            maven = true;
             if (!maven) {
                 spoonConfig.init(codebase, dependency);
             } else {

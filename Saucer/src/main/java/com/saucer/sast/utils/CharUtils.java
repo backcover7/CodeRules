@@ -2,8 +2,12 @@ package com.saucer.sast.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.ForbiddenClassException;
 import org.apache.commons.text.StringSubstitutor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -120,5 +124,12 @@ public class CharUtils {
         } else {
             return 1;
         }
+    }
+
+    public static Object DeepCopy(Object obj) {
+        XStream xstream = new XStream();
+        xstream.allowTypesByWildcard(new String[]{"com.contrastsecurity.sarif.*", "com.saucer.sast.lang.java.parser.nodes.*"});
+        String xml = xstream.toXML(obj);
+        return xstream.fromXML(xml);
     }
 }

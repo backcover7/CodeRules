@@ -2,7 +2,6 @@ package com.saucer.sast.lang.java.parser.core;
 
 import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
-import com.saucer.sast.lang.java.parser.nodes.MethodNode;
 import com.saucer.sast.utils.DbUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
