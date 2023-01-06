@@ -4,6 +4,7 @@ import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.parser.core.MethodHierarchy;
 import com.saucer.sast.lang.java.parser.nodes.RuleNode;
 import com.saucer.sast.lang.java.parser.nodes.*;
+import com.saucer.sast.lang.java.parser.query.Extracter;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtExecutableReference;
@@ -25,11 +26,10 @@ import static com.saucer.sast.utils.CharUtils.*;
 public class DbUtils {
     public static Connection conn;
     //todo
-    public final static String dbname = Paths.get("target", "saucer.db").toAbsolutePath().normalize().toString();
+    public final static String dbname = Paths.get(FileUtils.OutputDirectory, "saucer.db").toAbsolutePath().normalize().toString();
     public final static String rulesTable = "rules";
     public final static String sourcenodeTable = "sourcenodes";
     public final static String invocationsTable = "invocations";
-    public final static String fieldsTable = "fields";
     public final static String sourcenodeCGTable = "sourcenodeCG";
 
     public final static String invocationCGTable = "invocationCG";
@@ -82,10 +82,10 @@ public class DbUtils {
     }
 
     private static void ImportRules() {
-        ImportRules(Paths.get(FileUtils.RulesDirectory, "sources.csv").toString(), RuleNode.SOURCE);
-        ImportRules(Paths.get(FileUtils.RulesDirectory, "sinks.csv").toString(), RuleNode.SINK);
-        ImportRules(Paths.get(FileUtils.RulesDirectory, "gadget.csv").toString(), RuleNode.GADGET);
-        ImportRules(Paths.get(FileUtils.RulesDirectory, "negative.csv").toString(), RuleNode.NEGATIVE);
+        ImportRules(Paths.get(FileUtils.CSVDirectory, "sources.csv").toString(), RuleNode.SOURCE);
+        ImportRules(Paths.get(FileUtils.CSVDirectory, "sinks.csv").toString(), RuleNode.SINK);
+        ImportRules(Paths.get(FileUtils.CSVDirectory, "gadget.csv").toString(), RuleNode.GADGET);
+        ImportRules(Paths.get(FileUtils.CSVDirectory, "negative.csv").toString(), RuleNode.NEGATIVE);
     }
 
     private static void ImportRules(String rulePath, String category) {
@@ -552,6 +552,22 @@ public class DbUtils {
         return ExtractInvocationNodeFromRuleNode(ruleNode);
     }
 
+    public static void UpdateInvocationRuleNode(Extracter.ExtractRuleObject extractRuleObject, Location location) {
+        String sql = "Update invocations SET " + extractRuleObject.getRuleFlag() + " = 1, category = ?, kind = ?, rule = ? WHERE invocationlocation = ?";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            RuleNode ruleNode = extractRuleObject.getRuleNode();
+            statement.setString(1, ruleNode.getCategory());
+            statement.setString(2, ruleNode.getKind());
+            statement.setString(3, ruleNode.getRule());
+            statement.setString(4, Object2Json(location));
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static InvocationNode ExtractInvocationNodeFromRuleNode(RuleNode ruleNode) {
         SourceNode sourceNode = new SourceNode();
         sourceNode.setRuleNode(ruleNode);
@@ -806,6 +822,28 @@ public class DbUtils {
             e.printStackTrace();
         }
         return rule;
+    }
+
+    public static int QueryAnnotationParentMethodID(InvocationNode invocationAnnotation) {
+        String sql = "SELECT * FROM sourcenodes WHERE sourcenodes.MethodID IN (SELECT sourcenodeCG.MethodID FROM sourcenodeCG WHERE sourcenodeCG.InvocationID IN (SELECT invocations.InvocationID FROM invocations WHERE invocations.isAnnotation = 1 AND invocations.namespace = ? AND invocations.classtype = ? AND invocations.methodname = null AND invocations.InvocationLocation = ?))";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            SimpleMethodNode simpleMethodNode = invocationAnnotation.getSourceNode().getMethodNode().getSimpleMethodNode();
+            stmt.setString(1, simpleMethodNode.getFullClasstype().getNamespace());
+            stmt.setString(2, simpleMethodNode.getFullClasstype().getName());
+            stmt.setString(3, Object2Json(invocationAnnotation.getInvocationLocation()));
+            ResultSet resultSet = stmt.executeQuery();
+            List<SourceNode> sourceNodes = QuerySourceNode(resultSet);
+            if (sourceNodes.size() == 1) {
+                return sourceNodes.get(0).getMethodID();
+            } else {
+                throw new Exception("[!] Error in query parent method of annotation!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return -1;
     }
 
 

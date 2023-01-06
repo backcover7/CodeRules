@@ -3,6 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <repositories>
+        <repository>
+            <id>spoon-snapshot</id>
+            <name>Maven Repository for Spoon Snapshots</name>
+            <url>https://repository.ow2.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
 
     <groupId>Saucer</groupId>
     <artifactId>Saucer</artifactId>
@@ -32,7 +39,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>com.saucer.sast.lang.java.Main</mainClass>
+                            <mainClass>com.saucer.sast.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -61,7 +68,7 @@
         <dependency>
             <groupId>fr.inria.gforge.spoon</groupId>
             <artifactId>spoon-core</artifactId>
-            <version>10.3.0-beta-5</version>
+            <version>10.3.0-beta-9</version>
         </dependency>
         <dependency>
             <groupId>me.tongfei</groupId>

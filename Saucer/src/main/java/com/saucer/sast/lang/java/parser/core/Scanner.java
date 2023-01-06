@@ -1,9 +1,9 @@
 package com.saucer.sast.lang.java.parser.core;
 
 import com.contrastsecurity.sarif.*;
-import com.google.common.base.Stopwatch;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.*;
+import com.saucer.sast.lang.java.parser.query.Extracter;
 import com.saucer.sast.utils.DbUtils;
 import com.saucer.sast.utils.SarifUtils;
 import com.saucer.sast.utils.SemgrepUtils;
@@ -20,7 +20,6 @@ import spoon.support.reflect.declaration.CtClassImpl;
 import java.lang.Exception;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class Scanner {
     public void Scan() {
@@ -28,12 +27,8 @@ public class Scanner {
         init();
 
         System.out.println("[*] Processing global tainted flow analysis ...");
-        Stopwatch taintWatch = Stopwatch.createStarted();
-        FlowAnalysis flowAnalysis = new FlowAnalysis(Integer.MAX_VALUE - 1);
+        FlowAnalysis flowAnalysis = new FlowAnalysis();
         flowAnalysis.Analyze();
-        taintWatch.stop();
-        System.out.println(new StringBuilder().append("[+] Elapsed time of taint flow analysis: ")
-                .append(taintWatch.elapsed(TimeUnit.MINUTES)).append(" minutes"));
 
         System.out.println("[*] Create Sarif Report ...");
         SarifUtils.report();
@@ -87,6 +82,9 @@ public class Scanner {
                 }
             });
         });
+
+        Extracter extracter = new Extracter();
+        extracter.FilterAndUpdate();
 
         DbUtils.ImportWebInvocationSourceFlow();
     }

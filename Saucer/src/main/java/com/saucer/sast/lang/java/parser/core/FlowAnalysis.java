@@ -14,7 +14,7 @@ public class FlowAnalysis {
      *  source -> node -> sink : isSource + isSourcePropagator -> isSourcePropagator + isSinkPropagator -> isSink + isSinkPropagator
      *  source -> node1 -> node2 -> sink : isSource + isSourcePropagator -> isSourcePropagator + isSinkPropagator -> isSinkPropagator -> isSink + isSinkPropagator
      */
-    private int depth = 10;   // TODO default?
+    private int depth = Integer.MAX_VALUE - 1;
 
     public FlowAnalysis() {}
 
@@ -75,6 +75,7 @@ public class FlowAnalysis {
                 for (Location[] succLeafPath : succLeafPaths) {
                     List<Location> succLeafPathList = new ArrayList<>(Arrays.asList(succLeafPath));
                     List<Location> predLeafPathList = new ArrayList<>(Arrays.asList(predLeafPath));
+
                     Collections.reverse(predLeafPathList);
                     succLeafPathList.remove(0);
                     predLeafPathList.addAll(succLeafPathList);

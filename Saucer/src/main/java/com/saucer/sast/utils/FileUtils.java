@@ -1,7 +1,6 @@
 package com.saucer.sast.utils;
 
-import com.saucer.sast.lang.java.Main;
-import com.saucer.sast.lang.java.config.PropertyConfig;
+import com.saucer.sast.Main;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,10 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class FileUtils {
-    // todo
-    public final static String RulesDirectory = Paths.get("../csv/nodes").toAbsolutePath().normalize().toString();
-    public final static String OutputDirectory = Paths.get("target").toAbsolutePath().normalize().toString();
-
+    public final static String CSVDirectory = Paths.get(Main.csv).toAbsolutePath().normalize().toString();
+    public final static String OutputDirectory = Paths.get(Main.output).toAbsolutePath().normalize().toString();
     public static String csv = Paths.get("../csv").toAbsolutePath().normalize().toString();
     public static String collections = Paths.get(csv, "collections").toString();
     public static String sinks = Paths.get(collections, "sinks.csv").toString();

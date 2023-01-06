@@ -39,12 +39,16 @@ public class SemgrepUtils {
 
     public final static String[] SemgrepCLI = new String[]{"semgrep", "scan", DATAFLOWTRACE_FLAG, "-f"};
 
-    private static List<Result> RunSemgrepRule(String yaml, String codebase) throws IOException {
+    public static List<Result> RunSemgrepRule(String yaml, String codebase) {
         ArrayList<String> cmd = new ArrayList<>(Arrays.asList(SemgrepCLI));
         cmd.add(yaml);
         cmd.add(codebase);
         cmd.add(SARIF_FORMAT);
-        return ProcessSarifResult(new ProcessBuilder(cmd.toArray(new String[0])).start());
+        try {
+            return ProcessSarifResult(new ProcessBuilder(cmd.toArray(new String[0])).start());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static List<Result> ProcessSarifResult(Process process) throws IOException {

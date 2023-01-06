@@ -5,7 +5,6 @@ import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.FlowAnalysis;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
 
-import java.lang.Exception;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;

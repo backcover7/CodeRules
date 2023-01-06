@@ -3,11 +3,8 @@ package com.saucer.sast.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.ForbiddenClassException;
 import org.apache.commons.text.StringSubstitutor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +16,8 @@ public class CharUtils {
     public final static String backslash = "\\";
     public final static String comma = ",";
     public final static String backtick = "`";
+
+    public final static String carrot = "^";
     public final static String star = "*";
     public final static String dollarRegex = "\\$";
     public final static String dollar = "$";
@@ -27,7 +26,6 @@ public class CharUtils {
     public final static String semicolon = ";";
     public final static String dash = "-";
     public final static String vertical = "|";
-    public final static String carrot = "^";
     public final static String singleQuote = "'";
     public final static String doubleQuote = "\"";
     public final static String sharp = "#";
