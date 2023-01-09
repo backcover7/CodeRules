@@ -3,8 +3,6 @@ package com.saucer.sast.lang.java.parser.filter;
 import com.contrastsecurity.sarif.Location;
 import com.saucer.sast.Main;
 import com.saucer.sast.lang.java.config.SpoonConfig;
-import com.saucer.sast.lang.java.parser.filter.rule.JmsDeserialization;
-import com.saucer.sast.lang.java.parser.filter.rule.RmiDeserialization;
 import com.saucer.sast.lang.java.parser.nodes.*;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
@@ -79,7 +77,6 @@ public class Extracter {
             extractRuleObject.setElems(SpoonConfig.model.getRootPackage().filterChildren(
                     extractRuleObject.getFilter()
 //                    new TemplateFilter()
-//                    new RmiDeserialization()
             ).list());
             return extractRuleObject;
         } catch (Exception e) {
