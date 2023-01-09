@@ -1,3 +1,5 @@
+package com.saucer.sast.lang.java.parser.filter.rule;
+
 import com.saucer.sast.lang.java.parser.filter.FilterHelper;
 import spoon.reflect.code.CtExpression;
 import spoon.reflect.code.CtInvocation;

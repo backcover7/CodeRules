@@ -4,6 +4,7 @@ import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.core.FlowAnalysis;
 import com.saucer.sast.lang.java.parser.nodes.InvocationNode;
+import com.saucer.sast.lang.java.parser.nodes.SourceNode;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -18,8 +19,8 @@ public class SarifUtils {
 
     public static List<Result> getNodes() {
         List<Result> sinkNodesResults = new ArrayList<>();
-        List<InvocationNode> sinkNodes = DbUtils.QuerySinkNodes();
-        for (InvocationNode sinkNode : sinkNodes) {
+        List<InvocationNode> sinkNodesFromInvocations = DbUtils.QuerySinkNodesFromInvocations();
+        for (InvocationNode sinkNode : sinkNodesFromInvocations) {
             List<Location> sinkLocations = new ArrayList<>();
             Location sinkLocation = sinkNode.getInvocationLocation();
             sinkLocations.add(sinkLocation);
@@ -29,6 +30,20 @@ public class SarifUtils {
             sinkLocations.add(sinkNode.getInvocationLocation());
             sinks.setLocations(sinkLocations);
             sinks.setRuleId(sinkNode.getSourceNode().getRuleNode().getRule());
+            sinkNodesResults.add(sinks);
+        }
+
+        List<SourceNode> sinkNodesFromSourcenodes = DbUtils.QuerySinkNodesFromSourcenodes();
+        for (SourceNode sinkNode : sinkNodesFromSourcenodes) {
+            List<Location> sinkLocations = new ArrayList<>();
+            Location sinkLocation = sinkNode.getMethodNode().getMethodLocation();
+            sinkLocations.add(sinkLocation);
+
+            Result sinks = new Result().withMessage(new Message().withText(
+                    "[FYI - Sink functions] " + sinkNode.getMethodNode().getSimpleMethodNode().getFullQualifiedName()));
+            sinkLocations.add(sinkNode.getMethodNode().getMethodLocation());
+            sinks.setLocations(sinkLocations);
+            sinks.setRuleId(sinkNode.getRuleNode().getRule());
             sinkNodesResults.add(sinks);
         }
 

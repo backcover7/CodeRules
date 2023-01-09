@@ -3,7 +3,7 @@ package com.saucer.sast.lang.java.parser.core;
 import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.*;
-import com.saucer.sast.lang.java.parser.query.Extracter;
+import com.saucer.sast.lang.java.parser.filter.Extracter;
 import com.saucer.sast.utils.DbUtils;
 import com.saucer.sast.utils.SarifUtils;
 import com.saucer.sast.utils.SemgrepUtils;

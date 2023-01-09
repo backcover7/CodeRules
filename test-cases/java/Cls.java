@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.crypto.Cipher;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class Cls extends HttpServlet
 {
     private static org.apache.log4j.Logger log = Logger.getLogger(Register.class);
@@ -27,5 +30,9 @@ public class Cls extends HttpServlet
         Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
         c.init(Cipher.ENCRYPT_MODE, k, iv);
         byte[] cipherText = c.doFinal(plainText);
+    }
+
+    void setConn(Connection conn) throws SQLException {
+        conn.setCatalog("EXTERNAL_CONFIG_CONTROL");
     }
 }

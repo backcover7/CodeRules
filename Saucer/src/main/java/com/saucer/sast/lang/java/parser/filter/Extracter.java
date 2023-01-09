@@ -1,8 +1,10 @@
-package com.saucer.sast.lang.java.parser.query;
+package com.saucer.sast.lang.java.parser.filter;
 
 import com.contrastsecurity.sarif.Location;
 import com.saucer.sast.Main;
 import com.saucer.sast.lang.java.config.SpoonConfig;
+import com.saucer.sast.lang.java.parser.filter.rule.JmsDeserialization;
+import com.saucer.sast.lang.java.parser.filter.rule.RmiDeserialization;
 import com.saucer.sast.lang.java.parser.nodes.*;
 import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
@@ -75,9 +77,9 @@ public class Extracter {
         try {
             ExtractRuleObject extractRuleObject = loadExtensibleRule(model);
             extractRuleObject.setElems(SpoonConfig.model.getRootPackage().filterChildren(
-//                    extractRuleObject.getFilter()
+                    extractRuleObject.getFilter()
 //                    new TemplateFilter()
-                    new PaddingOracle()
+//                    new RmiDeserialization()
             ).list());
             return extractRuleObject;
         } catch (Exception e) {
@@ -204,7 +206,27 @@ public class Extracter {
                     System.err.println("[!] Error: Issue in processing annotation in rule");
                     System.exit(1);
                 }
+            } else if (elem instanceof CtMethod) {
+                CtMethod<?> method = (CtMethod<?>) elem;
+                ClassNode classNode = new ClassNode();
+                classNode.setNamespace(method.getTopLevelType().getPackage().getQualifiedName());
+                classNode.setName(method.getDeclaringType().getSimpleName());
+                SimpleMethodNode simpleMethodNode = new SimpleMethodNode();
+                simpleMethodNode.setFullClasstype(classNode);
+                simpleMethodNode.setName(method.getSimpleName());
+                MethodNode methodNode = new MethodNode();
+                methodNode.setSimpleMethodNode(simpleMethodNode);
+                methodNode.setReturntype(method.getType().getQualifiedName());
+                methodNode.setSignature(method.getSignature());
+                methodNode.setSourceCode(method.getOriginalSourceFragment().getSourceCode());
+                location = SpoonUtils.ConvertPosition2Location(methodNode, method.getOriginalSourceFragment().getSourcePosition());
+                methodNode.setMethodLocation(location);
+                SourceNode sourceNode = new SourceNode();
+                sourceNode.setMethodNode(methodNode);
+                DbUtils.UpdateSourceRuleNode(extractRuleObject, methodNode);
+                return;
             }
+
             DbUtils.UpdateInvocationRuleNode(extractRuleObject, location);
         }
     }

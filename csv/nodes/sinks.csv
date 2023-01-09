@@ -176,6 +176,10 @@ java.io:Serializable:readObjectNoData:deserialization
 java.io:Serializable:readUnshared:deserialization
 java.io:Serializable:readArray:deserialization
 java.io:Serializable:readResolve:deserialization
+java.lang.reflect:InvocationHandler:readObject:deserialization
+java.lang.reflect:InvocationHandler:readUnshared:deserialization
+java.lang.reflect:InvocationHandler:readArray:deserialization
+java.lang.reflect:InvocationHandler:readResolve:deserialization
 jodd.json:JsonParser:(parse.*):deserialization
 org.codehaus.jackson.map:ObjectMapper:enableDefaultTyping:deserialization
 org.codehaus.jackson.map:ObjectMapper:readTree:deserialization
@@ -621,6 +625,7 @@ java.lang.reflect:Constructor:newInstance:reflect
 java.lang.reflect:InvocationHandler:invoke:reflect
 java.lang.reflect:Method:invoke:reflect
 java.lang.reflect:ReflectPermission:ReflectPermission:reflect
+java.security:AccessController:doPrivileged:reflect
 java.net:URLClassLoader:newInstance:reflect
 javassist.util.proxy:MethodHandler:invoke:reflect
 javax.management.loading:MLet:getMBeansFromURL:reflect

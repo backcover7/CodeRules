@@ -4,7 +4,7 @@ import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.parser.core.MethodHierarchy;
 import com.saucer.sast.lang.java.parser.nodes.RuleNode;
 import com.saucer.sast.lang.java.parser.nodes.*;
-import com.saucer.sast.lang.java.parser.query.Extracter;
+import com.saucer.sast.lang.java.parser.filter.Extracter;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtExecutableReference;
@@ -552,6 +552,25 @@ public class DbUtils {
         return ExtractInvocationNodeFromRuleNode(ruleNode);
     }
 
+    public static void UpdateSourceRuleNode(Extracter.ExtractRuleObject extractRuleObject, MethodNode methodNode) {
+        String sql = "Update sourcenodes SET " + extractRuleObject.getRuleFlag() + " = 1, category = ?, kind = ?, rule = ? WHERE returntype = ? AND signature = ? AND sourcecode = ? AND methodlocation = ?";
+        try {
+            PreparedStatement statement = conn.prepareStatement(sql);
+            RuleNode ruleNode = extractRuleObject.getRuleNode();
+            statement.setString(1, ruleNode.getCategory());
+            statement.setString(2, ruleNode.getKind());
+            statement.setString(3, ruleNode.getRule());
+            statement.setString(4, methodNode.getReturntype());
+            statement.setString(5, methodNode.getSignature());
+            statement.setString(6, methodNode.getSourceCode());
+            statement.setString(7, Object2Json(methodNode.getMethodLocation()));
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void UpdateInvocationRuleNode(Extracter.ExtractRuleObject extractRuleObject, Location location) {
         String sql = "Update invocations SET " + extractRuleObject.getRuleFlag() + " = 1, category = ?, kind = ?, rule = ? WHERE invocationlocation = ?";
         try {
@@ -749,7 +768,7 @@ public class DbUtils {
         }
     }
 
-    public static List<InvocationNode> QuerySinkNodes() {
+    public static List<InvocationNode> QuerySinkNodesFromInvocations() {
         List<InvocationNode> invocationNodes = new ArrayList<>();
 
         String sql = "SELECT * FROM invocations WHERE isInvocationSink = 1 OR (isAnnotationSink = 1 AND isSinkPropagator = 0)";
@@ -761,6 +780,20 @@ public class DbUtils {
         }
 
         return invocationNodes;
+    }
+
+    public static List<SourceNode> QuerySinkNodesFromSourcenodes() {
+        List<SourceNode> sourceNodes = new ArrayList<>();
+
+        String sql = "SELECT * FROM sourcenodes WHERE isInvocationSink = 1";
+        try (Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            sourceNodes = QuerySourceNode(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sourceNodes;
     }
 
     public static List<InvocationNode> QueryWebSourceNodes() {

@@ -26,10 +26,14 @@ public class ClassNode {
     }
 
     public String getFullQualifiedName() {
-        return String.join(
-                CharUtils.dot,
-                namespace,
-                name
-        );
+        if (!namespace.equals(CharUtils.empty)) {
+            return String.join(
+                    CharUtils.dot,
+                    namespace,
+                    name
+            );
+        } else {
+            return name;
+        }
     }
 }

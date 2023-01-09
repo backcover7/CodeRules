@@ -8,8 +8,6 @@ import com.saucer.sast.utils.DbUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
 
-import java.nio.file.Paths;
-
 //@Command(name = "Java", mixinStandardHelpOptions = true, version = "Saucer/0.1",
 //        description = "Scan Java codebase to find security threats.")
 public class Main implements Runnable {

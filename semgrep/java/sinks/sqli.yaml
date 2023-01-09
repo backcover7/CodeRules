@@ -1,9 +1,0 @@
-rules:
-  - id: sqli
-    options:
-      symbolic_propagation: true
-    pattern: (java.sql.Connection $C).setCatalog(..., "EXTERNAL_CONFIG_CONTROL")  
-    message: Semgrep found a match related to sql injection
-    severity: WARNING
-    languages:
-      - java

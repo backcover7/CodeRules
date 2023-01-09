@@ -1,8 +1,8 @@
-package com.saucer.sast.lang.java.parser.query;
+package com.saucer.sast.lang.java.parser.filter;
 
-import spoon.reflect.declaration.CtElement;
+import spoon.reflect.code.CtInvocation;
 
-public class TemplateFilter extends FilterHelper<CtElement> {
+public class TemplateFilter extends FilterHelper<CtInvocation<?>> {
     String category = "";
     String kind = "";
     String rule = "";
@@ -17,8 +17,9 @@ public class TemplateFilter extends FilterHelper<CtElement> {
      * private boolean isAnnotationSink;
      */
     boolean isInvocationSink = true;
+
     @Override
-    public boolean matches(CtElement element) {
+    public boolean matches(CtInvocation invocation) {
         return false;
     }
 }

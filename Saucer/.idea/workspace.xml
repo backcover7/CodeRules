@@ -13,27 +13,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/FilterHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/spoon-core-10.3.0-beta-5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/config/PropertyConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/FlowAnalysis.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/FlowAnalysis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spooned-classes/ApacheCommonsTextLookup.class" beforeDir="false" afterPath="$PROJECT_DIR$/spooned-classes/ApacheCommonsTextLookup.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spooned-classes/PaddingOracle.class" beforeDir="false" afterPath="$PROJECT_DIR$/spooned-classes/PaddingOracle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/DependencyConfusion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/VulnScan.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/javascript/run.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/nodes/ClassNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/nodes/ClassNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/query/Extracter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/Extracter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/query/FilterHelper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/query/PaddingOracle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/query/TemplateFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/TemplateFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" afterPath="$PROJECT_DIR$/../csv/nodes/sinks.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/taint2args.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/taint2return.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/taint2sink.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/taint4source.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/ApacheCommonsTextLookup.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rules/ApacheCommonsTextLookup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/PaddingOracle.java" beforeDir="false" afterPath="$PROJECT_DIR$/../rules/PaddingOracle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/crypto.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/deser.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/do_privileged_use.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/interpolation_commons_text.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/sqli.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test-cases/java/Cls.java" beforeDir="false" afterPath="$PROJECT_DIR$/../test-cases/java/Cls.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +118,11 @@
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/main/lib" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.saucer.sast.lang.java.parser.CtxRrule" />
       <recent name="com.saucer.sast.lang.java.parser.query" />
       <recent name="" />
       <recent name="com.saucer.sast.utils" />
@@ -135,7 +140,7 @@
     <configuration name="run" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.Main" />
       <module name="Saucer" />
-      <option name="PROGRAM_PARAMETERS" value="-r ../rules -c ../csv/nodes -o target $PROJECT_DIR$/../test-cases/java/Cls.java" />
+      <option name="PROGRAM_PARAMETERS" value="-r ../rules -c ../csv/nodes -o target $USER_HOME$/Downloads/rpc" />
       <option name="VM_PARAMETERS" value="-Xmx6g" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -213,7 +218,7 @@
       <workItem from="1672791136731" duration="292000" />
       <workItem from="1672791456278" duration="30895000" />
       <workItem from="1672873466067" duration="136000" />
-      <workItem from="1672873626139" duration="31030000" />
+      <workItem from="1672873626139" duration="58903000" />
     </task>
     <servers />
   </component>
@@ -235,13 +240,19 @@
     <breakpoint-manager>
       <breakpoints>
         <breakpoint type="java-exception">
-          <properties class="java.lang.NullPointerException" package="java.lang" />
-          <option name="timeStamp" value="48" />
-        </breakpoint>
-        <breakpoint type="java-exception">
           <properties class="java.lang.ClassCastException" package="java.lang" />
           <option name="timeStamp" value="80" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/Extracter.java</url>
+          <line>229</line>
+          <option name="timeStamp" value="217" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SarifUtils.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="219" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
