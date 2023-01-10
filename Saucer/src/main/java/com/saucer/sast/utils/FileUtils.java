@@ -9,12 +9,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class FileUtils {
-    public final static String CSVDirectory = Paths.get(Main.csv).toAbsolutePath().normalize().toString();
+    public final static String CSVRuleDirectory = Paths.get(Main.rule, "csv").toAbsolutePath().normalize().toString();
     public final static String OutputDirectory = Paths.get(Main.output).toAbsolutePath().normalize().toString();
-    public static String csv = Paths.get("../csv").toAbsolutePath().normalize().toString();
-    public static String collections = Paths.get(csv, "collections").toString();
-    public static String sinks = Paths.get(collections, "sinks.csv").toString();
-    public static String sources = Paths.get(collections, "sources.csv").toString();
 
     public static String readTaint4Source() {
         InputStream taint4sourceInputStream = FileUtils.class.getResourceAsStream("/taint4source.yaml");

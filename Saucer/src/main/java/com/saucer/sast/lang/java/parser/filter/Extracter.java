@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class Extracter {
-    public final static String RuleDirectory = Paths.get(Main.rule).toAbsolutePath().normalize().toString();
+    public final static String FilterRuleDirectory = Paths.get(Main.rule, "filter").toAbsolutePath().normalize().toString();
 
     public static class ExtractRuleObject{
         private RuleNode ruleNode;
@@ -108,7 +108,7 @@ public class Extracter {
 
                                 Stream<CtField<?>> RuleFlagFieldStream = filter.getFields().stream().filter(
                                         field -> field.getSimpleName().startsWith("is"));
-                                String RuleFlag =RuleFlagFieldStream.findFirst().get().getSimpleName();
+                                String RuleFlag = RuleFlagFieldStream.findFirst().get().getSimpleName();
 
                                 try {
                                     RuleNode.class.getDeclaredField(RuleFlag);
@@ -129,6 +129,7 @@ public class Extracter {
             }
         } catch (Exception e) {
             System.err.println("[!] Wrong format of Filter rule! Please check your rule again.");
+            e.printStackTrace();
             System.exit(1);
         }
 
@@ -136,14 +137,13 @@ public class Extracter {
     }
 
     public void FilterAndUpdate() {
-        ArrayList<String> rules = FileUtils.getExtensionFiles(RuleDirectory, CharUtils.JavaExtension, true);
+        ArrayList<String> rules = FileUtils.getExtensionFiles(FilterRuleDirectory, CharUtils.JavaExtension, true);
         for (String rule : rules) {
             FilterAndUpdate(rule);
         }
     }
 
-    // Todo
-    public void FilterAndUpdate(String rule) {
+    private void FilterAndUpdate(String rule) {
         ExtractRuleObject extractRuleObject = FilterElements(rule);
         List<Object> elems = extractRuleObject.getElems();
         for (Object elem: elems) {
@@ -218,8 +218,6 @@ public class Extracter {
                 methodNode.setSourceCode(method.getOriginalSourceFragment().getSourceCode());
                 location = SpoonUtils.ConvertPosition2Location(methodNode, method.getOriginalSourceFragment().getSourcePosition());
                 methodNode.setMethodLocation(location);
-                SourceNode sourceNode = new SourceNode();
-                sourceNode.setMethodNode(methodNode);
                 DbUtils.UpdateSourceRuleNode(extractRuleObject, methodNode);
                 return;
             }

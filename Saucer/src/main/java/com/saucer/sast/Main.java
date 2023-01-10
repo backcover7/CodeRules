@@ -8,16 +8,14 @@ import com.saucer.sast.utils.DbUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
 
-//@Command(name = "Java", mixinStandardHelpOptions = true, version = "Saucer/0.1",
-//        description = "Scan Java codebase to find security threats.")
+import java.nio.file.Paths;
+
+@Command(mixinStandardHelpOptions = true, version = "Saucer/0.1", description = "Security Analysis on Plain Java.")
 public class Main implements Runnable {
     @Parameters(index = "0", description = "The path of target codebase.")
     public static String codebase;
 
-    @Option(names = {"-c", "--csv"}, defaultValue = "../csv/nodes", description = "The path of security analysis csv rules.")
-    public static String csv;
-
-    @Option(names = {"-r", "--rule"}, defaultValue = "../rules", description = "The path of security analysis filter rules.")
+    @Option(names = {"-r", "--rule"}, defaultValue = "rules", description = "The path of security analysis filter rules.")
     public static String rule;
 
     @Option(names = {"-m", "--maven"}, description = "Specify if the target is built by Maven")

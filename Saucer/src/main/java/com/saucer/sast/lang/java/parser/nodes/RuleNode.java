@@ -1,7 +1,5 @@
 package com.saucer.sast.lang.java.parser.nodes;
 
-import com.saucer.sast.lang.java.parser.nodes.SimpleMethodNode;
-
 // store to db
 public class RuleNode {
     private SimpleMethodNode simpleMethodNode;
@@ -38,7 +36,6 @@ public class RuleNode {
     public final static String SOURCE = "source";
     public final static String SINK = "sink";
     public final static String GADGET = "gadget";
-    public final static String NEGATIVE = "negative";
 
     public SimpleMethodNode getSimpleMethodNode() {
         return simpleMethodNode;

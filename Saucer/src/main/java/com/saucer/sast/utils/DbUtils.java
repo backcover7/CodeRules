@@ -25,7 +25,6 @@ import static com.saucer.sast.utils.CharUtils.*;
 
 public class DbUtils {
     public static Connection conn;
-    //todo
     public final static String dbname = Paths.get(FileUtils.OutputDirectory, "saucer.db").toAbsolutePath().normalize().toString();
     public final static String rulesTable = "rules";
     public final static String sourcenodeTable = "sourcenodes";
@@ -82,10 +81,9 @@ public class DbUtils {
     }
 
     private static void ImportRules() {
-        ImportRules(Paths.get(FileUtils.CSVDirectory, "sources.csv").toString(), RuleNode.SOURCE);
-        ImportRules(Paths.get(FileUtils.CSVDirectory, "sinks.csv").toString(), RuleNode.SINK);
-        ImportRules(Paths.get(FileUtils.CSVDirectory, "gadget.csv").toString(), RuleNode.GADGET);
-        ImportRules(Paths.get(FileUtils.CSVDirectory, "negative.csv").toString(), RuleNode.NEGATIVE);
+        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "sources.csv").toString(), RuleNode.SOURCE);
+        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "sinks.csv").toString(), RuleNode.SINK);
+        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "gadget.csv").toString(), RuleNode.GADGET);
     }
 
     private static void ImportRules(String rulePath, String category) {

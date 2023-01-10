@@ -1,9 +1,0 @@
-rules:
-  - id: sqaure_bracket_operation
-    pattern: $X["$CALLER"]
-    message: Semgrep found a sqaure bracket operation call in JavaScript
-    fix: $X.$CALLER
-    languages:
-      - javascript
-      - typescript
-    severity: WARNINGa
