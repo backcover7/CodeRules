@@ -13,141 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spooned-classes/JmsDeserialization.class" beforeDir="false" afterPath="$PROJECT_DIR$/spooned-classes/JmsDeserialization.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/spooned-classes/RmiDeserialization.class" beforeDir="false" afterPath="$PROJECT_DIR$/spooned-classes/RmiDeserialization.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CSVDefinition.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeQL.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/CodeScan.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/converter/Findsecbugs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/MethodHierarchy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/MethodHierarchy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/Extracter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/Extracter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/TemplateFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/FilterTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/rule/ApacheCommonsTextLookup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/rule/JmsDeserialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/rule/PaddingOracle.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/rule/RmiDeserialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/rule/SqliExternalConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/nodes/FieldNode.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/nodes/RuleNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/nodes/RuleNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/sink.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/source.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/taint/SensitiveApi.qll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/taint/negaive-summary.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/codeql/taint/summary.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/aws.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/beans.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/command-scala.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/command.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/crlf-logs.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/el.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/formatter.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/http-parameter-pollution.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/kotlin-path-traversal-in.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/ldap.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/path-traversal-in.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/path-traversal-out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/requestdispatcher-file-disclosure.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/response-splitting.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/scala-path-traversal-in.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/scala-path-traversal-out.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/scala-play-ssrf.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/script-engine.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/seam-el.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sensitive-data-exposure-scala.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/smtp.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/spel.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/spring-file-disclosure.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-android.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-hibernate.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-jdbc.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-jdo.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-jpa.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-scala-anorm.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-scala-slick.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-spring.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-turbine.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/sql-vertx-sql-client.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/struts-file-disclosure.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/struts2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/trust-boundary-violation-attribute.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/trust-boundary-violation-value.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/urlconnection-ssrf.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xpath-apache.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xpath-javax.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xslt.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xss-jsp.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xss-scala-mvc-api.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xss-scala-twirl.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/injection-sinks/xss-servlet.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/metadata/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/metadata/findbugs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/metadata/messages.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/metadata/messages_ja.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/password-methods/password-methods-all.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/safe-encoders/apache-commons.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/safe-encoders/other.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/safe-encoders/owasp.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/android-taint-sql.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/collections.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/dropwizard.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/guava.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/java-ee.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/java-lang.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/java-net.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/jetty.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/logging.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/other.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/portlet.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/scala.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/sonarqube.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/struts2-taint.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/taint-param-annotations.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/taint-sensitive-data.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/tainted-system-variables.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/findsecbugs/taint-config/wicket.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/Fortify_Rules_en_2022_10_11.rar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/core_apex.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/core_java.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/core_javascript.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/core_sql.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/extended_java.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/extended_javascript.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/extended_jsp.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/fortify/extended_sql.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/sinks.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/collections/sources.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/gadget.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/negative.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/sinks.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csv/nodes/sources.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rules/ApacheCommonsTextLookup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rules/JmsDeserialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rules/PaddingOracle.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rules/RmiDeserialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../rules/SqliExternalConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sarif-schema-2.1.0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/cases/marshalsec_gadget/HikariDataSource/HikariConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/cases/marshalsec_gadget/HikariDataSource/HikariDataSource.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/cases/marshalsec_gadget/JNDIManagedRuntime.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/cases/marshalsec_gadget/JdbcRowSetImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/dos.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/experimental/improper_trycatch.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/autobinding.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/logic.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/java/sinks/mybatis.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../semgrep/javascript/Optimization/sqaure_bracket_operation.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tabby/knowledges.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tabby/rules.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test-cases/node.sarif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test-cases/test.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,7 +120,7 @@
     <configuration name="run" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.Main" />
       <module name="Saucer" />
-      <option name="PROGRAM_PARAMETERS" value="-r ../rules -o target ~/Documents/CodeRules/test-cases/java/test.java" />
+      <option name="PROGRAM_PARAMETERS" value="--help" />
       <option name="VM_PARAMETERS" value="-Xmx6g" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -335,7 +201,7 @@
       <workItem from="1672873626139" duration="71388000" />
       <workItem from="1673367350791" duration="12000" />
       <workItem from="1673367376293" duration="2785000" />
-      <workItem from="1673371797901" duration="4801000" />
+      <workItem from="1673371797901" duration="6236000" />
     </task>
     <servers />
   </component>
