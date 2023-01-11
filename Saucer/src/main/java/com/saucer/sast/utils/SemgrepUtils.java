@@ -65,7 +65,7 @@ public class SemgrepUtils {
             if (!invocation.getSourceNode().getRuleNode().isAnnotationFlag()) {
                 if (!invocation.getSourceNode().getMethodNode().getMethodLocation().equals(source.getSourceNode().getMethodNode().getMethodLocation())) {
                     YamlRule = CharUtils.StringSubstitute(
-                            CreateTemplateMap(source, invocation), FileUtils.readTaint4Source());
+                            CreateTemplateMap(source, invocation), FileUtils.readResourceFile2String("taint4source.yaml"));
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
                 }
             }
@@ -90,12 +90,12 @@ public class SemgrepUtils {
                     // taint flow from non-param method to non-param invocation
                     // taint flow from has-param method to non-param invocation
                     YamlRule = CharUtils.StringSubstitute(
-                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readTaint2Nonparaminvocation());
+                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readResourceFile2String("taint2nonparaminvocation.yaml"));
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
                 } else {
                     // taint flow from has-param method to has-param invocation
                     YamlRule = CharUtils.StringSubstitute(
-                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readTaint2Invocation());
+                            CreateTemplateMap(sourceNode, invocationNode), FileUtils.readResourceFile2String("taint2invocation.yaml"));
                     SemgrepScanRes = SemgrepTemplateScan(YamlRule);
                 }
             }

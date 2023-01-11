@@ -8,15 +8,10 @@ import com.saucer.sast.utils.DbUtils;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
 
-import java.nio.file.Paths;
-
-@Command(mixinStandardHelpOptions = true, version = "Saucer/0.1", description = "Security Analysis on Plain Java.")
+@Command(mixinStandardHelpOptions = true, header = CharUtils.banner, version = "Saucer/1.0", description = "Security Analysis on Plain Java.")
 public class Main implements Runnable {
     @Parameters(index = "0", description = "The path of target codebase.")
     public static String codebase;
-
-    @Option(names = {"-r", "--rule"}, defaultValue = "rules", description = "The path of security analysis filter rules.")
-    public static String rule;
 
     @Option(names = {"-m", "--maven"}, description = "Specify if the target is built by Maven")
     public static boolean maven;
@@ -61,7 +56,8 @@ public class Main implements Runnable {
     }
 
     public static void main(String[] args) {
-        int exitCode = new CommandLine(new Main()).execute(args);
+        CommandLine cmd = new CommandLine(new Main());
+        int exitCode = cmd.execute(args);
         System.exit(exitCode);
     }
 }

@@ -1,0 +1,33 @@
+rules:
+  - id: cmpjs
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - patterns:
+        - pattern: $C.set("$A", ...)
+        - metavariable-regex:
+            metavariable: $A
+            regex: v.(href|body|src)
+    message: Semgrep found a match
+    languages:
+      - javascript
+      - typescript
+    severity: WARNING
+  - id: cmphtml
+    options:
+      symbolic_propagation: true
+    pattern-either:
+      - patterns:
+        - pattern: $X = "{!...}"
+        - metavariable-regex:
+            metavariable: $X
+            regex: ^(href|on.*)$
+    paths:
+      include:
+        - "*.cmp"
+        - "*.lib"
+    message: Semgrep found a match
+    languages:
+      - generic
+    severity: WARNING
+  

@@ -7,10 +7,10 @@ import spoon.reflect.code.CtInvocation;
 import java.util.List;
 
 public class PaddingOracle extends FilterHelper<CtInvocation<?>> {
-    String category = "sink";
-    String kind = "crypto";
-    String rule = "javax.crypto:Cipher:getInstance:crypto";
-    boolean isInvocationSink = true;
+    public static String category = "sink";
+    public static String kind = "crypto";
+    public static String rule = "javax.crypto:Cipher:getInstance:crypto";
+    public static boolean isInvocationSink = true;
 
     @Override
     public boolean matches(CtInvocation invocation) {

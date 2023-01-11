@@ -51,7 +51,7 @@ rules:
               - pattern: $METHOD($D, ...)
               - metavariable-regex:
                   metavariable: $METHOD
-                  regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(eval|execScript|document\.(write|writeln|execCommand)|parseFromString|send|globalEval|(document\.)?location\.(replace|assign)|open|fetch|navigation\.navigate|set(Timeout|Interval|Immediate)|document\.implementation\.createHTMLDocument|navigator\.(sendBeacon|serviceWorker\.register)|URL\.createObjectURL)
+                  regex: ((window|self|_self|top|parent|frames|this|globalThis)\.)*(eval|execScript|document\.(write|writeln|execCommand)|parseFromString|send|globalEval|(document\.)?location\.(replace|assign)|open|fetch|navigation\.navigate|set(Timeout|Interval|Immediate)|document\.implementation\.createHTMLDocument|navigator\.(sendBeacon|serviceWorker\.register|clipboard.(write|writeText))|URL\.createObjectURL)
             - patterns:
               - pattern: $JQUERY.$METHOD($D, ...)
               - metavariable-pattern:

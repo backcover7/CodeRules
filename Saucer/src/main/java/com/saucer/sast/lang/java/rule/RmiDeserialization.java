@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RmiDeserialization extends FilterHelper<CtMethod<?>> {
-    String category = "sink";
-    String kind = "deserialization";
-    String rule = "java.rmi:Remote:<Method>:deserialization";
-    boolean isInvocationSink = true;
+    public static String category = "sink";
+    public static String kind = "deserialization";
+    public static String rule = "java.rmi:Remote:<Method>:deserialization";
+    public static boolean isInvocationSink = true;
 
     @Override
     public boolean matches(CtMethod<?> method) {

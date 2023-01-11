@@ -4,9 +4,18 @@ Saucer is a SAST tool which is based on Spoon (https://spoon.gforge.inria.fr/) a
 https://www.sfdc.co/Saucer
 
 ## Guide
-java -jar Saucer-0.1-all.jar --help
-Usage: <main class> [-hmV] [-d=<dependency>] [-o=<output>] [-r=<rule>]
-                    <codebase>
+❯ java -jar Saucer-0.1-all.jar --help
+ ________  ________  ___  ___  ________  _______   ________          ___
+|\   ____\|\   __  \|\  \|\  \|\   ____\|\  ___ \ |\   __  \        |\  \
+\ \  \___|\ \  \|\  \ \  \\\  \ \  \___|\ \   __/|\ \  \|\  \       \ \  \
+ \ \_____  \ \   __  \ \  \\\  \ \  \    \ \  \_|/_\ \   _  _\       \ \  \
+  \|____|\  \ \  \ \  \ \  \\\  \ \  \____\ \  \_|\ \ \  \\  \|       \ \__\
+    ____\_\  \ \__\ \__\ \_______\ \_______\ \_______\ \__\\ _\        \|__|
+   |\_________\|__|\|__|\|_______|\|_______|\|_______|\|__|\|__|           ___
+   \|_________|                                                           |\__\
+                                                                          \|__|
+                                    @Author: kang.hou@salesforce.com
+Usage: <main class> [-hmV] [-d=<dependency>] [-o=<output>] <codebase>
 Security Analysis on Plain Java.
       <codebase>          The path of target codebase.
   -d, --dependency=<dependency>
@@ -16,12 +25,11 @@ Security Analysis on Plain Java.
   -m, --maven             Specify if the target is built by Maven
   -o, --output=<output>   The path of output report.
                           * Default is current directory.
-  -r, --rule=<rule>       The path of security analysis filter rules.
   -V, --version           Print version information and exit.
 
 ### Examples
-java -Xmx6g -jar Saucer-0.1-all.jar -r rules -o ~/Downloads test-cases/java/test.java
-java -Xmx6g -jar Saucer-0.1-all.jar -r rules -m Commons-BeanUtils/
+java -Xmx6g -jar Saucer-0.1-all.jar -o ~/Downloads test-cases/java/test.java
+java -Xmx6g -jar Saucer-0.1-all.jar -m Commons-BeanUtils/
 
 ## Rule Sources
 1. https://github.com/momosecurity/momo-code-sec-inspector-java/tree/2018.3/src/main/java/com/immomo/momosec/lang

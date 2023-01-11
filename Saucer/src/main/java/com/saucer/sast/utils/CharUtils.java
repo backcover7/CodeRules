@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.text.StringSubstitutor;
+import picocli.CommandLine;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -58,7 +59,7 @@ public class CharUtils {
             "   |\\_________\\|__|\\|__|\\|_______|\\|_______|\\|_______|\\|__|\\|__|           ___ \n" +
             "   \\|_________|                                                           |\\__\\\n" +
             "                                                                          \\|__|\n" +
-            "                                                                               ";
+            "                                    @Author: kang.hou@salesforce.com            ";
 
     public static boolean RegexMatch(String regex, String string) {
         return RegexMatchLastOccurence(regex, string) != null;

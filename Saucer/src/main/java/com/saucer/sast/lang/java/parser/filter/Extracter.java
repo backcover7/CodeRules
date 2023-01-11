@@ -1,30 +1,21 @@
 package com.saucer.sast.lang.java.parser.filter;
 
 import com.contrastsecurity.sarif.Location;
-import com.saucer.sast.Main;
 import com.saucer.sast.lang.java.config.SpoonConfig;
 import com.saucer.sast.lang.java.parser.nodes.*;
-import com.saucer.sast.utils.CharUtils;
 import com.saucer.sast.utils.DbUtils;
-import com.saucer.sast.utils.FileUtils;
 import com.saucer.sast.utils.SpoonUtils;
-import spoon.Launcher;
-import spoon.reflect.CtModel;
+import org.reflections.Reflections;
 import spoon.reflect.code.CtConstructorCall;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.declaration.*;
-import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.Filter;
-import spoon.reflect.visitor.filter.TypeFilter;
 
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Set;
 
 public class Extracter {
-    public final static String FilterRuleDirectory = Paths.get(Main.rule, "filter").toAbsolutePath().normalize().toString();
-
     public static class ExtractRuleObject{
         private RuleNode ruleNode;
         private String ruleFlag;
@@ -66,14 +57,9 @@ public class Extracter {
     }
 
     // https://spoon.gforge.inria.fr/filter.html
-    private ExtractRuleObject FilterElements(String rule) {
-        Launcher launcher = new Launcher();
-        launcher.addInputResource(rule);
-        launcher.buildModel();
-        CtModel model = launcher.getModel();
-
+    private Extracter.ExtractRuleObject FilterElements(Class<? extends FilterHelper> filter) {
         try {
-            ExtractRuleObject extractRuleObject = loadExtensibleRule(model);
+            Extracter.ExtractRuleObject extractRuleObject = LoadFilter(filter);
             extractRuleObject.setElems(SpoonConfig.model.getRootPackage().filterChildren(
                     extractRuleObject.getFilter()
 //                    new TemplateFilter()
@@ -85,48 +71,45 @@ public class Extracter {
         return null;
     }
 
-    private ExtractRuleObject loadExtensibleRule(CtModel model) {
-        List<CtType<?>> elements = model.getElements(new TypeFilter<>(CtType.class));
-
+    private Extracter.ExtractRuleObject LoadFilter(Class<? extends FilterHelper> filter) {
         try {
-            for (CtType<?> filter : elements) {
-                CtTypeReference<?> superClass = filter.getSuperclass();
-                if (superClass.getActualClass() == FilterHelper.class) {
-                    List<CtMethod<?>> matchesMethods = filter.getMethodsByName("matches");
-                    if (matchesMethods.size() == 1) {
-                        CtMethod<?> matches = matchesMethods.get(0);
-                        if (matches.isPublic() &&
-                                matches.getType().getQualifiedName().equals("boolean")) {
-                            List<CtParameter<?>> parameters = matches.getParameters();
-                            if (parameters.size() == 1) {
-                                RuleNode ruleNode = new RuleNode();
-                                ruleNode.setCategory(filter.getField(RuleNode.CATEGORY).getAssignment().toString());
-                                ruleNode.setKind(filter.getField(RuleNode.KIND).getAssignment().toString());
-                                ruleNode.setRule(filter.getField(RuleNode.RULE).getAssignment().toString());
-
-                                Filter<?> filterObj = (Filter<?>) ((CtClass<?>) filter).newInstance();
-
-                                Stream<CtField<?>> RuleFlagFieldStream = filter.getFields().stream().filter(
-                                        field -> field.getSimpleName().startsWith("is"));
-                                String RuleFlag = RuleFlagFieldStream.findFirst().get().getSimpleName();
-
-                                try {
-                                    RuleNode.class.getDeclaredField(RuleFlag);
-                                } catch (Exception e) {
-                                    System.err.println("[!] Please recheck the flag field in your rule.");
-                                    System.exit(1);
-                                }
-
-                                ExtractRuleObject extractRuleObject = new ExtractRuleObject();
-                                extractRuleObject.setRuleNode(ruleNode);
-                                extractRuleObject.setFilter(filterObj);
-                                extractRuleObject.setRuleFlag(RuleFlag);
-                                return extractRuleObject;
-                            }
-                        }
-                    }
+            Filter<?> filterObj = filter.getDeclaredConstructor().newInstance();
+            RuleNode ruleNode = new RuleNode();
+            Field[] fields = filter.getDeclaredFields();
+            String RuleFlag = null;
+            for (Field field : fields) {
+                switch (field.getName()) {
+                    case "category":
+                        ruleNode.setCategory(field.get(filterObj).toString());
+                        break;
+                    case "kind":
+                        ruleNode.setKind(field.get(filterObj).toString());
+                        break;
+                    case "rule":
+                        ruleNode.setRule(field.get(filterObj).toString());
+                        break;
+                    default:
+                        RuleFlag = field.getName();
+                        break;
                 }
             }
+            ruleNode.setCategory(filter.getDeclaredField(RuleNode.CATEGORY).get(filterObj).toString());
+            ruleNode.setKind(filter.getDeclaredField(RuleNode.KIND).get(filterObj).toString());
+            ruleNode.setRule(filter.getDeclaredField(RuleNode.RULE).get(filterObj).toString());
+
+
+            try {
+                RuleNode.class.getDeclaredField(RuleFlag);
+            } catch (Exception e) {
+                System.err.println("[!] Please recheck the flag field in your rule.");
+                System.exit(1);
+            }
+
+            Extracter.ExtractRuleObject extractRuleObject = new Extracter.ExtractRuleObject();
+            extractRuleObject.setRuleNode(ruleNode);
+            extractRuleObject.setFilter(filterObj);
+            extractRuleObject.setRuleFlag(RuleFlag);
+            return extractRuleObject;
         } catch (Exception e) {
             System.err.println("[!] Wrong format of Filter rule! Please check your rule again.");
             e.printStackTrace();
@@ -137,14 +120,15 @@ public class Extracter {
     }
 
     public void FilterAndUpdate() {
-        ArrayList<String> rules = FileUtils.getExtensionFiles(FilterRuleDirectory, CharUtils.JavaExtension, true);
-        for (String rule : rules) {
-            FilterAndUpdate(rule);
+        Reflections reflections = new Reflections("com.saucer.sast.lang.java.rule");
+        Set<Class<? extends FilterHelper>> filters = reflections.getSubTypesOf(FilterHelper.class);
+        for (Class<? extends FilterHelper> filter : filters) {
+            FilterAndUpdate(filter);
         }
     }
 
-    private void FilterAndUpdate(String rule) {
-        ExtractRuleObject extractRuleObject = FilterElements(rule);
+    private void FilterAndUpdate(Class<? extends FilterHelper> filter) {
+        Extracter.ExtractRuleObject extractRuleObject = FilterElements(filter);
         List<Object> elems = extractRuleObject.getElems();
         for (Object elem: elems) {
             Location location = new Location();

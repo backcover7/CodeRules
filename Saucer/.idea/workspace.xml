@@ -13,7 +13,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="969ba946-6885-4318-be48-459a93ba14f9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/core/Scanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/parser/filter/Extracter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/ApacheCommonsTextLookup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/ApacheCommonsTextLookup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/JmsDeserialization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/JmsDeserialization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/PaddingOracle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/PaddingOracle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/RmiDeserialization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/RmiDeserialization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/SqliExternalConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/lang/java/rule/SqliExternalConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/CharUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/DbUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/FileUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/saucer/sast/utils/SemgrepUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/csv/gadget.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/csv/sinks.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/csv/sources.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/filter/ApacheCommonsTextLookup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/filter/JmsDeserialization.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/filter/PaddingOracle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/filter/RmiDeserialization.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rules/filter/SqliExternalConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../semgrep/javascript/sinks/dom_xss.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../semgrep/javascript/sinks/dom_xss.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +126,7 @@
       <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.saucer.sast.lang.java.parser.filter" />
       <recent name="com.saucer.sast.lang.java.parser.CtxRrule" />
       <recent name="com.saucer.sast.lang.java.parser.query" />
       <recent name="" />
@@ -120,7 +145,7 @@
     <configuration name="run" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.saucer.sast.Main" />
       <module name="Saucer" />
-      <option name="PROGRAM_PARAMETERS" value="--help" />
+      <option name="PROGRAM_PARAMETERS" value="-o target ../test-cases/java/test.java" />
       <option name="VM_PARAMETERS" value="-Xmx6g" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -201,7 +226,7 @@
       <workItem from="1672873626139" duration="71388000" />
       <workItem from="1673367350791" duration="12000" />
       <workItem from="1673367376293" duration="2785000" />
-      <workItem from="1673371797901" duration="6236000" />
+      <workItem from="1673371797901" duration="11705000" />
     </task>
     <servers />
   </component>
@@ -226,12 +251,6 @@
           <properties class="java.lang.ClassCastException" package="java.lang" />
           <option name="timeStamp" value="80" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-field">
-          <url>file://$PROJECT_DIR$/src/main/java/com/saucer/sast/Main.java</url>
-          <line>18</line>
-          <properties field="rule" class="com.saucer.sast.Main" />
-          <option name="timeStamp" value="225" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

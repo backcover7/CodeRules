@@ -7,10 +7,10 @@ import spoon.reflect.declaration.CtType;
 import spoon.reflect.visitor.filter.TypeFilter;
 
 public class JmsDeserialization extends FilterHelper<CtInvocation<?>> {
-    String category = "sink";
-    String kind = "deserialization";
-    String rule = "javax.jms:MessageListener:onMessage:deserialization";
-    boolean isInvocationSink = true;
+    public static String category = "sink";
+    public static String kind = "deserialization";
+    public static String rule = "javax.jms:MessageListener:onMessage:deserialization";
+    public static boolean isInvocationSink = true;
 
     @Override
     public boolean matches(CtInvocation<?> invocation) {

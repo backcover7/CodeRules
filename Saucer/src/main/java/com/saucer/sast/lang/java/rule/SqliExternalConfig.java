@@ -4,10 +4,10 @@ import com.saucer.sast.lang.java.parser.filter.FilterHelper;
 import spoon.reflect.code.CtInvocation;
 
 public class SqliExternalConfig extends FilterHelper<CtInvocation<?>> {
-    String category = "sink";
-    String kind = "sqli";
-    String rule = "java.sql:Connection:setCatalog:sqli";
-    boolean isInvocationSink = true;
+    public static String category = "sink";
+    public static String kind = "sqli";
+    public static String rule = "java.sql:Connection:setCatalog:sqli";
+    public static boolean isInvocationSink = true;
 
     @Override
     public boolean matches(CtInvocation<?> invocation) {

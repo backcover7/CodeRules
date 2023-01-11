@@ -2,9 +2,9 @@ package com.saucer.sast.utils;
 
 import com.contrastsecurity.sarif.*;
 import com.saucer.sast.lang.java.parser.core.MethodHierarchy;
+import com.saucer.sast.lang.java.parser.filter.Extracter;
 import com.saucer.sast.lang.java.parser.nodes.RuleNode;
 import com.saucer.sast.lang.java.parser.nodes.*;
-import com.saucer.sast.lang.java.parser.filter.Extracter;
 import org.apache.commons.io.FilenameUtils;
 import spoon.reflect.declaration.CtType;
 import spoon.reflect.reference.CtExecutableReference;
@@ -16,10 +16,7 @@ import java.io.*;
 import java.lang.Exception;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.saucer.sast.utils.CharUtils.*;
 
@@ -81,12 +78,12 @@ public class DbUtils {
     }
 
     private static void ImportRules() {
-        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "sources.csv").toString(), RuleNode.SOURCE);
-        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "sinks.csv").toString(), RuleNode.SINK);
-        ImportRules(Paths.get(FileUtils.CSVRuleDirectory, "gadget.csv").toString(), RuleNode.GADGET);
+        ImportRules("source.csv", RuleNode.SOURCE);
+        ImportRules("sink.csv", RuleNode.SINK);
+        ImportRules("gadget.csv", RuleNode.GADGET);
     }
 
-    private static void ImportRules(String rulePath, String category) {
+    private static void ImportRules(String RuleFilename, String category) {
         String sql = new StringBuilder()
                 .append("INSERT INTO ").append(rulesTable).append(" (")
                 .append(ClassNode.NAMESPACE).append(", ")
@@ -97,8 +94,9 @@ public class DbUtils {
                 .append(RuleNode.RULE).append(") VALUES (?, ?, ?, ?, ?, ?)").toString();
 
         try {
-            BufferedReader lineReader = new BufferedReader(new FileReader(rulePath));
-            lineReader.lines().forEach(lineText -> {
+            String content = FileUtils.readResourceFile2String(RuleFilename);
+            String[] lines = content.split(LF);
+            Arrays.stream(lines).sequential().forEach(lineText -> {
                 try {
                     PreparedStatement statement = conn.prepareStatement(sql);
                     String[] data = lineText.split(CharUtils.colon, -1);
@@ -115,7 +113,6 @@ public class DbUtils {
                     e.printStackTrace();
                 }
             });
-            lineReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

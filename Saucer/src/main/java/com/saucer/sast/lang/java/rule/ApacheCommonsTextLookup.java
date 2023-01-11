@@ -8,10 +8,10 @@ import spoon.reflect.declaration.CtElement;
 import java.util.List;
 
 public class ApacheCommonsTextLookup extends FilterHelper<CtInvocation<?>> {
-    String category = "sink";
-    String kind = "el";
-    String rule = "org.apache.commons.text:StringSubstitutor:replace:el";
-    boolean isInvocationSink = true;
+    public static String category = "sink";
+    public static String kind = "el";
+    public static String rule = "org.apache.commons.text:StringSubstitutor:replace:el";
+    public static boolean isInvocationSink = true;
 
     @Override
     public boolean matches(CtInvocation invocation) {

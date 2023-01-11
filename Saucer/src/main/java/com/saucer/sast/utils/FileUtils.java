@@ -9,22 +9,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class FileUtils {
-    public final static String CSVRuleDirectory = Paths.get(Main.rule, "csv").toAbsolutePath().normalize().toString();
     public final static String OutputDirectory = Paths.get(Main.output).toAbsolutePath().normalize().toString();
 
-    public static String readTaint4Source() {
-        InputStream taint4sourceInputStream = FileUtils.class.getResourceAsStream("/taint4source.yaml");
-        return ReadFile2String(taint4sourceInputStream);
-    }
-
-    public static String readTaint2Invocation() {
-        InputStream taint2invocationInputStream = FileUtils.class.getResourceAsStream("/taint2invocation.yaml");
-        return ReadFile2String(taint2invocationInputStream);
-    }
-
-    public static String readTaint2Nonparaminvocation() {
-        InputStream taint2nonparaminvocationInputStream = FileUtils.class.getResourceAsStream("/taint2nonparaminvocation.yaml");
-        return ReadFile2String(taint2nonparaminvocationInputStream);
+    public static String readResourceFile2String(String filename) {
+        InputStream resourceFile = FileUtils.class.getResourceAsStream("/" + filename);
+        return ReadFile2String(resourceFile);
     }
 
     public static String Expanduser(String path) {
